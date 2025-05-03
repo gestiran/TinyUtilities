@@ -1,0 +1,25 @@
+{
+  "name": "com.ges.tinyutilities",
+  "displayName": "Tiny Utilities",
+  "author": {
+    "name": "Derek Sliman",
+    "url": "https://github.com/gestiran"
+  },
+  "version": "0.1.0",
+  "unity": "2018.4",
+  "description": "Utilities pack",
+  "keywords": [
+    "utilities",
+    "tools"
+  ],
+  "license": "MIT",
+  "category": "Utilities",
+  "dependencies": {
+    "com.unity.modules.uielements": "1.0.0",
+    "com.unity.nuget.newtonsoft-json": "3.2.1",
+    "com.cysharp.unitask": "2.5.10"
+  },
+  "publishConfig": {
+    "registry": "https://package.openupm.com"
+  }
+}
