@@ -6,6 +6,7 @@ using System.Collections.Generic;
 
 #if I2_LOCALIZE
 using I2.Loc;
+using UnityEngine;
 #endif
 
 #endif
