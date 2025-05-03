@@ -1,0 +1,26 @@
+{
+    "name": "TinyUtilities.Runtime",
+    "rootNamespace": "TinyUtilities",
+    "references": [
+        "UniTask"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": true,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "Sirenix.OdinInspector.Attributes.dll",
+        "Sirenix.Serialization.dll",
+        "Sirenix.Serialization.Config.dll"
+    ],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [
+        {
+            "name": "com.cysharp.unitask",
+            "expression": "2.3.3",
+            "define": "UNITASK_ENABLE"
+        }
+    ],
+    "noEngineReferences": false
+}

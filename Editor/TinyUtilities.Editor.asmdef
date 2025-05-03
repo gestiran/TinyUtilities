@@ -1,0 +1,24 @@
+{
+    "name": "TinyUtilities.Editor",
+    "rootNamespace": "TinyUtilities",
+    "references": [
+        "GUID:4e0a720b84c89124e9d810fcff94c92f"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "Sirenix.OdinInspector.Attributes.dll",
+        "Sirenix.OdinInspector.Editor.dll",
+        "Sirenix.Utilities.dll",
+        "Sirenix.Utilities.Editor.dll",
+        "Sirenix.Serialization.dll"
+    ],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
