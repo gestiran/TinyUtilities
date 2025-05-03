@@ -1,0 +1,34 @@
+using Sirenix.OdinInspector;
+using UnityEngine;
+
+namespace TinyUtilities.Components {
+    public sealed class StaticName : MonoBehaviour, ISelfValidator {
+        [SerializeField, HideInInspector]
+        private string _name;
+        
+        public void Validate(SelfValidationResult result) {
+        #if UNITY_EDITOR
+            
+            if (gameObject.name != _name) {
+                result.AddError($"Invalid name, required: {_name}").WithFix(FixName);
+            }
+            
+        #endif
+        }
+        
+    #if UNITY_EDITOR
+        
+        private void FixName() {
+            gameObject.name = _name;
+            UnityEditor.EditorUtility.SetDirty(gameObject);
+        }
+        
+        [ContextMenu(InspectorNames.SOFT_RESET)]
+        private void Reset() {
+            _name = gameObject.name;
+            UnityEditor.EditorUtility.SetDirty(this);
+        }
+        
+    #endif
+    }
+}

@@ -2,7 +2,9 @@
     "name": "TinyUtilities.Runtime",
     "rootNamespace": "TinyUtilities",
     "references": [
-        "UniTask"
+        "UniTask",
+        "DemigiantDOTweenRuntime",
+        "Unity.TextMeshPro"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
@@ -11,7 +13,9 @@
     "precompiledReferences": [
         "Sirenix.OdinInspector.Attributes.dll",
         "Sirenix.Serialization.dll",
-        "Sirenix.Serialization.Config.dll"
+        "Sirenix.Serialization.Config.dll",
+        "Newtonsoft.Json.dll",
+        "DOTween.dll"
     ],
     "autoReferenced": true,
     "defineConstraints": [],
