@@ -4,7 +4,8 @@
     "references": [
         "UniTask",
         "DemigiantDOTweenRuntime",
-        "Unity.TextMeshPro"
+        "Unity.TextMeshPro",
+        "I2LocalizationRuntime"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
@@ -24,6 +25,11 @@
             "name": "com.cysharp.unitask",
             "expression": "2.3.3",
             "define": "UNITASK_ENABLE"
+        },
+        {
+            "name": "i2.loc",
+            "expression": "2.8.20",
+            "define": "I2_LOCALIZE"
         }
     ],
     "noEngineReferences": false
