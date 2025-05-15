@@ -119,7 +119,13 @@ namespace TinyUtilities.Extensions.Global {
             return builder.ToString();
         }
         
-        public static T GetRandom<T>(this T[] array) => array[UnityRandom.Range(0, array.Length)];
+        public static T Random<T>(this T[] array, T defaultValue = default) {
+            if (array.Length > 0) {
+                return array[UnityRandom.Range(0, array.Length - 1)];
+            }
+            
+            return defaultValue;
+        }
         
         public static T[] RemoveRange<T>(this T[] array, T[] objects) {
             List<T> result = new List<T>(array.Length);

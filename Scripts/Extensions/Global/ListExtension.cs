@@ -62,5 +62,13 @@ namespace TinyUtilities.Extensions.Global {
             
             return false;
         }
+        
+        public static T Random<T>(this List<T> list, T defaultValue = default) {
+            if (list.Count > 0) {
+                return list[UnityRandom.Range(0, list.Count - 1)];
+            }
+            
+            return defaultValue;
+        }
     }
 }

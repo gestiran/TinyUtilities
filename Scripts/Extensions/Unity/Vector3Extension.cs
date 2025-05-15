@@ -148,7 +148,7 @@ namespace TinyUtilities.Extensions.Unity {
             return true;
         }
         
-        private static List<Vector3> FilterLineCast(this List<Vector3> positions, Vector3 from, int layerMask) {
+        public static List<Vector3> FilterLineCast(this List<Vector3> positions, Vector3 from, int layerMask) {
             for (int positionId = positions.Count - 1; positionId >= 0; positionId--) {
                 if (Physics.Linecast(from, positions[positionId], layerMask) == false) {
                     continue;
