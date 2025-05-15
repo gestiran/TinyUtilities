@@ -47,6 +47,16 @@ namespace TinyUtilities {
         }
         
         public static Vector3 GetRandomPositionOnRange(Vector3 targetPosition, NavMeshQueryFilter filter, float radius) {
+            List<Vector3> results = GetPositionsOnRange(targetPosition, filter, radius);
+            
+            if (results.Count > 0) {
+                return results[Random.Range(0, results.Count)];
+            }
+            
+            return targetPosition;
+        }
+
+		public static List<Vector3> GetPositionsOnRange(Vector3 targetPosition, NavMeshQueryFilter filter, float radius) {
             List<Vector3> directions = Vector3Utility.GetDirectionsByAngle(16);
             List<Vector3> results = new List<Vector3>();
             
@@ -56,11 +66,7 @@ namespace TinyUtilities {
                 }
             }
             
-            if (results.Count > 0) {
-                return results[Random.Range(0, results.Count)];
-            }
-            
-            return targetPosition;
+            return results;
         }
         
         public static bool TryGetNearestWaypoint(Vector3 from, Vector3 to, NavMeshQueryFilter filter, out Vector3 result) {

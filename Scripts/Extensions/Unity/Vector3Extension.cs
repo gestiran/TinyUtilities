@@ -148,6 +148,18 @@ namespace TinyUtilities.Extensions.Unity {
             return true;
         }
         
+        private static List<Vector3> FilterLineCast(this List<Vector3> positions, Vector3 from, int layerMask) {
+            for (int positionId = positions.Count - 1; positionId >= 0; positionId--) {
+                if (Physics.Linecast(from, positions[positionId], layerMask) == false) {
+                    continue;
+                }
+                
+                positions.RemoveAt(positionId);
+            }
+            
+            return positions;
+        }
+        
         private static Vector3 RotateAroundX(Vector3 point, Vector3 center, float angle) {
             float sin = Mathf.Sin(angle);
             float cos = Mathf.Cos(angle);
