@@ -1,11 +1,12 @@
-﻿using TinyUtilities.Extensions.Global;
+﻿using System.Collections.Generic;
+using TinyUtilities.Extensions.Global;
+using TinyUtilities.Unity;
 using UnityEngine;
 using UnityEngine.AI;
 
 namespace TinyUtilities {
     public static class NavigationUtility {
         public static readonly NavMeshBuildSettings[] settings;
-        public static readonly int globalMask;
         
         private static readonly int[] _agentIds;
         
@@ -19,7 +20,6 @@ namespace TinyUtilities {
         static NavigationUtility() {
             settings = CreateSettings();
             _agentIds = ConvertSettingsToIds(settings);
-            globalMask = LayerMask.GetMask("Environment", "StaticFood");
         }
         
         public static NavMeshQueryFilter CreateFilter(int areaMask, int agentId = 0) {
@@ -44,6 +44,23 @@ namespace TinyUtilities {
             }
             
             return position;
+        }
+        
+        public static Vector3 GetRandomPositionOnRange(Vector3 targetPosition, NavMeshQueryFilter filter, float radius) {
+            List<Vector3> directions = Vector3Utility.GetDirectionsByAngle(16);
+            List<Vector3> results = new List<Vector3>();
+            
+            for (int i = 0; i < directions.Count; i++) {
+                if (TrySamplePosition(targetPosition + directions[i] * radius + Vector3.up, filter, radius, out Vector3 position)) {
+                    results.Add(position);
+                }
+            }
+            
+            if (results.Count > 0) {
+                return results[Random.Range(0, results.Count)];
+            }
+            
+            return targetPosition;
         }
         
         public static bool TryGetNearestWaypoint(Vector3 from, Vector3 to, NavMeshQueryFilter filter, out Vector3 result) {

@@ -2,24 +2,27 @@ using System.Threading;
 
 namespace TinyUtilities.Extensions.Global {
     public static class CancellationTokenSourceExtension {
-        public static CancellationTokenSource Reset(this CancellationTokenSource obj) {
-            if (obj == null) {
+        public static CancellationTokenSource Reset(this CancellationTokenSource cancellation) {
+            if (cancellation == null) {
                 return null;
             }
             
-            obj.Cancel();
-            obj.Dispose();
+            CancelAndDispose(cancellation);
             return null;
         }
         
-        public static CancellationTokenSource Recreate(this CancellationTokenSource obj) {
-            if (obj == null) {
+        public static CancellationTokenSource Recreate(this CancellationTokenSource cancellation) {
+            if (cancellation == null) {
                 return new CancellationTokenSource();
             }
             
-            obj.Cancel();
-            obj.Dispose();
+            CancelAndDispose(cancellation);
             return new CancellationTokenSource();
+        }
+        
+        public static void CancelAndDispose(this CancellationTokenSource cancellation) {
+            cancellation.Cancel();
+            cancellation.Dispose();
         }
     }
 }
