@@ -160,6 +160,30 @@ namespace TinyUtilities.Extensions.Unity {
             return positions;
         }
         
+        public static List<Vector3> FilterNearest<T>(this List<Vector3> positions, T filter, float distance = 0.1f) where T : IEnumerable<Vector3> {
+            for (int positionId = positions.Count - 1; positionId >= 0; positionId--) {
+                if (IsContainNearest(filter, positions[positionId], distance) == false) {
+                    continue;
+                }
+                
+                positions.RemoveAt(positionId);
+            }
+            
+            return positions;
+        }
+        
+        public static bool IsContainNearest<T>(this T positions, Vector3 position, float distance = 0.1f) where T : IEnumerable<Vector3> {
+            foreach (Vector3 target in positions) {
+                if (Vector3.Distance(target, position) > distance) {
+                    continue;
+                }
+                
+                return true;
+            }
+            
+            return false;
+        }
+        
         private static Vector3 RotateAroundX(Vector3 point, Vector3 center, float angle) {
             float sin = Mathf.Sin(angle);
             float cos = Mathf.Cos(angle);
