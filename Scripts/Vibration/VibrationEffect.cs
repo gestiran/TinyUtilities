@@ -84,7 +84,7 @@ namespace TinyUtilities.Vibration {
             } else {
                 _vibrator.Call(_VIBRATE_METHOD, milliseconds);
             }
-        #else
+        #elif UNITY_IOS
             Handheld.Vibrate();
         #endif
         }
@@ -97,15 +97,15 @@ namespace TinyUtilities.Vibration {
                 case PredefinedEffect.HeavyClick: CreateOneShot(128); break;
                 default: CreateOneShot(64); break;
             }
-        #else
+        #elif UNITY_IOS
             Handheld.Vibrate();
         #endif
         }
         
-    #if UNITY_ANDROID && !UNITY_EDITOR
         /// <summary> Create a waveform vibration </summary>
         /// <param name="timings"> The timing values, in milliseconds, of the timing / amplitude pairs. Timing values of 0 will cause the pair to be ignored </param>
         public static void CreateWaveform(long[] timings) {
+        #if UNITY_ANDROID && !UNITY_EDITOR
             int[] amplitudes = new int[timings.Length];
             
             for (int amplitudeId = 2; amplitudeId < amplitudes.Length; amplitudeId += 2) {
@@ -113,14 +113,15 @@ namespace TinyUtilities.Vibration {
             }
             
             CreateWaveform(timings, amplitudes, -1);
+        #endif
         }
-    #endif
         
         /// <summary> Create a waveform vibration </summary>
         /// <param name="timings"> The timing values, in milliseconds, of the timing / amplitude pairs. Timing values of 0 will cause the pair to be ignored </param>
         /// <param name="amplitude"> The amplitude values of the timing / amplitude pairs. Amplitude values must be between 0 and 255, or equal to DEFAULT_AMPLITUDE.
         /// An amplitude value of 0 implies the motor is off </param>
         public static void CreateWaveform(long[] timings, int amplitude) {
+        #if UNITY_ANDROID && !UNITY_EDITOR
             int[] amplitudes = new int[timings.Length];
             
             for (int amplitudeId = 2; amplitudeId < amplitudes.Length; amplitudeId += 2) {
@@ -128,6 +129,7 @@ namespace TinyUtilities.Vibration {
             }
             
             CreateWaveform(timings, amplitudes, -1);
+        #endif
         }
         
         /// <summary> Create a waveform vibration </summary>
@@ -169,7 +171,7 @@ namespace TinyUtilities.Vibration {
                 _vibrator.Call(_VIBRATE_METHOD, timings, repeat);
             }
             
-        #else
+        #elif UNITY_IOS
             Handheld.Vibrate();
         #endif
         }
