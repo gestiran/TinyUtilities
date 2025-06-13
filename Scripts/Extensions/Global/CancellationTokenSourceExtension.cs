@@ -2,6 +2,14 @@ using System.Threading;
 
 namespace TinyUtilities.Extensions.Global {
     public static class CancellationTokenSourceExtension {
+        public static CancellationTokenSource Create(this CancellationTokenSource cancellation) {
+            if (cancellation == null) {
+                return new CancellationTokenSource();;
+            }
+            
+            return cancellation;
+        }
+        
         public static CancellationTokenSource Reset(this CancellationTokenSource cancellation) {
             if (cancellation == null) {
                 return null;
