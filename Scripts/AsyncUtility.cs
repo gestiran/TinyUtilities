@@ -5,12 +5,17 @@ using UnityEngine;
 
 namespace TinyUtilities {
     public static class AsyncUtility {
+        public static CancellationToken token => _cancellation.Token;
+        
+        private static CancellationTokenSource _cancellation;
+        
         private static readonly float _aspect;
         
         private const float _MOVE_DISTANCE = 0.1f;
         
         static AsyncUtility() {
             _aspect = (Screen.width + Screen.height) / 2f;
+            _cancellation = new CancellationTokenSource();
         }
         
         public static async UniTask CallAfterFrame(Action callback, CancellationToken cancellation) {
@@ -75,5 +80,12 @@ namespace TinyUtilities {
                 await UniTask.Yield(cancellation);
             }
         }
+        
+    #if UNITY_EDITOR
+        
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        private static void Reset() => _cancellation = new CancellationTokenSource();
+        
+    #endif
     }
 }
