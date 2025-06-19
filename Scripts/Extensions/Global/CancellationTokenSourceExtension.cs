@@ -4,7 +4,7 @@ namespace TinyUtilities.Extensions.Global {
     public static class CancellationTokenSourceExtension {
         public static CancellationTokenSource Create(this CancellationTokenSource cancellation) {
             if (cancellation == null) {
-                return new CancellationTokenSource();;
+                return new CancellationTokenSource();
             }
             
             return cancellation;
@@ -17,6 +17,41 @@ namespace TinyUtilities.Extensions.Global {
             
             CancelAndDispose(cancellation);
             return null;
+        }
+        
+        public static void ResetForce(this CancellationTokenSource cancellation) {
+            if (cancellation == null) {
+                return;
+            }
+            
+            CancelAndDispose(cancellation);
+        }
+        
+        public static void Recreate(this CancellationTokenSource cancellation, out CancellationTokenSource result) {
+            if (cancellation == null) {
+                result = new CancellationTokenSource();
+            }
+            
+            CancelAndDispose(cancellation);
+            result = new CancellationTokenSource();
+        }
+        
+        public static void Recreate(this CancellationTokenSource cancellation, CancellationTokenSource reference, out CancellationTokenSource result) {
+            if (cancellation == null) {
+                result = reference;
+            }
+            
+            CancelAndDispose(cancellation);
+            result = reference;
+        }
+        
+        public static CancellationTokenSource Recreate(this CancellationTokenSource cancellation, CancellationTokenSource reference) {
+            if (cancellation == null) {
+                return reference;
+            }
+            
+            CancelAndDispose(cancellation);
+            return reference;
         }
         
         public static CancellationTokenSource Recreate(this CancellationTokenSource cancellation) {
