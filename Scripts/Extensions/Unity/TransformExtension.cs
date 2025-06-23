@@ -143,6 +143,17 @@ namespace TinyUtilities.Extensions.Unity {
             return childTransform;
         }
         
+        public static void ScaleGlobal(this Transform transform, Vector3 scale) {
+            Transform parent = transform.parent;
+            
+            while (parent) {
+                scale = scale.DivideValues(parent.localScale);
+                parent = parent.parent;
+            }
+            
+            transform.localScale = scale;
+        }
+        
         private static bool TryFindChildWithName(Transform[] children, string name, out Transform result) {
             for (int childId = 0; childId < children.Length; childId++) {
                 if (children[childId].name.Equals(name)) {

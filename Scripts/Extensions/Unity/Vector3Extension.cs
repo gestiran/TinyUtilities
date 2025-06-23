@@ -51,8 +51,8 @@ namespace TinyUtilities.Extensions.Unity {
             bool isInside = false;
             
             for (int pointId = 0, endPointId = points.Length - 1; pointId < points.Length; endPointId = pointId++) {
-                if (points[pointId].z > position.z != points[endPointId].z > position.z
-                 && position.x < (points[endPointId].x - points[pointId].x) * (position.z - points[pointId].z) / (points[endPointId].z - points[pointId].z) + points[pointId].x) {
+                if (points[pointId].z > position.z != points[endPointId].z > position.z && position.x
+                    < (points[endPointId].x - points[pointId].x) * (position.z - points[pointId].z) / (points[endPointId].z - points[pointId].z) + points[pointId].x) {
                     isInside = !isInside;
                 }
             }
@@ -174,11 +174,19 @@ namespace TinyUtilities.Extensions.Unity {
         
         public static bool IsContainNearest<T>(this T positions, Vector3 position, float distance = 0.1f) where T : IEnumerable<Vector3> {
             foreach (Vector3 target in positions) {
-                if (Vector3.Distance(target, position) > distance) {
-                    continue;
+                if (Vector3.Distance(target, position) < distance) {
+                    return true;
                 }
-                
-                return true;
+            }
+            
+            return false;
+        }
+        
+        public static bool TryFindNearest<T>(this T positions, Vector3 position, float distance) where T : IEnumerable<Vector3> {
+            foreach (Vector3 target in positions) {
+                if (Vector3.Distance(position, target) < distance) {
+                    return true;
+                }
             }
             
             return false;
