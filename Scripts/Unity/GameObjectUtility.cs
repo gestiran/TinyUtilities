@@ -11,5 +11,21 @@ namespace TinyUtilities.Unity {
             
             return result;
         }
+        
+    #if UNITY_EDITOR
+        
+        public static bool TryFindObjectsOfTypePrefab<T>(out T[] result) where T : Object {
+            UnityEditor.SceneManagement.PrefabStage stage = UnityEditor.SceneManagement.PrefabStageUtility.GetCurrentPrefabStage();
+            
+            if (stage != null) {
+                result = stage.prefabContentsRoot.GetComponentsInChildren<T>(true);
+                return true;
+            }
+            
+            result = null;
+            return false;
+        }
+        
+    #endif
     }
 }

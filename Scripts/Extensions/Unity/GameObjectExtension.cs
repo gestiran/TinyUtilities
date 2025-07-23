@@ -78,6 +78,7 @@ namespace TinyUtilities.Extensions.Unity {
         }
         
     #if UNITY_EDITOR
+        
         public static bool IsSceneAsset(this GameObject gameObject) {
             if (UnityEditor.PrefabUtility.IsPartOfAnyPrefab(gameObject)) {
                 return UnityEditor.PrefabUtility.GetPrefabInstanceStatus(gameObject) == UnityEditor.PrefabInstanceStatus.Connected;
@@ -85,6 +86,7 @@ namespace TinyUtilities.Extensions.Unity {
             
             return UnityEditor.SceneManagement.PrefabStageUtility.GetPrefabStage(gameObject) == null;
         }
+        
     #endif
     }
 }

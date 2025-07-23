@@ -7,6 +7,11 @@ namespace TinyUtilities.Extensions.Global {
         public static void Mix<T>(this List<T> list) {
             for (int i = 0; i < list.Count; i++) {
                 int newIndex = UnityRandom.Range(0, list.Count);
+                
+                if (newIndex == i) {
+                    continue;
+                }
+                
                 (list[newIndex], list[i]) = (list[i], list[newIndex]);
             }
         }
@@ -69,6 +74,56 @@ namespace TinyUtilities.Extensions.Global {
             }
             
             return defaultValue;
+        }
+        
+        public static int GetUniqueCount<T>(this List<T> list) => list.GetUniqueCount(value => value.GetHashCode());
+        
+        public static int GetUniqueCount<T>(this List<T> list, Func<T, int> getHashCode) {
+            List<int> diff = new List<int>();
+            
+            for (int i = 0; i < list.Count; i++) {
+                int hash = getHashCode(list[i]);
+                
+                if (diff.Contains(hash)) {
+                    continue;
+                }
+                
+                diff.Add(hash);
+            }
+            
+            return diff.Count;
+        }
+        
+        public static bool IsAllUniqueElements<T>(this List<T> list) => list.IsAllUniqueElements(value => value.GetHashCode());
+        
+        public static bool IsAllUniqueElements<T>(this List<T> list, Func<T, int> getHashCode) {
+            List<int> diff = new List<int>();
+            
+            for (int i = 0; i < list.Count; i++) {
+                int hash = getHashCode(list[i]);
+                
+                if (diff.Contains(hash)) {
+                    return false;
+                }
+                
+                diff.Add(hash);
+            }
+            
+            return true;
+        }
+        
+        public static bool TryGetValue<T>(this List<T> list, int hash, out T result) {
+            for (int i = 0; i < list.Count; i++) {
+                if (list[i].GetHashCode() != hash) {
+                    continue;
+                }
+                
+                result = list[i];
+                return true;
+            }
+            
+            result = default;
+            return false;
         }
     }
 }
