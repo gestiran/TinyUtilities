@@ -1,4 +1,7 @@
-﻿using System.Text;
+﻿// Copyright (c) 2023 Derek Sliman
+// Licensed under the MIT License. See LICENSE.md for details.
+
+using System.Text;
 using Sirenix.Serialization;
 
 namespace TinyUtilities {

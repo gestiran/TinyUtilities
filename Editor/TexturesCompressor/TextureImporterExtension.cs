@@ -1,4 +1,7 @@
-﻿using UnityEditor;
+﻿// Copyright (c) 2023 Derek Sliman
+// Licensed under the MIT License. See LICENSE.md for details.
+
+using UnityEditor;
 
 namespace TinyUtilities.Editor.TexturesCompressor {
     public static class TextureImporterExtension {

@@ -1,4 +1,7 @@
-﻿using Sirenix.OdinInspector.Editor.Validation;
+﻿// Copyright (c) 2023 Derek Sliman
+// Licensed under the MIT License. See LICENSE.md for details.
+
+using Sirenix.OdinInspector.Editor.Validation;
 using TinyUtilities.Editor.TexturesCompressor;
 using UnityEditor;
 using UnityEngine;

@@ -1,4 +1,7 @@
-﻿namespace TinyUtilities.Extensions.Global {
+﻿// Copyright (c) 2023 Derek Sliman
+// Licensed under the MIT License. See LICENSE.md for details.
+
+namespace TinyUtilities.Extensions.Global {
     public static class TimeConvertExtension {
         public static int ToMS(this float seconds) => (int)(seconds * 1000f);
         

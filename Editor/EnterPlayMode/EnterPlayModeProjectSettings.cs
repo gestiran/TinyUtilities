@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿// Copyright (c) 2023 Derek Sliman
+// Licensed under the MIT License. See LICENSE.md for details.
+
+using System.Collections.Generic;
 using TinyUtilities.Editor.EnterPlayMode.AsyncTools;
 using TinyUtilities.Editor.EnterPlayMode.BeforePlayMode;
 using TinyUtilities.Editor.EnterPlayMode.DoTweenTools;

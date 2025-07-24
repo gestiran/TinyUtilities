@@ -1,4 +1,7 @@
-﻿using System.Reflection;
+﻿// Copyright (c) 2023 Derek Sliman
+// Licensed under the MIT License. See LICENSE.md for details.
+
+using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 
