@@ -3,6 +3,8 @@
 
 using System.Collections;
 using DG.Tweening;
+using DG.Tweening.Core;
+using DG.Tweening.Plugins.Options;
 using Sirenix.OdinInspector;
 using TinyUtilities.Extensions.Global;
 using TinyUtilities.Extensions.Unity;
@@ -103,10 +105,10 @@ namespace TinyUtilities.Components {
             
             if (_orientation == Orientation.Vertical) {
                 float duration = Mathf.Abs(_thisScrollRect.content.anchoredPosition.y - _positions[elementId]) / _speed;
-                tween = _thisScrollRect.content.DOAnchorPosY(_positions[elementId], Mathf.Min(duration, _MAX_DURATION));
+                tween = DOAnchorPosY(_thisScrollRect.content, _positions[elementId], Mathf.Min(duration, _MAX_DURATION));
             } else {
                 float duration = Mathf.Abs(_thisScrollRect.content.anchoredPosition.x - _positions[elementId]) / _speed;
-                tween = _thisScrollRect.content.DOAnchorPosX(_positions[elementId], Mathf.Min(duration, _MAX_DURATION));
+                tween = DOAnchorPosX(_thisScrollRect.content, _positions[elementId], Mathf.Min(duration, _MAX_DURATION));
             }
             
             tween.SetEase(_ease).OnComplete(EnableScroll).SetUpdate(true);
@@ -162,6 +164,18 @@ namespace TinyUtilities.Components {
             }
             
             currentElement = Mathf.Clamp(currentElement, 0, _positions.Length - 1);
+        }
+        
+        private static TweenerCore<Vector2, Vector2, VectorOptions> DOAnchorPosY(RectTransform target, float endValue, float duration, bool snapping = false) {
+            TweenerCore<Vector2, Vector2, VectorOptions> t = DOTween.To(() => target.anchoredPosition, x => target.anchoredPosition = x, new Vector2(0, endValue), duration);
+            t.SetOptions(AxisConstraint.Y, snapping).SetTarget(target);
+            return t;
+        }
+        
+        private static TweenerCore<Vector2, Vector2, VectorOptions> DOAnchorPosX(RectTransform target, float endValue, float duration, bool snapping = false) {
+            TweenerCore<Vector2, Vector2, VectorOptions> t = DOTween.To(() => target.anchoredPosition, x => target.anchoredPosition = x, new Vector2(endValue, 0), duration);
+            t.SetOptions(AxisConstraint.X, snapping).SetTarget(target);
+            return t;
         }
         
         private IEnumerator CalculateProcess() {

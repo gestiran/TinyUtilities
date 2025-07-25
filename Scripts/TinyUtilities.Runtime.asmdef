@@ -3,7 +3,6 @@
     "rootNamespace": "TinyUtilities",
     "references": [
         "UniTask",
-        "DemigiantDOTweenRuntime",
         "Unity.TextMeshPro",
         "I2LocalizationRuntime"
     ],
