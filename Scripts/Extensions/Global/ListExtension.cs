@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Text;
 using UnityRandom = UnityEngine.Random;
 
 namespace TinyUtilities.Extensions.Global {
@@ -127,6 +128,32 @@ namespace TinyUtilities.Extensions.Global {
             
             result = default;
             return false;
+        }
+        
+        public static string ToStringArray<T>(this List<T> list) {
+            StringBuilder builder = new StringBuilder(list.Count);
+            
+            for (int i = 0; i < list.Count; i++) {
+                builder.AppendFormat("{0} = {1}\n", i, list[i]);
+            }
+            
+            return builder.ToString();
+        }
+        
+        public static string ToStringArrayValues<T>(this List<T> list) => list.ToStringArrayValues(value => value.ToString());
+        
+        public static string ToStringArrayValues<T>(this List<T> list, Func<T, string> toString) {
+            StringBuilder builder = new StringBuilder(list.Count);
+            
+            if (list.Count > 0) {
+                builder.AppendFormat("{0}", toString(list[0]));
+            }
+            
+            for (int i = 1; i < list.Count; i++) {
+                builder.AppendFormat(", {0}", toString(list[i]));
+            }
+            
+            return builder.ToString();
         }
     }
 }
