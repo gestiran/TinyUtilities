@@ -2,9 +2,6 @@
 // Licensed under the MIT License. See LICENSE.md for details.
 
 using System.Collections;
-using DG.Tweening;
-using DG.Tweening.Core;
-using DG.Tweening.Plugins.Options;
 using Sirenix.OdinInspector;
 using TinyUtilities.Extensions.Global;
 using TinyUtilities.Extensions.Unity;
@@ -12,6 +9,12 @@ using TinyUtilities.Validation;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+
+#if DOTWEEN
+using DG.Tweening;
+using DG.Tweening.Core;
+using DG.Tweening.Plugins.Options;
+#endif
 
 namespace TinyUtilities.Components {
     [SelectionBase]
@@ -25,8 +28,10 @@ namespace TinyUtilities.Components {
         [SerializeField]
         private Orientation _orientation;
         
+    #if DOTWEEN
         [SerializeField]
         private Ease _ease = Ease.OutBack;
+    #endif
         
         [SerializeField, Min(1f)]
         private float _speed = 10f;
@@ -101,6 +106,8 @@ namespace TinyUtilities.Components {
             currentElement = elementId;
             DisableScroll();
             
+        #if DOTWEEN
+            
             Tweener tween;
             
             if (_orientation == Orientation.Vertical) {
@@ -112,6 +119,17 @@ namespace TinyUtilities.Components {
             }
             
             tween.SetEase(_ease).OnComplete(EnableScroll).SetUpdate(true);
+            
+        #else
+            
+            if (_orientation == Orientation.Vertical) {
+                _thisScrollRect.content.anchoredPosition = new Vector2(_thisScrollRect.content.anchoredPosition.x, _positions[elementId]);
+            } else {
+                _thisScrollRect.content.anchoredPosition = new Vector2(_positions[elementId], _thisScrollRect.content.anchoredPosition.y);
+            }
+            
+        #endif
+            
         }
         
         private void EnableScroll() {
@@ -166,6 +184,8 @@ namespace TinyUtilities.Components {
             currentElement = Mathf.Clamp(currentElement, 0, _positions.Length - 1);
         }
         
+    #if DOTWEEN
+        
         private static TweenerCore<Vector2, Vector2, VectorOptions> DOAnchorPosY(RectTransform target, float endValue, float duration, bool snapping = false) {
             TweenerCore<Vector2, Vector2, VectorOptions> t = DOTween.To(() => target.anchoredPosition, x => target.anchoredPosition = x, new Vector2(0, endValue), duration);
             t.SetOptions(AxisConstraint.Y, snapping).SetTarget(target);
@@ -177,6 +197,8 @@ namespace TinyUtilities.Components {
             t.SetOptions(AxisConstraint.X, snapping).SetTarget(target);
             return t;
         }
+        
+    #endif
         
         private IEnumerator CalculateProcess() {
             yield return null;

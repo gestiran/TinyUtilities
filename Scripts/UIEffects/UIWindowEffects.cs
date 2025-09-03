@@ -1,13 +1,18 @@
 // Copyright (c) 2023 Derek Sliman
 // Licensed under the MIT License. See LICENSE.md for details.
 
+using UnityEngine;
+
+#if DOTWEEN
 using DG.Tweening;
 using DG.Tweening.Core;
 using DG.Tweening.Plugins.Options;
-using UnityEngine;
+#endif
 
 namespace TinyUtilities.UIEffects {
     public static class UIWindowEffects {
+    #if DOTWEEN
+        
         public static Tweener DoEffectWindowShow(this CanvasGroup canvasGroup) {
             return DOFade(canvasGroup, 1f, 0.25f).SetEase(Ease.Linear);
         }
@@ -29,5 +34,7 @@ namespace TinyUtilities.UIEffects {
             t.SetTarget(target);
             return t;
         }
+        
+    #endif
     }
 }
