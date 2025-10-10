@@ -8,7 +8,7 @@ using UnityRandom = UnityEngine.Random;
 
 namespace TinyUtilities.Extensions.Global {
     public static class ListExtension {
-        public static void Mix<T>(this List<T> list) {
+        public static void Shuffle<T>(this List<T> list) {
             for (int i = 0; i < list.Count; i++) {
                 int newIndex = UnityRandom.Range(0, list.Count);
                 
@@ -72,7 +72,7 @@ namespace TinyUtilities.Extensions.Global {
             return false;
         }
         
-        public static T Random<T>(this List<T> list, T defaultValue = default) {
+        public static T Any<T>(this List<T> list, T defaultValue = default) {
             if (list.Count > 0) {
                 return list[UnityRandom.Range(0, list.Count - 1)];
             }

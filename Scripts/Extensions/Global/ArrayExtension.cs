@@ -122,7 +122,7 @@ namespace TinyUtilities.Extensions.Global {
             return builder.ToString();
         }
         
-        public static T Random<T>(this T[] array, T defaultValue = default) {
+        public static T Any<T>(this T[] array, T defaultValue = default) {
             if (array.Length > 0) {
                 return array[UnityRandom.Range(0, array.Length - 1)];
             }
@@ -174,6 +174,20 @@ namespace TinyUtilities.Extensions.Global {
             }
             
             return closestIndex;
+        }
+        
+        public static T[] Shuffle<T>(this T[] arr) {
+            for (int i = 0; i < arr.Length; i++) {
+                int index = UnityRandom.Range(0, arr.Length);
+                
+                if (index == i) {
+                    continue;
+                }
+                
+                (arr[index], arr[i]) = (arr[i], arr[index]);
+            }
+            
+            return arr;
         }
     }
 }
