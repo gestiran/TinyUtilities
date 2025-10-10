@@ -121,14 +121,25 @@ namespace TinyUtilities.Components {
             tween.SetEase(_ease).OnComplete(EnableScroll).SetUpdate(true);
             
         #else
+        
+            MoveToElementForce(elementId);
+            
+        #endif
+            
+        }
+        
+        public void MoveToElementForce(int elementId) {
+            if (elementId < 0 || elementId >= _positions.Length) {
+                return;
+            }
+            
+            currentElement = elementId;
             
             if (_orientation == Orientation.Vertical) {
                 _thisScrollRect.content.anchoredPosition = new Vector2(_thisScrollRect.content.anchoredPosition.x, _positions[elementId]);
             } else {
                 _thisScrollRect.content.anchoredPosition = new Vector2(_positions[elementId], _thisScrollRect.content.anchoredPosition.y);
             }
-            
-        #endif
             
         }
         
