@@ -34,7 +34,10 @@ namespace TinyUtilities.Components {
     #endif
         
         [SerializeField, Min(1f)]
-        private float _speed = 10f;
+        private float _speed = 100f;
+        
+        [SerializeField]
+        private float _offset;
         
         [SerializeField, Required]
         private ScrollButtonMove[] _buttons;
@@ -78,9 +81,9 @@ namespace TinyUtilities.Components {
             int nextElement;
             
             if (_orientation == Orientation.Vertical) {
-                nextElement = _positions.FindClosestIndex(_thisScrollRect.content.anchoredPosition.y);
+                nextElement = _positions.FindClosestIndex(_thisScrollRect.content.anchoredPosition.y + _offset);
             } else {
-                nextElement = _positions.FindClosestIndex(_thisScrollRect.content.anchoredPosition.x);
+                nextElement = _positions.FindClosestIndex(_thisScrollRect.content.anchoredPosition.x + _offset);
             }
             
             if (nextElement == currentElement) {
@@ -140,7 +143,6 @@ namespace TinyUtilities.Components {
             } else {
                 _thisScrollRect.content.anchoredPosition = new Vector2(_positions[elementId], _thisScrollRect.content.anchoredPosition.y);
             }
-            
         }
         
         private void EnableScroll() {
@@ -180,7 +182,7 @@ namespace TinyUtilities.Components {
                         offset -= elementRect.sizeDelta.y + spacing;
                     }
                     
-                    _positions[positionId] = offset;
+                    _positions[positionId] = offset + _offset;
                 }
             } else {
                 for (int childId = 0, positionId = 1; childId < childCount && positionId < _positions.Length; childId++, positionId++) {
@@ -188,7 +190,7 @@ namespace TinyUtilities.Components {
                         offset -= elementRect.sizeDelta.x + spacing;
                     }
                     
-                    _positions[positionId] = offset;
+                    _positions[positionId] = offset + _offset;
                 }
             }
             
