@@ -155,5 +155,15 @@ namespace TinyUtilities.Extensions.Global {
             
             return builder.ToString();
         }
+        
+        public static List<T> Reverse<T>(this List<T> list) {
+            int length = list.Count / 2;
+            
+            for (int i = 0; i < length; i++) {
+                (list[i], list[list.Count - 1 - i]) = (list[list.Count - 1 - i], list[i]);
+            }
+            
+            return list;
+        }
     }
 }

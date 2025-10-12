@@ -2,6 +2,7 @@
 // Licensed under the MIT License. See LICENSE.md for details.
 
 using System.Collections;
+using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using TinyUtilities.Extensions.Global;
 using TinyUtilities.Extensions.Unity;
@@ -22,22 +23,30 @@ namespace TinyUtilities.Components {
     [RequireComponent(typeof(ScrollRect))]
     [RequireComponent(typeof(RectTransform))]
     public sealed class ScrollElementsList : UIBehaviour, ISelfValidator, ICoroutineRunner, IBeginDragHandler, IDragHandler, IEndDragHandler {
-        public int currentElement { get; private set; }
+        public ScrollRect scroll => _thisScrollRect;
+        
         public int elementsCount => _positions.Length;
+        public int currentElement { get; private set; }
         
         [SerializeField]
         private Orientation _orientation;
         
+        [field: SerializeField]
+        public bool activeOnly { get; private set; }
+        
+        [field: SerializeField]
+        public bool isInverted { get; private set; }
+        
     #if DOTWEEN
-        [SerializeField]
-        private Ease _ease = Ease.OutBack;
+        [field: SerializeField]
+        public Ease ease { get; private set; } = Ease.OutBack;
     #endif
         
-        [SerializeField, Min(1f)]
-        private float _speed = 100f;
+        [field: SerializeField, Min(1f)]
+        public float speed { get; private set; } = 100f;
         
-        [SerializeField]
-        private float _offset;
+        [field: SerializeField]
+        public float offset { get; private set; }
         
         [SerializeField, Required]
         private ScrollButtonMove[] _buttons;
@@ -93,6 +102,16 @@ namespace TinyUtilities.Components {
             currentElement = nextElement;
         }
         
+        public void SetOffset(float value) {
+            offset = value;
+            CalculateOffsets();
+        }
+        
+        public void SetInvertedState(bool value) {
+            isInverted = value;
+            CalculateOffsets();
+        }
+        
         public void Recalculate() {
             if (gameObject.activeInHierarchy == false) {
                 return;
@@ -114,17 +133,16 @@ namespace TinyUtilities.Components {
             Tweener tween;
             
             if (_orientation == Orientation.Vertical) {
-                float duration = Mathf.Abs(_thisScrollRect.content.anchoredPosition.y - _positions[elementId]) / _speed;
+                float duration = Mathf.Abs(_thisScrollRect.content.anchoredPosition.y - _positions[elementId]) / speed;
                 tween = DOAnchorPosY(_thisScrollRect.content, _positions[elementId], Mathf.Min(duration, _MAX_DURATION));
             } else {
-                float duration = Mathf.Abs(_thisScrollRect.content.anchoredPosition.x - _positions[elementId]) / _speed;
+                float duration = Mathf.Abs(_thisScrollRect.content.anchoredPosition.x - _positions[elementId]) / speed;
                 tween = DOAnchorPosX(_thisScrollRect.content, _positions[elementId], Mathf.Min(duration, _MAX_DURATION));
             }
             
-            tween.SetEase(_ease).OnComplete(EnableScroll).SetUpdate(true);
+            tween.SetEase(ease).OnComplete(EnableScroll).SetUpdate(true);
             
         #else
-        
             MoveToElementForce(elementId);
             
         #endif
@@ -170,30 +188,43 @@ namespace TinyUtilities.Components {
         private void CalculateOffsets() {
             RectTransform content = _thisScrollRect.content;
             int childCount = content.childCount;
-            _positions = new float[Mathf.Max(1, content.childCount)];
+            List<float> positions = new List<float>(Mathf.Max(1, content.childCount));
             
             float spacing = _contentLayoutGroup.spacing;
-            float offset = _offset;
-            _positions[0] = offset;
+            float position = offset;
+            positions.Add(position);
             
             if (_orientation == Orientation.Vertical) {
-                for (int childId = 0, positionId = 1; childId < childCount && positionId < _positions.Length; childId++, positionId++) {
+                for (int childId = 0; childId < childCount; childId++) {
                     if (content.GetChild(childId) is RectTransform elementRect) {
-                        offset -= elementRect.sizeDelta.y + spacing;
+                        if (activeOnly && elementRect.gameObject.activeSelf == false) {
+                            continue;
+                        }
+                        
+                        position -= elementRect.sizeDelta.y + spacing;
                     }
                     
-                    _positions[positionId] = offset;
+                    positions.Add(position);
                 }
             } else {
-                for (int childId = 0, positionId = 1; childId < childCount && positionId < _positions.Length; childId++, positionId++) {
+                for (int childId = 0; childId < childCount; childId++) {
                     if (content.GetChild(childId) is RectTransform elementRect) {
-                        offset -= elementRect.sizeDelta.x + spacing;
+                        if (activeOnly && elementRect.gameObject.activeSelf == false) {
+                            continue;
+                        }
+                        
+                        position -= elementRect.sizeDelta.x + spacing;
                     }
                     
-                    _positions[positionId] = offset;
+                    positions.Add(position);
                 }
             }
             
+            if (isInverted) {
+                positions.Reverse();
+            }
+            
+            _positions = positions.ToArray();
             currentElement = Mathf.Clamp(currentElement, 0, _positions.Length - 1);
         }
         

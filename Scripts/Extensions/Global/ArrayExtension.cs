@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using JetBrains.Annotations;
 using UnityEngine;
 using UnityRandom = UnityEngine.Random;
 
@@ -154,16 +155,16 @@ namespace TinyUtilities.Extensions.Global {
             return false;
         }
         
-        public static int FindClosestIndex(this float[] arr, float target) {
-            if (arr == null || arr.Length == 0) {
+        public static int FindClosestIndex(this float[] array, float target) {
+            if (array == null || array.Length == 0) {
                 return 0;
             }
             
             int closestIndex = 0;
-            float minDiff = Mathf.Abs(arr[0] - target);
+            float minDiff = Mathf.Abs(array[0] - target);
             
-            for (int i = 1; i < arr.Length; i++) {
-                float diff = Mathf.Abs(arr[i] - target);
+            for (int i = 1; i < array.Length; i++) {
+                float diff = Mathf.Abs(array[i] - target);
                 
                 if (diff >= minDiff) {
                     continue;
@@ -176,18 +177,29 @@ namespace TinyUtilities.Extensions.Global {
             return closestIndex;
         }
         
-        public static T[] Shuffle<T>(this T[] arr) {
-            for (int i = 0; i < arr.Length; i++) {
-                int index = UnityRandom.Range(0, arr.Length);
+        public static T[] Shuffle<T>(this T[] array) {
+            for (int i = 0; i < array.Length; i++) {
+                int index = UnityRandom.Range(0, array.Length);
                 
                 if (index == i) {
                     continue;
                 }
                 
-                (arr[index], arr[i]) = (arr[i], arr[index]);
+                (array[index], array[i]) = (array[i], array[index]);
             }
             
-            return arr;
+            return array;
+        }
+        
+        [CollectionAccess(CollectionAccessType.ModifyExistingContent)]
+        public static T[] Reverse<T>(this T[] array) {
+            int length = array.Length / 2;
+            
+            for (int i = 0; i < length; i++) {
+                (array[i], array[array.Length - 1 - i]) = (array[array.Length - 1 - i], array[i]);
+            }
+            
+            return array;
         }
     }
 }
