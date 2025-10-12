@@ -86,30 +86,18 @@ namespace TinyUtilities.Components {
         
         public void OnEndDrag(PointerEventData eventData) => MoveToElement(currentElement);
         
-        public void OnDrag(PointerEventData eventData) {
-            int nextElement;
-            
-            if (_orientation == Orientation.Vertical) {
-                nextElement = _positions.FindClosestIndex(_thisScrollRect.content.anchoredPosition.y);
-            } else {
-                nextElement = _positions.FindClosestIndex(_thisScrollRect.content.anchoredPosition.x);
-            }
-            
-            if (nextElement == currentElement) {
-                return;
-            }
-            
-            currentElement = nextElement;
-        }
+        public void OnDrag(PointerEventData eventData) => UpdateCurrentElement();
         
         public void SetOffset(float value) {
             offset = value;
             CalculateOffsets();
+            UpdateCurrentElement();
         }
         
         public void SetInvertedState(bool value) {
             isInverted = value;
             CalculateOffsets();
+            UpdateCurrentElement();
         }
         
         public void Recalculate() {
@@ -163,6 +151,22 @@ namespace TinyUtilities.Components {
             }
         }
         
+        private void UpdateCurrentElement() {
+            int nextElement;
+            
+            if (_orientation == Orientation.Vertical) {
+                nextElement = _positions.FindClosestIndex(_thisScrollRect.content.anchoredPosition.y);
+            } else {
+                nextElement = _positions.FindClosestIndex(_thisScrollRect.content.anchoredPosition.x);
+            }
+            
+            if (nextElement == currentElement) {
+                return;
+            }
+            
+            currentElement = nextElement;
+        }
+        
         private void EnableScroll() {
             _thisScrollRect.enabled = true;
             UpdateButtons();
@@ -188,11 +192,25 @@ namespace TinyUtilities.Components {
         private void CalculateOffsets() {
             RectTransform content = _thisScrollRect.content;
             int childCount = content.childCount;
-            List<float> positions = new List<float>(Mathf.Max(1, content.childCount));
+            List<float> positions = new List<float>(Mathf.Max(1, childCount));
             
             float spacing = _contentLayoutGroup.spacing;
             float position = offset;
+            
+            if (childCount > 0) {
+                if (_orientation == Orientation.Vertical) {
+                    if (content.GetChild(0) is RectTransform elementRect) {
+                        position += (content.sizeDelta.y / 2) - (elementRect.sizeDelta.y / 2);
+                    }
+                } else {
+                    if (content.GetChild(0) is RectTransform elementRect) {
+                        position += (content.sizeDelta.x / 2) - (elementRect.sizeDelta.x / 2);
+                    }
+                }
+            }
+            
             positions.Add(position);
+            childCount -= 1;
             
             if (_orientation == Orientation.Vertical) {
                 for (int childId = 0; childId < childCount; childId++) {
