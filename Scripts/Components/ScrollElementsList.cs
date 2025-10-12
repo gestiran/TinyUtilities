@@ -81,9 +81,9 @@ namespace TinyUtilities.Components {
             int nextElement;
             
             if (_orientation == Orientation.Vertical) {
-                nextElement = _positions.FindClosestIndex(_thisScrollRect.content.anchoredPosition.y + _offset);
+                nextElement = _positions.FindClosestIndex(_thisScrollRect.content.anchoredPosition.y);
             } else {
-                nextElement = _positions.FindClosestIndex(_thisScrollRect.content.anchoredPosition.x + _offset);
+                nextElement = _positions.FindClosestIndex(_thisScrollRect.content.anchoredPosition.x);
             }
             
             if (nextElement == currentElement) {
@@ -173,7 +173,7 @@ namespace TinyUtilities.Components {
             _positions = new float[Mathf.Max(1, content.childCount)];
             
             float spacing = _contentLayoutGroup.spacing;
-            float offset = 0;
+            float offset = _offset;
             _positions[0] = offset;
             
             if (_orientation == Orientation.Vertical) {
@@ -182,7 +182,7 @@ namespace TinyUtilities.Components {
                         offset -= elementRect.sizeDelta.y + spacing;
                     }
                     
-                    _positions[positionId] = offset + _offset;
+                    _positions[positionId] = offset;
                 }
             } else {
                 for (int childId = 0, positionId = 1; childId < childCount && positionId < _positions.Length; childId++, positionId++) {
@@ -190,7 +190,7 @@ namespace TinyUtilities.Components {
                         offset -= elementRect.sizeDelta.x + spacing;
                     }
                     
-                    _positions[positionId] = offset + _offset;
+                    _positions[positionId] = offset;
                 }
             }
             
