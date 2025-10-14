@@ -1,6 +1,7 @@
 // Copyright (c) 2023 Derek Sliman
 // Licensed under the MIT License. See LICENSE.md for details.
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
@@ -8,6 +9,7 @@ using TinyUtilities.Extensions.Global;
 using TinyUtilities.Extensions.Unity;
 using TinyUtilities.Validation;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
@@ -51,6 +53,9 @@ namespace TinyUtilities.Components {
         [SerializeField, Required]
         private ScrollButtonMove[] _buttons;
         
+        [SerializeField]
+        public UnityEvent<int> onCurrentElementChanged;
+        
         [SerializeField, FoldoutGroup(InspectorNames.GENERATED), Required, ReadOnly]
         private ScrollRect _thisScrollRect;
         
@@ -74,7 +79,7 @@ namespace TinyUtilities.Components {
         
         protected override void OnEnable() {
             base.OnEnable();
-            _calculateProcess = StartCoroutine(CalculateProcess());
+            _calculateProcess = StartCoroutine(CalculateProcess(() => { }));
         }
         
         protected override void OnDisable() {
@@ -100,17 +105,23 @@ namespace TinyUtilities.Components {
             UpdateCurrentElement();
         }
         
-        public void Recalculate() {
+        public void Recalculate() => Recalculate(() => { });
+        
+        public void Recalculate(Action onComplete) {
             if (gameObject.activeInHierarchy == false) {
                 return;
             }
             
-            _calculateProcess = this.RestartCoroutine(_calculateProcess, CalculateProcess());
+            _calculateProcess = this.RestartCoroutine(_calculateProcess, CalculateProcess(onComplete));
         }
         
         public void MoveToElement(int elementId) {
             if (elementId < 0 || elementId >= _positions.Length) {
                 return;
+            }
+            
+            if (elementId != currentElement) {
+                onCurrentElementChanged.Invoke(elementId);
             }
             
             currentElement = elementId;
@@ -142,6 +153,10 @@ namespace TinyUtilities.Components {
                 return;
             }
             
+            if (elementId != currentElement) {
+                onCurrentElementChanged.Invoke(elementId);
+            }
+            
             currentElement = elementId;
             
             if (_orientation == Orientation.Vertical) {
@@ -162,6 +177,10 @@ namespace TinyUtilities.Components {
             
             if (nextElement == currentElement) {
                 return;
+            }
+            
+            if (nextElement != currentElement) {
+                onCurrentElementChanged.Invoke(nextElement);
             }
             
             currentElement = nextElement;
@@ -243,7 +262,14 @@ namespace TinyUtilities.Components {
             }
             
             _positions = positions.ToArray();
-            currentElement = Mathf.Clamp(currentElement, 0, _positions.Length - 1);
+            
+            int elementId = Mathf.Clamp(currentElement, 0, _positions.Length - 1);
+            
+            if (elementId != currentElement) {
+                onCurrentElementChanged.Invoke(elementId);
+            }
+            
+            currentElement = elementId;
         }
         
     #if DOTWEEN
@@ -262,10 +288,11 @@ namespace TinyUtilities.Components {
         
     #endif
         
-        private IEnumerator CalculateProcess() {
+        private IEnumerator CalculateProcess(Action onComplete) {
             yield return null;
             CalculateOffsets();
             UpdateButtons();
+            onComplete.Invoke();
         }
         
         public void Validate(SelfValidationResult result) {
