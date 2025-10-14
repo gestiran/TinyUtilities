@@ -173,6 +173,8 @@ namespace TinyUtilities.Extensions.Unity {
             return false;
         }
         
+        public static RectTransform RectTransform(this Transform transform) => transform as RectTransform;
+        
         private static bool TryFindChildWithNameNR(Transform[] children, string name, out Transform result) {
             return TryFindChildWithName(children, name, out result);
         }
