@@ -212,7 +212,7 @@ namespace TinyUtilities.Components {
         
         private void CalculateOffsets() {
             RectTransform content = _thisScrollRect.content;
-            int childCount = content.childCount;
+            int childCount = CalculateChildCount(content);
             List<float> positions = new List<float>(Mathf.Max(1, childCount));
             
             float spacing = _contentLayoutGroup.spacing;
@@ -280,6 +280,20 @@ namespace TinyUtilities.Components {
             }
             
             currentElement = elementId;
+        }
+        
+        private int CalculateChildCount(RectTransform parent) {
+            int childCount = parent.childCount;
+            
+            if (activeOnly) {
+                for (int childId = 0; childId < childCount; childId++) {
+                    if (parent.GetChild(childId).gameObject.activeSelf == false) {
+                        childCount--;
+                    }
+                }   
+            }
+            
+            return childCount;
         }
         
     #if DOTWEEN
