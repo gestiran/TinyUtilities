@@ -28,15 +28,16 @@ namespace TinyUtilities.Components {
         public ScrollRect scroll => _thisScrollRect;
         
         public int elementsCount => _positions.Length;
+        
         public int currentElement { get; private set; }
         
-        [SerializeField]
+        [SerializeField, OnValueChanged("ApplyOrientation")]
         private Orientation _orientation;
         
         [field: SerializeField]
         public bool activeOnly { get; private set; }
         
-        [field: SerializeField]
+        [field: SerializeField, OnValueChanged("ApplyOrientation")]
         public bool isInverted { get; private set; }
         
     #if DOTWEEN
@@ -44,11 +45,8 @@ namespace TinyUtilities.Components {
         public Ease ease { get; private set; } = Ease.OutBack;
     #endif
         
-        [field: SerializeField, Min(1f)]
-        public float speed { get; private set; } = 100f;
-        
         [field: SerializeField]
-        public float offset { get; private set; }
+        public float speed { get; private set; } = 100f;
         
         [SerializeField, Required]
         private ScrollButtonMove[] _buttons;
@@ -79,7 +77,7 @@ namespace TinyUtilities.Components {
         
         protected override void OnEnable() {
             base.OnEnable();
-            _calculateProcess = StartCoroutine(CalculateProcess(() => { }));
+            _calculateProcess = StartCoroutine(CalculateAfterFrameProcess(() => { }));
         }
         
         protected override void OnDisable() {
@@ -92,12 +90,6 @@ namespace TinyUtilities.Components {
         public void OnEndDrag(PointerEventData eventData) => MoveToElement(currentElement);
         
         public void OnDrag(PointerEventData eventData) => UpdateCurrentElement();
-        
-        public void SetOffset(float value) {
-            offset = value;
-            CalculateOffsets();
-            UpdateCurrentElement();
-        }
         
         public void SetInvertedState(bool value) {
             isInverted = value;
@@ -112,11 +104,11 @@ namespace TinyUtilities.Components {
                 return;
             }
             
-            _calculateProcess = this.RestartCoroutine(_calculateProcess, CalculateProcess(onComplete));
+            _calculateProcess = this.RestartCoroutine(_calculateProcess, CalculateAfterFrameProcess(onComplete));
         }
         
         public void MoveToElement(int elementId) {
-            if (elementId < 0 || elementId >= _positions.Length) {
+            if (IsCanMove(elementId) == false) {
                 return;
             }
             
@@ -143,13 +135,11 @@ namespace TinyUtilities.Components {
             
         #else
             MoveToElementForce(elementId);
-            
         #endif
-            
         }
         
         public void MoveToElementForce(int elementId) {
-            if (elementId < 0 || elementId >= _positions.Length) {
+            if (IsCanMove(elementId) == false) {
                 return;
             }
             
@@ -166,6 +156,18 @@ namespace TinyUtilities.Components {
             }
         }
         
+        private bool IsCanMove(int elementId) {
+            if (elementId < 0 || elementId >= _positions.Length) {
+                return false;
+            }
+            
+            if (_positions.Length == 1) {
+                return false;
+            }
+            
+            return true;
+        }
+        
         private void UpdateCurrentElement() {
             int nextElement;
             
@@ -179,10 +181,7 @@ namespace TinyUtilities.Components {
                 return;
             }
             
-            if (nextElement != currentElement) {
-                onCurrentElementChanged.Invoke(nextElement);
-            }
-            
+            onCurrentElementChanged.Invoke(nextElement);
             currentElement = nextElement;
         }
         
@@ -214,17 +213,19 @@ namespace TinyUtilities.Components {
             List<float> positions = new List<float>(Mathf.Max(1, childCount));
             
             float spacing = _contentLayoutGroup.spacing;
-            float position = offset;
+            float position = 0;
             
-            if (childCount > 0) {
-                if (_orientation == Orientation.Vertical) {
-                    if (content.GetChild(0) is RectTransform elementRect) {
-                        position += (content.sizeDelta.y / 2) - (elementRect.sizeDelta.y / 2);
-                    }
+            if (_orientation == Orientation.Vertical) {
+                if (isInverted) {
+                    position -= _contentLayoutGroup.padding.bottom;
                 } else {
-                    if (content.GetChild(0) is RectTransform elementRect) {
-                        position += (content.sizeDelta.x / 2) - (elementRect.sizeDelta.x / 2);
-                    }
+                    position += _contentLayoutGroup.padding.top;
+                }
+            } else {
+                if (isInverted) {
+                    position -= _contentLayoutGroup.padding.left;
+                } else {
+                    position += _contentLayoutGroup.padding.right;
                 }
             }
             
@@ -238,7 +239,11 @@ namespace TinyUtilities.Components {
                             continue;
                         }
                         
-                        position -= elementRect.sizeDelta.y + spacing;
+                        if (isInverted) {
+                            position -= elementRect.sizeDelta.y + spacing;
+                        } else {
+                            position += elementRect.sizeDelta.y + spacing;
+                        }
                     }
                     
                     positions.Add(position);
@@ -250,15 +255,15 @@ namespace TinyUtilities.Components {
                             continue;
                         }
                         
-                        position -= elementRect.sizeDelta.x + spacing;
+                        if (isInverted) {
+                            position -= elementRect.sizeDelta.x + spacing;
+                        } else {
+                            position += elementRect.sizeDelta.x + spacing;
+                        }
                     }
                     
                     positions.Add(position);
                 }
-            }
-            
-            if (isInverted) {
-                positions.Reverse();
             }
             
             _positions = positions.ToArray();
@@ -288,8 +293,8 @@ namespace TinyUtilities.Components {
         
     #endif
         
-        private IEnumerator CalculateProcess(Action onComplete) {
-            yield return null;
+        private IEnumerator CalculateAfterFrameProcess(Action onComplete) {
+            yield return new WaitForEndOfFrame();
             CalculateOffsets();
             UpdateButtons();
             onComplete.Invoke();
@@ -304,6 +309,25 @@ namespace TinyUtilities.Components {
             if (_thisScrollRect != null) {
                 if (_thisScrollRect.content == null) {
                     result.AddError($"{nameof(ScrollRect)} content is required!");
+                } else {
+                    RectTransform content = _thisScrollRect.content;
+                    
+                    float offset = isInverted ? 0f : 1f;
+                    Vector2 anchors = _orientation == Orientation.Vertical ? new Vector2(0.5f, offset) : new Vector2(offset, 0.5f);
+                    
+                    if (content.anchorMin != anchors) {
+                        result.AddError("Invalid content anchors!").WithFix(() => content.anchorMin = anchors);
+                    }
+                    
+                    if (content.anchorMax != anchors) {
+                        result.AddError("Invalid content anchors!").WithFix(() => content.anchorMax = anchors);
+                        ;
+                    }
+                    
+                    if (content.pivot != anchors) {
+                        result.AddError("Invalid content pivot!").WithFix(() => content.pivot = anchors);
+                        ;
+                    }
                 }
                 
                 if (_thisScrollRect.content.ValidateNotCurrent(_contentLayoutGroup)) {
@@ -314,6 +338,7 @@ namespace TinyUtilities.Components {
         }
         
     #if UNITY_EDITOR
+        
         [ContextMenu(InspectorNames.SOFT_RESET)]
         protected override void Reset() {
             _thisScrollRect = GetComponent<ScrollRect>();
@@ -322,7 +347,25 @@ namespace TinyUtilities.Components {
                 _contentLayoutGroup = _thisScrollRect.content.GetComponent<HorizontalOrVerticalLayoutGroup>();
             }
             
+            ApplyOrientation();
+            
             UnityEditor.EditorUtility.SetDirty(this);
+        }
+        
+        private void ApplyOrientation() {
+            RectTransform content = _thisScrollRect.content;
+            
+            if (content == null) {
+                return;
+            }
+            
+            float offset = isInverted ? 0f : 1f;
+            Vector2 anchors = _orientation == Orientation.Vertical ? new Vector2(0.5f, offset) : new Vector2(offset, 0.5f);
+            
+            content.anchorMin = anchors;
+            content.anchorMax = anchors;
+            
+            content.pivot = anchors;
         }
         
     #endif
