@@ -40,6 +40,9 @@ namespace TinyUtilities.Components {
         [field: SerializeField, OnValueChanged("ApplyOrientation")]
         public bool isInverted { get; private set; }
         
+        [field: SerializeField]
+        public bool isSkippedPadding { get; private set; }
+        
     #if DOTWEEN
         [field: SerializeField]
         public Ease ease { get; private set; } = Ease.OutBack;
@@ -215,17 +218,19 @@ namespace TinyUtilities.Components {
             float spacing = _contentLayoutGroup.spacing;
             float position = 0;
             
-            if (_orientation == Orientation.Vertical) {
-                if (isInverted) {
-                    position -= _contentLayoutGroup.padding.bottom;
+            if (isSkippedPadding == false) {
+                if (_orientation == Orientation.Vertical) {
+                    if (isInverted) {
+                        position -= _contentLayoutGroup.padding.bottom;
+                    } else {
+                        position += _contentLayoutGroup.padding.top;
+                    }
                 } else {
-                    position += _contentLayoutGroup.padding.top;
-                }
-            } else {
-                if (isInverted) {
-                    position -= _contentLayoutGroup.padding.left;
-                } else {
-                    position += _contentLayoutGroup.padding.right;
+                    if (isInverted) {
+                        position -= _contentLayoutGroup.padding.left;
+                    } else {
+                        position += _contentLayoutGroup.padding.right;
+                    }
                 }
             }
             
@@ -321,12 +326,10 @@ namespace TinyUtilities.Components {
                     
                     if (content.anchorMax != anchors) {
                         result.AddError("Invalid content anchors!").WithFix(() => content.anchorMax = anchors);
-                        ;
                     }
                     
                     if (content.pivot != anchors) {
                         result.AddError("Invalid content pivot!").WithFix(() => content.pivot = anchors);
-                        ;
                     }
                 }
                 
