@@ -29,6 +29,24 @@ namespace TinyUtilities {
             return current * 100 / max;
         }
         
+        public static int CalculatePercentSafe(int current, int max) {
+            if (max == 0) {
+                return 0;
+            }
+            
+            if (current >= max) {
+                return 100;
+            }
+            
+            int result = current * 100 / max;
+            
+            if (result == 100 && current < max) {
+                result = 99;
+            }
+            
+            return result;
+        }
+        
         public static int CalculateRemainPercent(int current, int max) => 100 - CalculatePercent(current, max);
         
         public static int ApplyPercent(int value, int percent) => value * percent / 100;
