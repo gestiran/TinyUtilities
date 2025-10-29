@@ -4,13 +4,16 @@
 using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
-using Sirenix.OdinInspector;
-using Sirenix.OdinInspector.Editor;
 using TinyUtilities.Editor.MergeScripts.Handlers;
 using TinyUtilities.Editor.MergeScripts.Pairs;
 using TinyUtilities.Extensions.Global;
 using UnityEditor;
 using UnityEngine;
+
+#if ODIN_INSPECTOR
+using Sirenix.OdinInspector;
+using Sirenix.OdinInspector.Editor;
+#endif
 
 namespace TinyUtilities.Editor.MergeScripts {
     public sealed class MergeScriptsWindow : OdinEditorWindow {

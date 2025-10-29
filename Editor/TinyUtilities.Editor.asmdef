@@ -24,6 +24,17 @@
     ],
     "autoReferenced": true,
     "defineConstraints": [],
-    "versionDefines": [],
+    "versionDefines": [
+        {
+            "name": "Sirenix.OdinInspector",
+            "expression": "1.0.0",
+            "define": "ODIN_INSPECTOR"
+        },
+        {
+            "name": "Sirenix.OdinInspector.Editor",
+            "expression": "1.0.0",
+            "define": "ODIN_INSPECTOR"
+        }
+    ],
     "noEngineReferences": false
 }

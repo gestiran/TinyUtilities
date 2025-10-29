@@ -2,10 +2,13 @@
 // Licensed under the MIT License. See LICENSE.md for details.
 
 using System;
-using Sirenix.OdinInspector;
-using Sirenix.OdinInspector.Editor;
 using UnityEditor;
 using UnityEngine;
+
+#if ODIN_INSPECTOR
+using Sirenix.OdinInspector;
+using Sirenix.OdinInspector.Editor;
+#endif
 
 namespace TinyUtilities.Editor.MergeObjects {
     public sealed class MergeObjectsWindow : OdinEditorWindow {

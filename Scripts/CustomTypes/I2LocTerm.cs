@@ -2,7 +2,10 @@
 // Licensed under the MIT License. See LICENSE.md for details.
 
 using System;
+
+#if ODIN_INSPECTOR
 using Sirenix.OdinInspector;
+#endif
 
 #if UNITY_EDITOR
 using System.Collections.Generic;

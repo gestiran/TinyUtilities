@@ -2,39 +2,27 @@
 // Licensed under the MIT License. See LICENSE.md for details.
 
 using System;
-using Sirenix.OdinInspector;
 using UnityEngine;
 
-namespace TinyUtilities.CustomTypes {
-#if ODIN_INSPECTOR && UNITY_EDITOR
-    [InlineProperty]
+#if ODIN_INSPECTOR
+using Sirenix.OdinInspector;
 #endif
-    [Serializable]
+
+namespace TinyUtilities.CustomTypes {
+    [Serializable, InlineProperty]
     public sealed class RectLink : IEquatable<RectLink>, IEquatable<Rect> {
         public Rect rect => new Rect(_x, _y, _width, _height);
         
-    #if ODIN_INSPECTOR && UNITY_EDITOR
-        [HorizontalGroup, HideLabel, SuffixLabel("X", true)]
-    #endif
-        [SerializeField]
+        [SerializeField, HorizontalGroup, HideLabel, SuffixLabel("X", true)]
         private float _x;
         
-    #if ODIN_INSPECTOR && UNITY_EDITOR
-        [HorizontalGroup, HideLabel, SuffixLabel("Y", true)]
-    #endif
-        [SerializeField]
+        [SerializeField, HorizontalGroup, HideLabel, SuffixLabel("Y", true)]
         private float _y;
         
-    #if ODIN_INSPECTOR && UNITY_EDITOR
-        [HorizontalGroup, HideLabel, SuffixLabel("Width", true)]
-    #endif
-        [SerializeField]
+        [SerializeField, HorizontalGroup, HideLabel, SuffixLabel("Width", true)]
         private float _width;
         
-    #if ODIN_INSPECTOR && UNITY_EDITOR
-        [HorizontalGroup, HideLabel, SuffixLabel("Height", true)]
-    #endif
-        [SerializeField]
+        [SerializeField, HorizontalGroup, HideLabel, SuffixLabel("Height", true)]
         private float _height;
         
         public RectLink() { }

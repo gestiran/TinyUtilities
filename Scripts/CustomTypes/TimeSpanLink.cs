@@ -3,40 +3,28 @@
 
 using System;
 using Newtonsoft.Json;
-using Sirenix.OdinInspector;
 using UnityEngine;
 
-namespace TinyUtilities.CustomTypes {
-#if ODIN_INSPECTOR && UNITY_EDITOR
-    [InlineProperty]
+#if ODIN_INSPECTOR
+using Sirenix.OdinInspector;
 #endif
-    [Serializable, JsonObject(MemberSerialization.Fields)]
+
+namespace TinyUtilities.CustomTypes {
+    [Serializable, JsonObject(MemberSerialization.Fields), InlineProperty]
     public sealed class TimeSpanLink : IEquatable<TimeSpanLink>, IEquatable<TimeSpan> {
         [JsonIgnore]
         public TimeSpan time => new TimeSpan(_days, _hours, _minutes, _seconds);
         
-    #if ODIN_INSPECTOR && UNITY_EDITOR
-        [HorizontalGroup, HideLabel, SuffixLabel("Day", true), MinValue(0)]
-    #endif
-        [SerializeField, JsonProperty("day")]
+        [SerializeField, JsonProperty("day"), HorizontalGroup, HideLabel, SuffixLabel("Day", true), MinValue(0)]
         private int _days;
         
-    #if ODIN_INSPECTOR && UNITY_EDITOR
-        [HorizontalGroup, HideLabel, SuffixLabel("Hour", true), MinValue(0)]
-    #endif
-        [SerializeField, JsonProperty("hour")]
+        [SerializeField, JsonProperty("hour"), HorizontalGroup, HideLabel, SuffixLabel("Hour", true), MinValue(0)]
         private int _hours;
         
-    #if ODIN_INSPECTOR && UNITY_EDITOR
-        [HorizontalGroup, HideLabel, SuffixLabel("Min", true), MinValue(0)]
-    #endif
-        [SerializeField, JsonProperty("min")]
+        [SerializeField, JsonProperty("min"), HorizontalGroup, HideLabel, SuffixLabel("Min", true), MinValue(0)]
         private int _minutes;
         
-    #if ODIN_INSPECTOR && UNITY_EDITOR
-        [HorizontalGroup, HideLabel, SuffixLabel("Sec", true), MinValue(0)]
-    #endif
-        [SerializeField, JsonProperty("sec")]
+        [SerializeField, JsonProperty("sec"), HorizontalGroup, HideLabel, SuffixLabel("Sec", true), MinValue(0)]
         private int _seconds;
         
         public TimeSpanLink() { }

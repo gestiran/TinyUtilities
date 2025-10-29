@@ -2,8 +2,11 @@
 // Licensed under the MIT License. See LICENSE.md for details.
 
 using DG.Tweening;
-using Sirenix.OdinInspector;
 using UnityEngine;
+
+#if ODIN_INSPECTOR
+using Sirenix.OdinInspector;
+#endif
 
 namespace TinyUtilities.Components {
     [DisallowMultipleComponent]

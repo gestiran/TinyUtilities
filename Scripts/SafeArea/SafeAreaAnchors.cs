@@ -2,9 +2,12 @@
 // Licensed under the MIT License. See LICENSE.md for details.
 
 using System;
-using Sirenix.OdinInspector;
 using TinyUtilities.ScreenOrientation;
 using UnityEngine;
+
+#if ODIN_INSPECTOR
+using Sirenix.OdinInspector;
+#endif
 
 namespace TinyUtilities.SafeArea {
     [DisallowMultipleComponent]

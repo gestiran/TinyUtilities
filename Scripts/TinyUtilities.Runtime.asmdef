@@ -29,6 +29,16 @@
             "name": "i2.loc",
             "expression": "2.8.20",
             "define": "I2_LOCALIZE"
+        },
+        {
+            "name": "Sirenix.OdinInspector",
+            "expression": "1.0.0",
+            "define": "ODIN_INSPECTOR"
+        },
+        {
+            "name": "Sirenix.Serialization",
+            "expression": "1.0.0",
+            "define": "ODIN_SERIALIZATION"
         }
     ],
     "noEngineReferences": false

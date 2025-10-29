@@ -4,9 +4,12 @@
 using System;
 using System.Collections;
 using System.IO;
-using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityObject = UnityEngine.Object;
+
+#if ODIN_INSPECTOR
+using Sirenix.OdinInspector;
+#endif
 
 namespace TinyUtilities.Unity {
     public static class AssetsUtility {

@@ -4,7 +4,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Sirenix.OdinInspector;
 using TinyUtilities.Extensions.Global;
 using TinyUtilities.Extensions.Unity;
 using TinyUtilities.Validation;
@@ -17,6 +16,10 @@ using UnityEngine.UI;
 using DG.Tweening;
 using DG.Tweening.Core;
 using DG.Tweening.Plugins.Options;
+#endif
+
+#if ODIN_INSPECTOR
+using Sirenix.OdinInspector;
 #endif
 
 namespace TinyUtilities.Components {
@@ -320,7 +323,7 @@ namespace TinyUtilities.Components {
         }
         
         public void Validate(SelfValidationResult result) {
-        #if UNITY_EDITOR
+        #if UNITY_EDITOR && ODIN_INSPECTOR
             if (this.ValidateNotCurrent(_thisScrollRect)) {
                 result.AddErrorNotCurrent<ScrollRect>().WithFix(() => this.FixComponent(out _thisScrollRect));
             }

@@ -2,9 +2,12 @@
 // Licensed under the MIT License. See LICENSE.md for details.
 
 using System;
+using UnityEngine;
+
+#if ODIN_INSPECTOR
 using System.IO;
 using Sirenix.Serialization;
-using UnityEngine;
+#endif
 
 namespace TinyUtilities {
     public static class IDUtility {
@@ -43,11 +46,16 @@ namespace TinyUtilities {
         public static string GetString() => $"{Get():0000000000}";
         
         private static void Save(uint id) {
+        #if ODIN_INSPECTOR
             byte[] data = SerializationUtility.SerializeValue(id, DataFormat.Binary);
             File.WriteAllBytes(Path.Combine(Application.persistentDataPath, _ID_KEY), data);
+        #else
+            PlayerPrefs.SetInt(_ID_KEY, (int)id);
+        #endif
         }
         
         private static uint Load() {
+        #if ODIN_INSPECTOR
             string path = Path.Combine(Application.persistentDataPath, _ID_KEY);
             
             if (!File.Exists(path)) {
@@ -57,6 +65,9 @@ namespace TinyUtilities {
             byte[] bytes = File.ReadAllBytes(path);
             
             return SerializationUtility.DeserializeValue<uint>(bytes, DataFormat.Binary);
+        #else
+            return (uint)PlayerPrefs.GetInt(_ID_KEY, 0);
+        #endif
         }
     }
 }
