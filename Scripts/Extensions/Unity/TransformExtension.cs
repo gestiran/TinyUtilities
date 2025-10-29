@@ -2,6 +2,7 @@
 // Licensed under the MIT License. See LICENSE.md for details.
 
 using System;
+using JetBrains.Annotations;
 using UnityEngine;
 using UnityObject = UnityEngine.Object;
 
@@ -173,7 +174,11 @@ namespace TinyUtilities.Extensions.Unity {
             return false;
         }
         
+        [Pure]
         public static RectTransform RectTransform(this Transform transform) => transform as RectTransform;
+        
+        [Pure]
+        public static Vector2 SizeDelta(this Transform transform) => transform.RectTransform().sizeDelta;
         
         private static bool TryFindChildWithNameNR(Transform[] children, string name, out Transform result) {
             return TryFindChildWithName(children, name, out result);
