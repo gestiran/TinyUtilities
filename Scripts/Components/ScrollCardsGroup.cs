@@ -120,18 +120,25 @@ namespace TinyUtilities.Components {
             
             _thisScrollRect.content.DOLocalMove(localPosition, durationOpen).SetUpdate(ignoreTimeScale);
             
+            float startPosition;
+            
+            if (orientation == Orientation.Horizontal) {
+                startPosition = cellSize.x * 0.5f;
+            } else {
+                startPosition = cellSize.y * 0.5f;
+            }
+            
             for (int cardId = 0; cardId < _cards.Length; cardId++) {
                 Transform card = _cards[cardId];
-                float moveDuration = durationOpen + Mathf.Abs(currentId - cardId) * durationOpen;
                 
                 if (orientation == Orientation.Horizontal) {
-                    localPosition = new Vector3(offsetCenter.x + (cellSize.x + spacing.x) * cardId, offsetCenter.y);
+                    localPosition = new Vector3(startPosition + (cellSize.x + spacing.x) * cardId, offsetCenter.y);
                 } else {
-                    localPosition = new Vector3(offsetCenter.x, offsetCenter.y + (cellSize.y + spacing.y) * cardId);
+                    localPosition = new Vector3(offsetCenter.x, startPosition + (cellSize.y + spacing.y) * cardId);
                 }
                 
                 card.DOScale(scaleMain, durationOpen).SetUpdate(ignoreTimeScale);
-                card.DOLocalMove(localPosition, moveDuration).SetUpdate(ignoreTimeScale);
+                card.DOLocalMove(localPosition, durationOpen).SetUpdate(ignoreTimeScale);
             }
             
             _thisScrollRect.enabled = true;
@@ -151,20 +158,19 @@ namespace TinyUtilities.Components {
             
             for (int cardId = 0; cardId < _cards.Length; cardId++) {
                 Transform card = _cards[cardId];
-                float moveDuration = durationClose + Mathf.Abs(currentId - cardId) * durationClose;
                 
                 if (cardId == currentId) {
-                    card.DOLocalMove(new Vector3(offsetCenter.x, offsetCenter.y), moveDuration).SetUpdate(ignoreTimeScale);
+                    card.DOLocalMove(new Vector3(offsetCenter.x, offsetCenter.y), durationClose).SetUpdate(ignoreTimeScale);
                 } else if (cardId == leftId) {
                     Vector3 localPosition = new Vector3(offsetCenter.x - offsetSubCards.x, offsetCenter.y - offsetSubCards.y);
-                    card.DOLocalMove(localPosition, moveDuration).SetUpdate(ignoreTimeScale);
+                    card.DOLocalMove(localPosition, durationClose).SetUpdate(ignoreTimeScale);
                     card.DOScale(scaleSub, durationClose).SetUpdate(ignoreTimeScale);
                 } else if (cardId == rightId) {
                     Vector3 localPosition = new Vector3(offsetCenter.x + offsetSubCards.x, offsetCenter.y + offsetSubCards.y);
-                    card.DOLocalMove(localPosition, moveDuration).SetUpdate(ignoreTimeScale);
+                    card.DOLocalMove(localPosition, durationClose).SetUpdate(ignoreTimeScale);
                     card.DOScale(scaleSub, durationClose).SetUpdate(ignoreTimeScale);
                 } else {
-                    card.DOLocalMove(new Vector3(offsetCenter.x, offsetCenter.y), moveDuration).SetUpdate(ignoreTimeScale);
+                    card.DOLocalMove(new Vector3(offsetCenter.x, offsetCenter.y), durationClose).SetUpdate(ignoreTimeScale);
                     card.DOScale(scaleSub * 0.5f, durationClose).SetUpdate(ignoreTimeScale);
                 }
             }
@@ -179,9 +185,9 @@ namespace TinyUtilities.Components {
         
         public void RecalculateContentSize() {
             if (orientation == Orientation.Horizontal) {
-                _thisScrollRect.content.sizeDelta = new Vector2((cellSize.x + spacing.x) * _cards.Length, cellSize.y);
+                _thisScrollRect.content.sizeDelta = new Vector2((cellSize.x + spacing.x) * _cards.Length + cellSize.x * 0.5f, cellSize.y);
             } else {
-                _thisScrollRect.content.sizeDelta = new Vector2(cellSize.y, (cellSize.y + spacing.y) * _cards.Length);
+                _thisScrollRect.content.sizeDelta = new Vector2(cellSize.y, (cellSize.y + spacing.y) * _cards.Length + cellSize.y * 0.5f);
             }
         }
         
