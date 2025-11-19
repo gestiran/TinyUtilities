@@ -43,59 +43,54 @@ namespace TinyUtilities.Extensions.Global {
         }
         
         public static void Recreate(this CancellationTokenSource cancellation, out CancellationTokenSource result) {
-            if (cancellation == null) {
-                result = new CancellationTokenSource();
+            if (cancellation != null) {
+                CancelAndDispose(cancellation);
+                
             }
             
-            CancelAndDispose(cancellation);
             result = new CancellationTokenSource();
         }
         
         public static void Recreate(this CancellationTokenSource cancellation, out CancellationTokenSource result, params CancellationToken[] tokens) {
-            if (cancellation == null) {
-                result = CancellationTokenSource.CreateLinkedTokenSource(tokens);
+            if (cancellation != null) {
+                CancelAndDispose(cancellation);
             }
             
-            CancelAndDispose(cancellation);
             result = CancellationTokenSource.CreateLinkedTokenSource(tokens);
         }
         
         public static void Update(this CancellationTokenSource cancellation, out CancellationTokenSource result, CancellationTokenSource reference) {
-            if (cancellation == null) {
-                result = reference;
+            if (cancellation != null) {
+                CancelAndDispose(cancellation);
             }
             
-            CancelAndDispose(cancellation);
             result = reference;
         }
         
         [Pure]
         public static CancellationTokenSource Update(this CancellationTokenSource cancellation, CancellationTokenSource reference) {
-            if (cancellation == null) {
-                return reference;
+            if (cancellation != null) {
+                CancelAndDispose(cancellation);
             }
             
-            CancelAndDispose(cancellation);
             return reference;
         }
         
         [Pure]
         public static CancellationTokenSource Recreate(this CancellationTokenSource cancellation) {
-            if (cancellation == null) {
-                return new CancellationTokenSource();
+            if (cancellation != null) {
+                CancelAndDispose(cancellation);
             }
             
-            CancelAndDispose(cancellation);
             return new CancellationTokenSource();
         }
         
         [Pure]
         public static CancellationTokenSource Recreate(this CancellationTokenSource cancellation, params CancellationToken[] tokens) {
-            if (cancellation == null) {
-                return CancellationTokenSource.CreateLinkedTokenSource(tokens);
+            if (cancellation != null) {
+                CancelAndDispose(cancellation);
             }
             
-            CancelAndDispose(cancellation);
             return CancellationTokenSource.CreateLinkedTokenSource(tokens);
         }
         
