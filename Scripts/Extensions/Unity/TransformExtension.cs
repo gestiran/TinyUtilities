@@ -2,12 +2,31 @@
 // Licensed under the MIT License. See LICENSE.md for details.
 
 using System;
+using System.Collections.Generic;
 using JetBrains.Annotations;
 using UnityEngine;
 using UnityObject = UnityEngine.Object;
 
 namespace TinyUtilities.Extensions.Unity {
     public static class TransformExtension {
+        public static Transform ScaleTo(this Transform transform, Vector3 localScale) {
+            transform.localScale = transform.localScale.MultiplyValues(localScale);
+            return transform;
+        }
+        
+        public static Transform DestroyAfter(this Transform transform, float seconds) {
+            transform.gameObject.DestroyAfter(seconds);
+            return transform;
+        }
+        
+        public static T DestroyAfter<T>(this T transforms, float seconds) where T : IEnumerable<Transform> {
+            foreach (Transform transform in transforms) {
+                DestroyAfter(transform, seconds);
+            }
+            
+            return transforms;
+        }
+        
         public static bool TryFindChildWithName(this Transform transform, string name, out Transform result) {
             return TryFindChildWithName(transform.GetChildTransforms(), name, out result);
         }

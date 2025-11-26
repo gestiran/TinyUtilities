@@ -6,6 +6,23 @@ using UnityEngine;
 
 namespace TinyUtilities.Extensions.Unity {
     public static class ParticleSystemExtension {
+        public static ParticleSystem PlayInstance(this ParticleSystem particle, Vector3 position, Transform parent = null) {
+            Transform particleTransform = particle.transform;
+            ParticleSystem instance = Object.Instantiate(particle, position + particleTransform.position, particleTransform.rotation, parent);
+            instance.Play();
+            return instance;
+        }
+        
+        public static ParticleSystem ScaleTo(this ParticleSystem particle, Vector3 localScale) {
+            particle.transform.ScaleTo(localScale);
+            return particle;
+        }
+        
+        public static ParticleSystem DestroyAfter(this ParticleSystem particle, float seconds) {
+            particle.gameObject.DestroyAfter(seconds);
+            return particle;
+        }
+        
         public static void Play<T>(this T particles, bool withChildren = true) where T : IEnumerable<ParticleSystem> {
             foreach (ParticleSystem particle in particles) {
                 particle.Play(withChildren);

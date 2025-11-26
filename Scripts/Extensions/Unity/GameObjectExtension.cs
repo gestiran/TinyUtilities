@@ -6,6 +6,24 @@ using UnityEngine;
 
 namespace TinyUtilities.Extensions.Unity {
     public static class GameObjectExtension {
+        public static GameObject ScaleTo(this GameObject gameObject, Vector3 localScale) {
+            gameObject.transform.ScaleTo(localScale);
+            return gameObject;
+        }
+        
+        public static GameObject DestroyAfter(this GameObject gameObject, float seconds) {
+            Object.Destroy(gameObject, seconds);
+            return gameObject;
+        }
+        
+        public static T DestroyAfter<T>(this T gameObjects, float seconds) where T : IEnumerable<GameObject> {
+            foreach (GameObject gameObject in gameObjects) {
+                DestroyAfter(gameObject, seconds);
+            }
+            
+            return gameObjects;
+        }
+        
         public static bool TryGetComponentInParent<T>(this GameObject gameObject, out T component) where T : Component {
             component = gameObject.GetComponentInParent<T>();
             return component != null;
