@@ -15,9 +15,9 @@ namespace TinyUtilities.Editor.EnterPlayMode {
         private static readonly DoTweenToolsModule _doTweenTools;
 
         static EnterPlayModeProjectSettings() {
+            _bootScene = new BootSceneModule();
             _asyncTools = new AsyncToolsModule();
             _doTweenTools = new DoTweenToolsModule();
-            _bootScene = new BootSceneModule();
             
             LoadStartState();
             
