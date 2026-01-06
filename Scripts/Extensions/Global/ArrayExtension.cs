@@ -131,6 +131,65 @@ namespace TinyUtilities.Extensions.Global {
             return defaultValue;
         }
         
+        public static T Any<T>(this T[] array, out int index, T defaultValue = default) {
+            if (array.Length > 0) {
+                index = UnityRandom.Range(0, array.Length - 1);
+                return array[index];
+            }
+            
+            index = 0;
+            return defaultValue;
+        }
+        
+        public static T[] Any<T>(this T[] origin, int count) {
+            if (origin.Length < count) {
+                return origin;
+            }
+            
+            T[] suffled = new T[origin.Length];
+            Array.Copy(origin, suffled, origin.Length);
+            suffled.Shuffle();
+            
+            T[] result = new T[count];
+            
+            for (int i = 0; i < count; i++) {
+                result[i] = suffled[i];
+            }
+            
+            return result;
+        }
+        
+        public static T[] Any<T>(this T[] array, int[] indexes) {
+            if (indexes.Length == 0) {
+                return Array.Empty<T>();
+            }
+            
+            int count = indexes.Length;
+            
+            if (count > array.Length) {
+                count = array.Length;
+            }
+            
+            List<int> ids = new List<int>(array.Length);
+            
+            for (int i = 0; i < ids.Count; i++) {
+                ids[i] = i;
+            }
+            
+            T[] result = new T[count];
+            
+            for (int i = 0; i < count; i++) {
+                int index = ids.Any();
+                
+                result[i] = array[index];
+                indexes[i] = index;
+                
+                ids.Remove(index);
+            }
+            
+            return result;
+        }
+        
         public static T[] RemoveRange<T>(this T[] array, T[] objects) {
             List<T> result = new List<T>(array.Length);
             
