@@ -16,5 +16,16 @@ namespace TinyUtilities.Editor.Utilities {
             save(newValue);
             return newValue;
         }
+        
+        public static int DrawLayer(string label, int value, Action<int> save) {
+            int newValue = EditorGUILayout.LayerField(label, value);
+            
+            if (newValue == value) {
+                return value;
+            }
+            
+            save(newValue);
+            return newValue;
+        }
     }
 }
