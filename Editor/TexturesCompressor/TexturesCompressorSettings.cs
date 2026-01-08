@@ -54,6 +54,11 @@ namespace TinyUtilities.Editor.TexturesCompressor {
         }
         
         private static void OnDrawSettings(string _) {
+        #if !ODIN_INSPECTOR || !ODIN_VALIDATOR
+            EditorGUILayout.LabelField("Dont work without OdinInspector and OdinValidator please import packages");
+            GUI.enabled = false;
+        #endif
+            
             bool isNeedOverridenValidationTemp = EditorGUILayout.Toggle("Overriden Validation", isNeedOverridenValidation);
             EditorGUILayout.Space();
             
@@ -64,7 +69,6 @@ namespace TinyUtilities.Editor.TexturesCompressor {
             TextureImporterFormat solidFormatTemp = (TextureImporterFormat)EditorGUILayout.EnumPopup("Solid (no alpha)", solidFormat);
             TextureImporterFormat alphaFormatTemp = (TextureImporterFormat)EditorGUILayout.EnumPopup("Alpha (has alpha)", alphaFormat);
             EditorGUILayout.Space();
-            
             
             if (isNeedOverridenValidationTemp != isNeedOverridenValidation) {
                 isNeedOverridenValidation = isNeedOverridenValidationTemp;
@@ -85,6 +89,8 @@ namespace TinyUtilities.Editor.TexturesCompressor {
                 alphaFormat = alphaFormatTemp;
                 EditorPrefs.SetInt($"{_projectKey}_{nameof(alphaFormat)}", (int)alphaFormatTemp);
             }
+            
+            GUI.enabled = true;
         }
     }
 }
