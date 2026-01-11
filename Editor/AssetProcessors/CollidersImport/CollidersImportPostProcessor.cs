@@ -1,115 +1,54 @@
 // Copyright (c) 2023 Derek Sliman
 // Licensed under the MIT License. See LICENSE.md for details.
 
-using System.Collections.Generic;
+using TinyUtilities.Editor.Utilities;
+using TinyUtilities.Extensions.Unity;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.Rendering;
 
 namespace TinyUtilities.Editor.AssetProcessors.CollidersImport {
     public sealed class CollidersImportPostProcessor : AssetPostprocessor {
+        public const int ORDER = 10;
+        
         private const string _BOX_COLLIDER = "UBX";
         private const string _CAPSULE_COLLIDER = "UCP";
         private const string _SPHERE_COLLIDER = "USX";
         private const string _MESH_CONVEX_COLLIDER = "UCX";
         private const string _MESH_COLLIDER = "UMC";
-        private const string _SHADOW = "USO";
         
         private void OnPostprocessModel(GameObject root) {
             if (CollidersImportModule.isEnable == false) {
                 return;
             }
             
-            List<Transform> children = new List<Transform>();
-            
-            foreach (Transform child in root.transform) {
-                children.Add(child);
-            }
-            
-            if (CollidersImportModule.overrideLayer) {
-                root.layer = CollidersImportModule.layer;
-                
-                foreach (Transform child in children) {
-                    child.gameObject.layer = CollidersImportModule.layer;
-                }
-            }
-            
-            bool isCustomShadow = false;
-            
-            for (int i = 0; i < children.Count; i++) {
-                if (TryGenerateShadow(children[i])) {
-                    isCustomShadow = true;
-                    children.RemoveAt(i);
-                    break;
-                }
-            }
-            
-            List<Transform> destroyList = new List<Transform>();
-            
-            foreach (Transform child in children) {
-                Generate(child, destroyList, root, isCustomShadow);
-            }
-            
-            foreach (Transform obj in destroyList) {
-                if (obj != null) {
-                    Object.DestroyImmediate(obj.gameObject);
+            foreach (Transform child in root.transform.GetAllChildren()) {
+                if (TryGenerate(child)) {
+                    Object.DestroyImmediate(child.gameObject);
                 }
             }
         }
         
-        private bool TryGenerateShadow(Transform target) {
-            if (IsHavePrefix(target, _SHADOW)) {
-                MeshRenderer renderer = target.GetComponent<MeshRenderer>();
-                
-                if (renderer == null) {
-                    return false;
-                }
-                
-                renderer.shadowCastingMode = ShadowCastingMode.ShadowsOnly;
-                renderer.enabled = true;
-                
-                return true;
-            }
-            
-            return false;
-        }
+        public override int GetPostprocessOrder() => ORDER;
         
-        private void GenerateNR(Transform target, List<Transform> destroyList, GameObject root, bool isCustomShadow) {
-            Generate(target, destroyList, root, isCustomShadow);
-        }
-        
-        private void Generate(Transform target, List<Transform> destroyList, GameObject root, bool isCustomShadow) {
-            foreach (Transform child in target.transform) {
-                GenerateNR(child, destroyList, root, isCustomShadow);
-            }
-            
-            if (IsHavePrefix(target, _BOX_COLLIDER)) {
+        private bool TryGenerate(Transform target) {
+            if (target.IsHavePrefix(_BOX_COLLIDER)) {
                 AddBoxCollider(target);
-                destroyList.Add(target);
-            } else if (IsHavePrefix(target, _CAPSULE_COLLIDER)) {
+            } else if (target.IsHavePrefix(_CAPSULE_COLLIDER)) {
                 AddCapsuleCollider(target);
-                destroyList.Add(target);
-            } else if (IsHavePrefix(target, _SPHERE_COLLIDER)) {
-                AddCollider<SphereCollider>(target, root);
-                destroyList.Add(target);
-            } else if (IsHavePrefix(target, _MESH_CONVEX_COLLIDER)) {
+            } else if (target.IsHavePrefix(_SPHERE_COLLIDER)) {
+                AddCollider<SphereCollider>(target);
+            } else if (target.IsHavePrefix(_MESH_CONVEX_COLLIDER)) {
                 TransformSharedMesh(target.GetComponent<MeshFilter>());
-                MeshCollider collider = AddCollider<MeshCollider>(target, root);
+                MeshCollider collider = AddCollider<MeshCollider>(target);
                 collider.convex = true;
-                destroyList.Add(target);
-            } else if (IsHavePrefix(target, _MESH_COLLIDER)) {
+            } else if (target.IsHavePrefix(_MESH_COLLIDER)) {
                 TransformSharedMesh(target.GetComponent<MeshFilter>());
-                AddCollider<MeshCollider>(target, root);
-                destroyList.Add(target);
-            } else if (IsHavePrefix(target, _SHADOW)) {
-                // Ignore
-            } else if (isCustomShadow) {
-                MeshRenderer renderer = target.GetComponent<MeshRenderer>();
-                
-                if (renderer != null) {
-                    renderer.shadowCastingMode = ShadowCastingMode.Off;
-                }
+                AddCollider<MeshCollider>(target);
+            } else {
+                return false;
             }
+            
+            return true;
         }
         
         private void AddBoxCollider(Transform target) {
@@ -136,8 +75,8 @@ namespace TinyUtilities.Editor.AssetProcessors.CollidersImport {
             collider.radius = Mathf.Min(x, y, z);
         }
         
-        private T AddCollider<T>(Transform target, GameObject root) where T : Collider {
-            if (1 - Mathf.Abs(Quaternion.Dot(root.transform.rotation, target.rotation)) > 0.1f) {
+        private T AddCollider<T>(Transform target) where T : Collider {
+            if (1 - Mathf.Abs(Quaternion.Dot(target.parent.rotation, target.rotation)) > 0.1f) {
                 Debug.LogWarning("Collision mesh transform doesn't match the parent transform rotation, Colliders may not have translated correctly.");
             }
             
@@ -186,14 +125,6 @@ namespace TinyUtilities.Editor.AssetProcessors.CollidersImport {
             bounds.extents = extents;
             bounds.center = center;
             return bounds;
-        }
-        
-        private bool IsHavePrefix(Transform target, string prefix) {
-            if (target.TryGetComponent(out MeshFilter meshFilter)) {
-                return meshFilter.sharedMesh.name.StartsWith($"{prefix}_");
-            }
-            
-            return target.name.StartsWith($"{prefix}_");
         }
     }
 }

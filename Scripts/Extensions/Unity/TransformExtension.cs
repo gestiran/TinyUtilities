@@ -3,7 +3,7 @@
 
 using System;
 using System.Collections.Generic;
-using JetBrains.Annotations;
+using System.Diagnostics.Contracts;
 using UnityEngine;
 using UnityObject = UnityEngine.Object;
 
@@ -199,8 +199,25 @@ namespace TinyUtilities.Extensions.Unity {
         [Pure]
         public static Vector2 SizeDelta(this Transform transform) => transform.RectTransform().sizeDelta;
         
+        [Pure]
+        public static List<Transform> GetAllChildren(this Transform transform) {
+            List<Transform> children = new List<Transform>();
+            transform.GetAllChildren(children);
+            return children;
+        }
+        
+        public static void GetAllChildren(this Transform transform, List<Transform> output) {
+            foreach (Transform child in transform) {
+                output.Add(child);
+                child.GetAllChildrenNR(output);
+            }
+        }
+        
+        
         private static bool TryFindChildWithNameNR(Transform[] children, string name, out Transform result) {
             return TryFindChildWithName(children, name, out result);
         }
+        
+        private static void GetAllChildrenNR(this Transform transform, List<Transform> output) => transform.GetAllChildren(output);
     }
 }
