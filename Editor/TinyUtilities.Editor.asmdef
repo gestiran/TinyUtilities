@@ -20,7 +20,8 @@
         "Sirenix.OdinInspector.Attributes.dll",
         "Sirenix.Utilities.dll",
         "Sirenix.Serialization.dll",
-        "DOTween.dll"
+        "DOTween.dll",
+        "Newtonsoft.Json.dll"
     ],
     "autoReferenced": true,
     "defineConstraints": [],
@@ -34,6 +35,11 @@
             "name": "Sirenix.OdinInspector.Editor",
             "expression": "1.0.0",
             "define": "ODIN_INSPECTOR"
+        },
+        {
+            "name": "com.unity.nuget.newtonsoft-json",
+            "expression": "1.0.0",
+            "define": "NEWTONSOFT_JSON"
         }
     ],
     "noEngineReferences": false

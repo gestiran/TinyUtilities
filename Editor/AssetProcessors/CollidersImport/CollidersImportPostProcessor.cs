@@ -10,12 +10,6 @@ namespace TinyUtilities.Editor.AssetProcessors.CollidersImport {
     public sealed class CollidersImportPostProcessor : AssetPostprocessor {
         public const int ORDER = 10;
         
-        private const string _BOX_COLLIDER = "UBX";
-        private const string _CAPSULE_COLLIDER = "UCP";
-        private const string _SPHERE_COLLIDER = "USX";
-        private const string _MESH_CONVEX_COLLIDER = "UCX";
-        private const string _MESH_COLLIDER = "UMC";
-        
         private void OnPostprocessModel(GameObject root) {
             if (CollidersImportModule.isEnable == false) {
                 return;
@@ -31,17 +25,17 @@ namespace TinyUtilities.Editor.AssetProcessors.CollidersImport {
         public override int GetPostprocessOrder() => ORDER;
         
         private bool TryGenerate(Transform target) {
-            if (target.IsHavePrefix(_BOX_COLLIDER)) {
+            if (target.IsHavePrefix(ImportPrefixes.BOX_COLLIDER)) {
                 AddBoxCollider(target);
-            } else if (target.IsHavePrefix(_CAPSULE_COLLIDER)) {
+            } else if (target.IsHavePrefix(ImportPrefixes.CAPSULE_COLLIDER)) {
                 AddCapsuleCollider(target);
-            } else if (target.IsHavePrefix(_SPHERE_COLLIDER)) {
+            } else if (target.IsHavePrefix(ImportPrefixes.SPHERE_COLLIDER)) {
                 AddCollider<SphereCollider>(target);
-            } else if (target.IsHavePrefix(_MESH_CONVEX_COLLIDER)) {
+            } else if (target.IsHavePrefix(ImportPrefixes.MESH_CONVEX_COLLIDER)) {
                 TransformSharedMesh(target.GetComponent<MeshFilter>());
                 MeshCollider collider = AddCollider<MeshCollider>(target);
                 collider.convex = true;
-            } else if (target.IsHavePrefix(_MESH_COLLIDER)) {
+            } else if (target.IsHavePrefix(ImportPrefixes.MESH_COLLIDER)) {
                 TransformSharedMesh(target.GetComponent<MeshFilter>());
                 AddCollider<MeshCollider>(target);
             } else {

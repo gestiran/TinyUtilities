@@ -1,7 +1,6 @@
 // Copyright (c) 2023 Derek Sliman
 // Licensed under the MIT License. See LICENSE.md for details.
 
-using System.Collections.Generic;
 using TinyUtilities.Editor.Utilities;
 using TinyUtilities.Extensions.Unity;
 using UnityEditor;
@@ -12,40 +11,42 @@ namespace TinyUtilities.Editor.AssetProcessors.CollidersImport {
     public sealed class ShadowImportPostProcessor : AssetPostprocessor {
         public const int ORDER = CollidersImportPostProcessor.ORDER + 10;
         
-        private const string _SHADOW = "USO";
-        
         private void OnPostprocessModel(GameObject root) {
             if (CollidersImportModule.isEnableShadow == false) {
                 return;
             }
             
-            List<Transform> children = root.transform.GetAllChildren();
-            
-            foreach (Transform child in children) {
-                GenerateShadow(child, children);
+            foreach (Transform child in root.transform.GetAllChildren()) {
+                GenerateShadow(child);
             }
         }
         
         public override int GetPostprocessOrder() => ORDER;
         
-        private void GenerateShadow(Transform target, List<Transform> all) {
-            if (target.IsHavePrefix(_SHADOW) == false) {
-                return;
+        private void GenerateShadow(Transform target) {
+            if (target.IsHavePrefix(ImportPrefixes.SHADOW_OBJECT)) {
+                GenerateShadowObject(target);
             }
-            
+        }
+        
+        private static void GenerateShadowObject(Transform target) {
             if (target.TryGetComponent(out MeshRenderer meshRenderer)) {
                 meshRenderer.shadowCastingMode = ShadowCastingMode.ShadowsOnly;
             }
             
             Transform parent = target.parent;
             
-            if (parent != null && parent.TryGetComponent(out meshRenderer)) {
+            if (parent == null) {
+                return;
+            }
+            
+            if (parent.TryGetComponent(out meshRenderer)) {
                 meshRenderer.shadowCastingMode = ShadowCastingMode.Off;
             } else {
-                string targetName = target.StripName(_SHADOW);
+                string targetName = target.StripName(ImportPrefixes.SHADOW_OBJECT);
                 
-                foreach (Transform obj in all) {
-                    if (obj.StripName().Equals(targetName) && obj.TryGetComponent(out meshRenderer)) {
+                foreach (Transform obj in parent) {
+                    if (obj.StripName(CollidersImportModule.stripPrefixes).Equals(targetName) && obj.TryGetComponent(out meshRenderer)) {
                         meshRenderer.shadowCastingMode = ShadowCastingMode.Off;
                     }
                 }
