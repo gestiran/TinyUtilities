@@ -1,54 +1,47 @@
 // Copyright (c) 2023 Derek Sliman
 // Licensed under the MIT License. See LICENSE.md for details.
 
-using System;
+using System.Text;
 using TinyUtilities.Editor.Utilities;
 using UnityEditor;
 using UnityEngine;
 
 namespace TinyUtilities.Editor.AssetProcessors.CollidersImport {
     public sealed class CollidersImportModule {
-        public static bool isEnable { get; private set; }
-        public static bool isEnableShadow { get; private set; }
-        public static string[] stripPrefixes { get; private set; }
-        public static bool overrideLayer { get; private set; }
-        public static int layer { get; private set; }
+        public static bool isEnabled { get; private set; }
         
-        private readonly CollidersImportPrefs _prefs;
+        private readonly AssetProcessorsPrefs _prefs;
         
         public CollidersImportModule() {
-            _prefs = new CollidersImportPrefs();
+            _prefs = new AssetProcessorsPrefs();
             Init();
         }
         
         public void Init() {
-            isEnable = _prefs.LoadIsEnable(false);
-            isEnableShadow = _prefs.LoadIsEnableShadow(false);
-            stripPrefixes = _prefs.LoadStripPrefixes(Array.Empty<string>());
-            overrideLayer = _prefs.LoadIsLayerOverride(false);
-            layer = _prefs.LoadLayer(LayerMask.NameToLayer("Default"));
+            isEnabled = _prefs.LoadIsEnable(false);
         }
         
         public void Draw() {
-            // Colliders
-            isEnable = GUIDrawUtility.DrawToggle("Import colliders", isEnable, _prefs.SaveIsEnable);
-            EditorGUILayout.Space();
+            EditorGUILayout.LabelField($"Сolliders ({(isEnabled ? "Enabled" : "Disabled")})", EditorStyles.boldLabel);
+            EditorGUILayout.HelpBox(HelpMessage(), MessageType.Info);
             
-            // Shadow
-            GUI.enabled = true;
-            isEnableShadow = GUIDrawUtility.DrawToggle("Import shadow", isEnableShadow, _prefs.SaveIsEnableShadow);
-            GUI.enabled = isEnableShadow;
-            stripPrefixes = GUIDrawUtility.DrawList("Strip prefixes", stripPrefixes, _prefs.SaveStripPrefixes);
-            EditorGUILayout.Space();
+            GUIContent isEnableLabel = new GUIContent("Enabled");
+            isEnableLabel.tooltip = "Enable colliders import post processors.";
+            isEnabled = GUIDrawUtility.DrawToggle(isEnableLabel, isEnabled, _prefs.SaveIsEnable);
+        }
+        
+        private string HelpMessage() {
+            StringBuilder builder = new StringBuilder();
+            builder.AppendLine("The required Collider will be added to the parent object depending on the prefix.");
+            builder.AppendLine();
+            builder.AppendLine("Used prefixes:");
+            builder.AppendLine($"{ImportPrefixes.BOX_COLLIDER} - {nameof(BoxCollider)}");
+            builder.AppendLine($"{ImportPrefixes.CAPSULE_COLLIDER} - {nameof(CapsuleCollider)}");
+            builder.AppendLine($"{ImportPrefixes.SPHERE_COLLIDER} - {nameof(SphereCollider)}");
+            builder.AppendLine($"{ImportPrefixes.MESH_CONVEX_COLLIDER} - {nameof(MeshCollider)} with convex");
+            builder.AppendLine($"{ImportPrefixes.MESH_COLLIDER} - {nameof(MeshCollider)}");
             
-            // Layer
-            GUI.enabled = true;
-            overrideLayer = GUIDrawUtility.DrawToggle("Override layer", overrideLayer, _prefs.SaveIsLayerOverride);
-            GUI.enabled = overrideLayer;
-            layer = GUIDrawUtility.DrawLayer("Layer", layer, _prefs.SaveLayer);
-            EditorGUILayout.Space();
-            
-            GUI.enabled = true;
+            return builder.ToString();
         }
     }
 }

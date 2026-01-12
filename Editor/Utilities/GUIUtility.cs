@@ -19,6 +19,17 @@ namespace TinyUtilities.Editor.Utilities {
             return newValue;
         }
         
+        public static bool DrawToggle(GUIContent label, bool value, Action<bool> save) {
+            bool newValue = EditorGUILayout.Toggle(label, value);
+            
+            if (newValue == value) {
+                return value;
+            }
+            
+            save(newValue);
+            return newValue;
+        }
+        
         public static int DrawLayer(string label, int value, Action<int> save) {
             int newValue = EditorGUILayout.LayerField(label, value);
             

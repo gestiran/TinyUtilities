@@ -10,8 +10,8 @@ using Newtonsoft.Json;
 using UnityEngine;
 #endif
 
-namespace TinyUtilities.Editor.AssetProcessors.CollidersImport {
-    public sealed class CollidersImportPrefs {
+namespace TinyUtilities.Editor.AssetProcessors {
+    public sealed class AssetProcessorsPrefs {
         private const string _IS_ENABLE_PROCESSOR = "CollidersImport_IsEnableProcessor";
         private const string _IS_ENABLE_SHADOW_PROCESSOR = "CollidersImport_IsEnableShadowProcessor";
         private const string _IS_STRIP_PREFIXES = "CollidersImport_StripPrefixes";

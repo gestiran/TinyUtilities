@@ -11,7 +11,7 @@ namespace TinyUtilities.Editor.AssetProcessors.CollidersImport {
         public const int ORDER = 10;
         
         private void OnPostprocessModel(GameObject root) {
-            if (CollidersImportModule.isEnable == false) {
+            if (CollidersImportModule.isEnabled == false) {
                 return;
             }
             

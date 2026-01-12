@@ -1,18 +1,19 @@
 // Copyright (c) 2023 Derek Sliman
 // Licensed under the MIT License. See LICENSE.md for details.
 
+using TinyUtilities.Editor.AssetProcessors.CollidersImport;
 using TinyUtilities.Editor.Utilities;
 using TinyUtilities.Extensions.Unity;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Rendering;
 
-namespace TinyUtilities.Editor.AssetProcessors.CollidersImport {
+namespace TinyUtilities.Editor.AssetProcessors.ShadowsImport {
     public sealed class ShadowImportPostProcessor : AssetPostprocessor {
         public const int ORDER = CollidersImportPostProcessor.ORDER + 10;
         
         private void OnPostprocessModel(GameObject root) {
-            if (CollidersImportModule.isEnableShadow == false) {
+            if (ShadowsImportModule.isEnabled == false) {
                 return;
             }
             
@@ -46,7 +47,7 @@ namespace TinyUtilities.Editor.AssetProcessors.CollidersImport {
                 string targetName = target.StripName(ImportPrefixes.SHADOW_OBJECT);
                 
                 foreach (Transform obj in parent) {
-                    if (obj.StripName(CollidersImportModule.stripPrefixes).Equals(targetName) && obj.TryGetComponent(out meshRenderer)) {
+                    if (obj.StripName(ShadowsImportModule.stripPrefixes).Equals(targetName) && obj.TryGetComponent(out meshRenderer)) {
                         meshRenderer.shadowCastingMode = ShadowCastingMode.Off;
                     }
                 }

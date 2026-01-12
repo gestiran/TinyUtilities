@@ -3,15 +3,21 @@
 
 using System.Collections.Generic;
 using TinyUtilities.Editor.AssetProcessors.CollidersImport;
+using TinyUtilities.Editor.AssetProcessors.LayerChange;
+using TinyUtilities.Editor.AssetProcessors.ShadowsImport;
 using UnityEditor;
 
 namespace TinyUtilities.Editor.AssetProcessors {
     [InitializeOnLoad]
     public static class AssetProcessorsProjectSettings {
         private static readonly CollidersImportModule _collidersImport;
+        private static readonly ShadowsImportModule _shadowsImport;
+        private static readonly LayerChangeModule _layerChange;
         
         static AssetProcessorsProjectSettings() {
             _collidersImport = new CollidersImportModule();
+            _shadowsImport = new ShadowsImportModule();
+            _layerChange = new LayerChangeModule();
             
             LoadStartState();
         }
@@ -31,10 +37,16 @@ namespace TinyUtilities.Editor.AssetProcessors {
         
         private static void LoadStartState() {
             _collidersImport.Init();
+            _shadowsImport.Init();
+            _layerChange.Init();
         }
         
         private static void OnDrawSettings(string obj) {
             _collidersImport.Draw();
+            EditorGUILayout.Space();
+            _shadowsImport.Draw();
+            EditorGUILayout.Space();
+            _layerChange.Draw();
         }
     }
 }
