@@ -4,8 +4,8 @@
 using System;
 using UnityEditor;
 
-namespace TinyUtilities.Editor.HotKeys {
-    public static class ChangeMaximizeHotKey {
+namespace TinyUtilities.Editor.Shortcuts {
+    public static class ChangeMaximizeShortcut {
         [MenuItem("Window/Change Maximize State")]
         public static void ChangeMaximizeState() {
             EditorWindow window = EditorWindow.focusedWindow;

@@ -5,8 +5,8 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.Rendering;
 
-namespace TinyUtilities.Editor.HotKeys {
-    public static class DisableShadowsHotkey {
+namespace TinyUtilities.Editor.Shortcuts {
+    public static class DisableShadowsShortcut {
         [MenuItem("GameObject/Disable Shadows/Children", false, 18)]
         public static void DisableShadowsChildren() {
             Object[] objects = Selection.objects;

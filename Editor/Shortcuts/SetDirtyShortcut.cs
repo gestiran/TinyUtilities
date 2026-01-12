@@ -4,8 +4,8 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace TinyUtilities.Editor.HotKeys {
-    public static class SetDirtyHotkey {
+namespace TinyUtilities.Editor.Shortcuts {
+    public static class SetDirtyShortcut {
         [MenuItem("Assets/Set Dirty", false, 18)]
         public static void ForceReloading() {
             Object[] objects = Selection.objects;
