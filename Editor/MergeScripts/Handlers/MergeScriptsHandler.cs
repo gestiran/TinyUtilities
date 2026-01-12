@@ -3,20 +3,30 @@
 
 using System;
 using System.IO;
-using System.Runtime.CompilerServices;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using TinyUtilities.Editor.MergeScripts.Pairs;
 using UnityEditor;
 using UnityEngine;
+using UnityObject = UnityEngine.Object;
 
 namespace TinyUtilities.Editor.MergeScripts.Handlers {
     public sealed class MergeScriptsHandler {
-        public async UniTask ChangeProcess(ChangePair[] pairs, Action<int, int> progress, Action onComplete, CancellationToken cancellation) {
+        public async UniTask ChangeAllProcess(ChangePair[] pairs, Action<int, int> progress, Action onComplete, CancellationToken cancellation) {
             string[] paths = GetAllPaths("t:prefab");
             await ChangeProcess(paths, pairs, progress, cancellation);
             
             paths = GetAllPaths("t:scene");
+            await ChangeProcess(paths, pairs, progress, cancellation);
+            
+            onComplete.Invoke();
+        }
+        
+        public async UniTask ChangeSelectedProcess(ChangePair[] pairs, Action<int, int> progress, Action onComplete, CancellationToken cancellation) {
+            string[] paths = GetSelectedPaths("t:prefab");
+            await ChangeProcess(paths, pairs, progress, cancellation);
+            
+            paths = GetSelectedPaths("t:scene");
             await ChangeProcess(paths, pairs, progress, cancellation);
             
             onComplete.Invoke();
@@ -39,7 +49,6 @@ namespace TinyUtilities.Editor.MergeScripts.Handlers {
             progress.Invoke(paths.Length, paths.Length);
         }
         
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private bool TryChange(string text, ChangePair pair, out string result) {
             switch (pair) {
                 case ChangeGUIDPair other:
@@ -68,12 +77,11 @@ namespace TinyUtilities.Editor.MergeScripts.Handlers {
             return false;
         }
         
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private bool TryChange(string text, ChangeGUIDPair pair, out string result) {
             string current = $"guid: {pair.current},";
             
             if (text.Contains(current)) {
-                result = text.Replace(current, $"guid: {pair.next}");
+                result = text.Replace(current, $"guid: {pair.next},");
                 return true;
             }
             
@@ -81,7 +89,6 @@ namespace TinyUtilities.Editor.MergeScripts.Handlers {
             return false;
         }
         
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private bool TryChange(string text, ChangeNamespacePair pair, out string result) {
             string current = $"ns: {pair.current},";
             
@@ -94,7 +101,6 @@ namespace TinyUtilities.Editor.MergeScripts.Handlers {
             return false;
         }
         
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private bool TryChange(string text, ChangeAssemblyPair pair, out string result) {
             string current = "ns: " + pair.targetNamespace + ", asm: " + pair.current + "}";
             
@@ -107,7 +113,6 @@ namespace TinyUtilities.Editor.MergeScripts.Handlers {
             return false;
         }
         
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private string[] GetAllPaths(string filter) {
             string dataPath = GetDataPath();
             string[] assets = AssetDatabase.FindAssets(filter);
@@ -119,7 +124,24 @@ namespace TinyUtilities.Editor.MergeScripts.Handlers {
             return assets;
         }
         
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private string[] GetSelectedPaths(string filter) {
+            UnityObject[] selected = Selection.objects;
+            string[] selectedPaths = new string[selected.Length];
+            
+            for (int pathId = 0; pathId < selectedPaths.Length; pathId++) {
+                selectedPaths[pathId] = AssetDatabase.GetAssetPath(selected[pathId]);
+            }
+            
+            string dataPath = GetDataPath();
+            string[] assets = AssetDatabase.FindAssets(filter, selectedPaths);
+            
+            for (int assetId = 0; assetId < assets.Length; assetId++) {
+                assets[assetId] = Path.Combine(dataPath, AssetDatabase.GUIDToAssetPath(assets[assetId]));
+            }
+            
+            return assets;
+        }
+        
         private string GetDataPath() => Path.GetDirectoryName(Application.dataPath);
     }
 }

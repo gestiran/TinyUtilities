@@ -41,8 +41,8 @@ namespace TinyUtilities.Editor.MergeScripts {
         }
         
         [DisableIf("IsActive")]
-        [Button, HorizontalGroup("Control")]
-        private void Start() {
+        [Button("All"), HorizontalGroup("Control")]
+        private void StartAll() {
             if (_validator.IsValid(_pairs) == false) {
                 return;
             }
@@ -50,7 +50,20 @@ namespace TinyUtilities.Editor.MergeScripts {
             Stop();
             
             _cancellation = new CancellationTokenSource();
-            _handler.ChangeProcess(_pairs, DisplayProgress, OnComplete, _cancellation.Token).Forget();
+            _handler.ChangeAllProcess(_pairs, DisplayProgress, OnComplete, _cancellation.Token).Forget();
+        }
+        
+        [DisableIf("IsActive")]
+        [Button("Selected"), HorizontalGroup("Control")]
+        private void StartSelected() {
+            if (_validator.IsValid(_pairs) == false) {
+                return;
+            }
+            
+            Stop();
+            
+            _cancellation = new CancellationTokenSource();
+            _handler.ChangeSelectedProcess(_pairs, DisplayProgress, OnComplete, _cancellation.Token).Forget();
         }
         
         [EnableIf("IsActive")]
