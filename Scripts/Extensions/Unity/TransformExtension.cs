@@ -213,6 +213,18 @@ namespace TinyUtilities.Extensions.Unity {
             }
         }
         
+        [Pure]
+        public static Transform GetMainParent(this Transform transform) {
+            Transform parent = null;
+            Transform temp = transform.parent;
+            
+            while (temp != null) {
+                parent = temp;
+                temp = temp.parent;
+            }
+            
+            return parent;
+        }
         
         private static bool TryFindChildWithNameNR(Transform[] children, string name, out Transform result) {
             return TryFindChildWithName(children, name, out result);
