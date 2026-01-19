@@ -23,7 +23,7 @@ namespace TinyUtilities.Extensions.Unity {
         }
         
         [Pure]
-        private static Vector3 CalculateMeshCenter<T>(this T meshFilters) where T : IEnumerable<MeshFilter> {
+        public static Vector3 CalculateMeshCenter<T>(this T meshFilters) where T : IEnumerable<MeshFilter> {
             Vector3 max = Vector3.zero;
             Vector3 min = Vector3.zero;
             
