@@ -7,14 +7,14 @@ using UnityEditor;
 namespace TinyUtilities.Editor.EnterPlayMode.AssemblyPipeline {
     [InitializeOnLoad]
     public static class AssemblyPipelineProjectSettings {
-        private static bool _isEnable;
-        private static bool _isNeedReload;
-
+        public static bool isEnable { get; private set; }
+        public static bool isNeedReload { get; private set; }
+        
         private static readonly AssemblyPipelinePrefs _prefs;
 
         static AssemblyPipelineProjectSettings() {
             _prefs = new AssemblyPipelinePrefs();
-            _isEnable = _prefs.LoadEnable();
+            isEnable = _prefs.LoadEnable();
 
             if (EditorSettings.enterPlayModeOptions == EnterPlayModeOptions.DisableDomainReload) {
                 Activate();
@@ -31,7 +31,7 @@ namespace TinyUtilities.Editor.EnterPlayMode.AssemblyPipeline {
             provider.guiHandler = OnDrawSettings;
             provider.keywords = new HashSet<string>(new[] { "Assembly" });
 
-            _isEnable = _prefs.LoadEnable();
+            isEnable = _prefs.LoadEnable();
 
             return provider;
         }
@@ -45,34 +45,28 @@ namespace TinyUtilities.Editor.EnterPlayMode.AssemblyPipeline {
         }
         
         private static void OnDrawSettings(string obj) {
-            bool newValue = EditorGUILayout.Toggle("Auto Reload Assembly", _isEnable);
+            bool newValue = EditorGUILayout.Toggle("Auto Reload Assembly", isEnable);
             
-            if (newValue == _isEnable) {
-                return;
+            if (newValue != isEnable) {
+                isEnable = newValue;
+                _prefs.SaveEnable(newValue);
             }
-            
-            _isEnable = newValue;
-            _prefs.SaveEnable(newValue);
         }
         
         private static void Activate() {
-            if (_isEnable == false) {
-                return;
+            if (isEnable) {
+                isNeedReload = false;
+                EditorApplication.playModeStateChanged += OnStateChanged;
             }
-            
-            _isNeedReload = false;
-            EditorApplication.playModeStateChanged += OnStateChanged;
         }
 
         private static void OnStateChanged(PlayModeStateChange state) {
             if (state == PlayModeStateChange.ExitingEditMode) {
-                if (_isNeedReload == false) {
-                    return;
+                if (isNeedReload) {
+                    ForceReloading();
                 }
-
-                ForceReloading();
             } else if (state == PlayModeStateChange.EnteredEditMode) {
-                _isNeedReload = true;
+                isNeedReload = true;
             }
         }
     }
