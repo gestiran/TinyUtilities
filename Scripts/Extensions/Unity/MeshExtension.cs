@@ -57,16 +57,12 @@ namespace TinyUtilities.Extensions.Unity {
         }
         
         [Pure]
-        public static Vector3 CalculateMeshCenter<T>(this T meshes) where T : IEnumerable<Mesh> {
-            MeshCorners corners = meshes.CalculateMeshCorners();
-            return new Vector3((corners.xMin + corners.xMax) * 0.5f, (corners.yMin + corners.yMax) * 0.5f, (corners.zMin + corners.zMax) * 0.5f);
-        }
+        public static Vector3 CalculateMeshCenter<T>(this T meshes) where T : IEnumerable<Mesh> => meshes.CalculateMeshCorners().Center();
         
         [Pure]
         public static Vector3 CalculateMeshCenter(this Mesh mesh) {
             if (mesh != null) {
-                MeshCorners corners = mesh.CalculateMeshCorners();
-                return new Vector3((corners.xMin + corners.xMax) * 0.5f, (corners.yMin + corners.yMax) * 0.5f, (corners.zMin + corners.zMax) * 0.5f);
+                return mesh.CalculateMeshCorners().Center();
             }
             
             return Vector3.zero;
