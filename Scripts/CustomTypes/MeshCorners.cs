@@ -74,7 +74,7 @@ namespace TinyUtilities.CustomTypes {
         
         public float SizeMax() => Mathf.Max(xSize, ySize, zSize);
         
-        public Vector3 Center() => new Vector3(xSize * 0.5f, ySize * 0.5f, zSize * 0.5f);
+        public Vector3 Center() => new Vector3((min.x + max.x) * 0.5f, (min.y + max.y) * 0.5f, (min.z + max.z) * 0.5f);
         
         public override string ToString() => $"MeshCorners(x: {xMin}::{xMax}, y: {yMin}::{yMax}, z: {zMin}::{zMax})";
     }
