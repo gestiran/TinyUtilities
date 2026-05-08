@@ -115,6 +115,7 @@ namespace TinyUtilities.Components {
         
         public void MoveToElement(int elementId) {
             if (IsCanMove(elementId) == false) {
+                UpdateButtons();
                 return;
             }
             
@@ -202,14 +203,14 @@ namespace TinyUtilities.Components {
         }
         
         private void HideButtons() {
-            for (int i = 0; i < _buttons.Length; i++) {
-                _buttons[i].Hide();
+            for (int buttonId = 0; buttonId < _buttons.Length; buttonId++) {
+                _buttons[buttonId].Hide();
             }
         }
         
         private void UpdateButtons() {
-            for (int i = 0; i < _buttons.Length; i++) {
-                _buttons[i].UpdateActiveState();
+            for (int buttonId = 0; buttonId < _buttons.Length; buttonId++) {
+                _buttons[buttonId].UpdateActiveState();
             }
         }
         
@@ -293,7 +294,7 @@ namespace TinyUtilities.Components {
                     if (parent.GetChild(childId).gameObject.activeSelf == false) {
                         childCount--;
                     }
-                }   
+                }
             }
             
             return childCount;
@@ -302,13 +303,21 @@ namespace TinyUtilities.Components {
     #if DOTWEEN
         
         private static TweenerCore<Vector2, Vector2, VectorOptions> DOAnchorPosY(RectTransform target, float endValue, float duration, bool snapping = false) {
-            TweenerCore<Vector2, Vector2, VectorOptions> t = DOTween.To(() => target.anchoredPosition, x => target.anchoredPosition = x, new Vector2(0, endValue), duration);
+            TweenerCore<Vector2, Vector2, VectorOptions> t = DOTween.To(() => target.anchoredPosition,
+                                                                        x => target.anchoredPosition = x,
+                                                                        new Vector2(0, endValue),
+                                                                        duration);
+            
             t.SetOptions(AxisConstraint.Y, snapping).SetTarget(target);
             return t;
         }
         
         private static TweenerCore<Vector2, Vector2, VectorOptions> DOAnchorPosX(RectTransform target, float endValue, float duration, bool snapping = false) {
-            TweenerCore<Vector2, Vector2, VectorOptions> t = DOTween.To(() => target.anchoredPosition, x => target.anchoredPosition = x, new Vector2(endValue, 0), duration);
+            TweenerCore<Vector2, Vector2, VectorOptions> t = DOTween.To(() => target.anchoredPosition,
+                                                                        x => target.anchoredPosition = x,
+                                                                        new Vector2(endValue, 0),
+                                                                        duration);
+            
             t.SetOptions(AxisConstraint.X, snapping).SetTarget(target);
             return t;
         }

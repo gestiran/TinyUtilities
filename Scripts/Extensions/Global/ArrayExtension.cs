@@ -15,6 +15,7 @@ namespace TinyUtilities.Extensions.Global {
         [Obsolete("Do nothing", true)]
         public static T[] AddToArray<T>(this T[] array) => array;
         
+        [Pure]
         public static T[] AddToArray<T>([In, Out] this T[] array, T obj) {
             if (array == null) {
                 array = Array.Empty<T>();
@@ -30,6 +31,7 @@ namespace TinyUtilities.Extensions.Global {
             return array;
         }
         
+        [Pure]
         public static T[] AddToArray<T>(this T[] array, params T[] objects) {
             if (array == null) {
                 array = Array.Empty<T>();
@@ -47,6 +49,7 @@ namespace TinyUtilities.Extensions.Global {
             return result;
         }
         
+        [Pure]
         public static T[] RemoveFromArray<T>(this T[] array, int id) {
             if (array == null) {
                 array = Array.Empty<T>();
@@ -66,6 +69,7 @@ namespace TinyUtilities.Extensions.Global {
             return result;
         }
         
+        [Pure]
         public static int[] GetNumbersArray(this int length) {
             int[] result = new int[length];
             
@@ -76,6 +80,7 @@ namespace TinyUtilities.Extensions.Global {
             return result;
         }
         
+        [Pure]
         public static GameObject[] ToGameObjectArray<T>(this T[] array) where T : MonoBehaviour {
             GameObject[] result = new GameObject[array.Length];
             
@@ -86,6 +91,7 @@ namespace TinyUtilities.Extensions.Global {
             return result;
         }
         
+        [Pure]
         public static bool IsContainObjectOfType<T>(this T[] array, T element) {
             for (int i = 0; i < array.Length; i++) {
                 if (array[i].GetType() == element.GetType()) {
@@ -96,6 +102,7 @@ namespace TinyUtilities.Extensions.Global {
             return false;
         }
         
+        [Pure]
         public static bool IsContain<T>(this T[] array, T element) {
             for (int i = 0; i < array.Length; i++) {
                 if (array[i].Equals(element)) {
@@ -106,13 +113,14 @@ namespace TinyUtilities.Extensions.Global {
             return false;
         }
         
+        [Pure]
         public static int GetMiddle(this int[] array) {
             int result = array.Sum();
             result /= array.Length;
-            
             return result;
         }
         
+        [Pure]
         public static string ToStringArray<T>(this T[] array) {
             StringBuilder builder = new StringBuilder(array.Length);
             
@@ -123,6 +131,7 @@ namespace TinyUtilities.Extensions.Global {
             return builder.ToString();
         }
         
+        [Pure]
         public static T Any<T>(this T[] array, T defaultValue = default) {
             if (array.Length > 0) {
                 return array[UnityRandom.Range(0, array.Length - 1)];
@@ -131,6 +140,7 @@ namespace TinyUtilities.Extensions.Global {
             return defaultValue;
         }
         
+        [Pure]
         public static T Any<T>(this T[] array, out int index, T defaultValue = default) {
             if (array.Length > 0) {
                 index = UnityRandom.Range(0, array.Length - 1);
@@ -141,24 +151,26 @@ namespace TinyUtilities.Extensions.Global {
             return defaultValue;
         }
         
+        [Pure]
         public static T[] Any<T>(this T[] origin, int count) {
             if (origin.Length < count) {
                 return origin;
             }
             
-            T[] suffled = new T[origin.Length];
-            Array.Copy(origin, suffled, origin.Length);
-            suffled.Shuffle();
+            T[] shuffled = new T[origin.Length];
+            Array.Copy(origin, shuffled, origin.Length);
+            shuffled.Shuffle();
             
             T[] result = new T[count];
             
             for (int i = 0; i < count; i++) {
-                result[i] = suffled[i];
+                result[i] = shuffled[i];
             }
             
             return result;
         }
         
+        [Pure]
         public static T[] Any<T>(this T[] array, int[] indexes) {
             if (indexes.Length == 0) {
                 return Array.Empty<T>();
@@ -190,6 +202,7 @@ namespace TinyUtilities.Extensions.Global {
             return result;
         }
         
+        [Pure]
         public static T[] RemoveRange<T>(this T[] array, T[] objects) {
             List<T> result = new List<T>(array.Length);
             
@@ -214,6 +227,7 @@ namespace TinyUtilities.Extensions.Global {
             return false;
         }
         
+        [Pure]
         public static int FindClosestIndex(this float[] array, float target) {
             if (array == null || array.Length == 0) {
                 return 0;
