@@ -2,6 +2,7 @@
 // Licensed under the MIT License. See LICENSE.md for details.
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEditor.SceneManagement;
@@ -41,6 +42,36 @@ namespace TinyUtilities.Editor {
                 EditorSceneManager.MarkSceneDirty(currentScene);
                 EditorSceneManager.SaveScene(currentScene);
             }
+        }
+        
+        public static GameObject NewObject(string name) => NewObject(name, null);
+        
+        public static GameObject NewObject(string name, Transform parent) {
+            GameObject obj = new GameObject(name);
+            obj.transform.SetParent(parent);
+            EditorUtility.SetDirty(obj);
+            return obj;
+        }
+        
+        public static GameObject NewObjectFirst(string name) => NewObject(name, null);
+        
+        public static GameObject NewObjectFirst(string name, Transform parent) {
+            GameObject obj = new GameObject(name);
+            obj.transform.SetParent(parent);
+            obj.transform.SetSiblingIndex(0);
+            EditorUtility.SetDirty(obj);
+            return obj;
+        }
+        
+        public static List<T> GetComponents<T>(bool includeInactive = false) {
+            GameObject[] objects = SceneManager.GetActiveScene().GetRootGameObjects();
+            List<T> result = new List<T>(objects.Length);
+            
+            for (int objId = 0; objId < objects.Length; objId++) {
+                result.AddRange(objects[objId].GetComponentsInChildren<T>(includeInactive));
+            }
+            
+            return result;
         }
     }
 }

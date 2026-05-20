@@ -26,6 +26,11 @@ namespace TinyUtilities {
             callback();
         }
         
+        public static async UniTask CallAfterFrame(Action callback) {
+            await UniTask.Yield();
+            callback();
+        }
+        
         public static async UniTask WaitFrames(int framesCount) {
             while (framesCount > 0) {
                 await UniTask.Yield();
