@@ -1,6 +1,7 @@
 // Copyright (c) 2023 Derek Sliman
 // Licensed under the MIT License. See LICENSE.md for details.
 
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -25,7 +26,7 @@ namespace TinyUtilities.Unity {
             return SceneManager.GetSceneByBuildIndex(buildId).name;
         }
         
-        public static GameObject NewObject(string name) => NewObject(name, default);
+        public static GameObject NewObject(string name) => NewObject(name, null);
         
         public static GameObject NewObject(string name, Transform parent) {
             GameObject obj = new GameObject(name);
@@ -36,7 +37,7 @@ namespace TinyUtilities.Unity {
             return obj;
         }
         
-        public static GameObject NewObjectFirst(string name) => NewObject(name, default);
+        public static GameObject NewObjectFirst(string name) => NewObject(name, null);
         
         public static GameObject NewObjectFirst(string name, Transform parent) {
             GameObject obj = new GameObject(name);
@@ -46,6 +47,17 @@ namespace TinyUtilities.Unity {
             UnityEditor.EditorUtility.SetDirty(obj);
         #endif
             return obj;
+        }
+        
+        public static List<T> GetComponents<T>(bool includeInactive = false) {
+            GameObject[] objects = SceneManager.GetActiveScene().GetRootGameObjects();
+            List<T> result = new List<T>(objects.Length);
+            
+            for (int objId = 0; objId < objects.Length; objId++) {
+                result.AddRange(objects[objId].GetComponentsInChildren<T>(includeInactive));
+            }
+            
+            return result;
         }
     }
 }
