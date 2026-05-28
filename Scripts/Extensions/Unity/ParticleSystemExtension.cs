@@ -4,12 +4,14 @@
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using UnityEngine;
+using UnityObject = UnityEngine.Object;
+using UnityRandom = UnityEngine.Random;
 
 namespace TinyUtilities.Extensions.Unity {
     public static class ParticleSystemExtension {
         public static ParticleSystem PlayInstance(this ParticleSystem particle, Vector3 position, Transform parent = null) {
             Transform particleTransform = particle.transform;
-            ParticleSystem instance = Object.Instantiate(particle, position + particleTransform.position, particleTransform.rotation, parent);
+            ParticleSystem instance = UnityObject.Instantiate(particle, position + particleTransform.position, particleTransform.rotation, parent);
             instance.Play();
             return instance;
         }
@@ -55,14 +57,20 @@ namespace TinyUtilities.Extensions.Unity {
         }
         
         [Pure]
-        public static ParticleSystem.Particle[] Burst(this ParticleSystem root, int count) {
-            ParticleSystem.Particle[] particles = new ParticleSystem.Particle[count];
-            
+        public static ParticleSystem.Particle[] Burst(this ParticleSystem root, int size) {
+            ParticleSystem.Particle[] particles = new ParticleSystem.Particle[size];
+            root.Burst(particles, particles.Length, 0);
+            return particles;
+        }
+        
+        public static void Burst(this ParticleSystem root, ParticleSystem.Particle[] particles, int size, int offset) {
             ParticleSystem.MainModule main = root.main;
             ParticleSystem.ShapeModule shape = root.shape;
             Transform transform = root.transform;
             
-            for (int i = 0; i < count; i++) {
+            size += offset;
+            
+            for (int i = offset; i < size; i++) {
                 ParticleSystem.Particle particle = new ParticleSystem.Particle();
                 
                 particle.startLifetime = EvaluateCurve(main.startLifetime);
@@ -86,12 +94,10 @@ namespace TinyUtilities.Extensions.Unity {
                     particle.velocity = localVelocity;
                 }
                 
-                particle.randomSeed = (uint)Random.Range(0, int.MaxValue);
+                particle.randomSeed = (uint)UnityRandom.Range(0, int.MaxValue);
                 
                 particles[i] = particle;
             }
-            
-            return particles;
         }
         
         private static void GetShapePositionAndDirection(ParticleSystem.ShapeModule shape, out Vector3 position, out Vector3 direction) {
@@ -103,51 +109,41 @@ namespace TinyUtilities.Extensions.Unity {
             }
             
             switch (shape.shapeType) {
-                case ParticleSystemShapeType.Sphere:
-                case ParticleSystemShapeType.SphereShell: {
-                    Vector3 onSphere = Random.onUnitSphere;
-                    bool shell = shape.shapeType == ParticleSystemShapeType.SphereShell;
-                    position = onSphere * shape.radius * (shell ? 1f : Random.value);
+                case ParticleSystemShapeType.Sphere: {
+                    Vector3 onSphere = UnityRandom.onUnitSphere;
+                    float minR = shape.radius * (1f - shape.radiusThickness);
+                    float maxR = shape.radius;
+                    position = onSphere * UnityRandom.Range(minR, maxR);
                     direction = onSphere;
                     break;
                 }
                 
-                case ParticleSystemShapeType.Hemisphere:
-                case ParticleSystemShapeType.HemisphereShell: {
-                    Vector3 onSphere = Random.onUnitSphere;
+                case ParticleSystemShapeType.Hemisphere: {
+                    Vector3 onSphere = UnityRandom.onUnitSphere;
                     onSphere.y = Mathf.Abs(onSphere.y);
-                    bool shell = shape.shapeType == ParticleSystemShapeType.HemisphereShell;
-                    position = onSphere * shape.radius * (shell ? 1f : Random.value);
+                    float minR = shape.radius * (1f - shape.radiusThickness);
+                    float maxR = shape.radius;
+                    position = onSphere * UnityRandom.Range(minR, maxR);
                     direction = onSphere;
                     break;
                 }
                 
                 case ParticleSystemShapeType.Cone:
-                case ParticleSystemShapeType.ConeShell:
-                case ParticleSystemShapeType.ConeVolume:
-                case ParticleSystemShapeType.ConeVolumeShell: {
+                case ParticleSystemShapeType.ConeVolume: {
                     float angleRad = shape.angle * Mathf.Deg2Rad;
-                    float r = shape.radius;
+                    float minR = shape.radius * (1f - shape.radiusThickness);
+                    float maxR = shape.radius;
                     
-                    float theta = Random.value * Mathf.PI * 2f;
-                    
-                    float rPoint;
-                    
-                    if (shape.shapeType == ParticleSystemShapeType.ConeShell || shape.shapeType == ParticleSystemShapeType.ConeVolumeShell) {
-                        rPoint = r;
-                    } else {
-                        rPoint = r * Mathf.Sqrt(Random.value);
-                    }
+                    float theta = UnityRandom.value * Mathf.PI * 2f;
+                    float rPoint = Mathf.Sqrt(UnityRandom.value) * (maxR - minR) + minR;
                     
                     Vector3 basePos = new Vector3(rPoint * Mathf.Cos(theta), 0f, rPoint * Mathf.Sin(theta));
                     
                     float spread = Mathf.Tan(angleRad);
                     direction = new Vector3(basePos.x * spread, 1f, basePos.z * spread).normalized;
                     
-                    bool volume = shape.shapeType == ParticleSystemShapeType.ConeVolume || shape.shapeType == ParticleSystemShapeType.ConeVolumeShell;
-                    
-                    if (volume) {
-                        position = basePos + direction * shape.length * Random.value;
+                    if (shape.shapeType == ParticleSystemShapeType.ConeVolume) {
+                        position = basePos + direction * shape.length * UnityRandom.value;
                     } else {
                         position = basePos;
                     }
@@ -161,7 +157,7 @@ namespace TinyUtilities.Extensions.Unity {
                     Vector3 half = shape.scale * 0.5f;
                     
                     if (shape.shapeType == ParticleSystemShapeType.Box) {
-                        position = new Vector3(Random.Range(-half.x, half.x), Random.Range(-half.y, half.y), Random.Range(-half.z, half.z));
+                        position = new Vector3(UnityRandom.Range(-half.x, half.x), UnityRandom.Range(-half.y, half.y), UnityRandom.Range(-half.z, half.z));
                     } else if (shape.shapeType == ParticleSystemShapeType.BoxShell) {
                         position = RandomOnBoxSurface(half);
                     } else {
@@ -172,24 +168,24 @@ namespace TinyUtilities.Extensions.Unity {
                     break;
                 }
                 
-                case ParticleSystemShapeType.Circle:
-                case ParticleSystemShapeType.CircleEdge: {
-                    float theta = Random.value * Mathf.PI * 2f;
-                    float r = shape.shapeType == ParticleSystemShapeType.CircleEdge ? shape.radius : shape.radius * Mathf.Sqrt(Random.value);
+                case ParticleSystemShapeType.Circle: {
+                    float theta = UnityRandom.value * Mathf.PI * 2f;
+                    float minR = shape.radius * (1f - shape.radiusThickness);
+                    float r = UnityRandom.Range(minR, shape.radius);
                     position = new Vector3(r * Mathf.Cos(theta), 0f, r * Mathf.Sin(theta));
                     direction = Vector3.up;
                     break;
                 }
                 
                 case ParticleSystemShapeType.SingleSidedEdge: {
-                    position = new Vector3(Random.Range(-shape.radius, shape.radius), 0f, 0f);
+                    position = new Vector3(UnityRandom.Range(-shape.radius, shape.radius), 0f, 0f);
                     direction = Vector3.up;
                     break;
                 }
                 
                 case ParticleSystemShapeType.Rectangle: {
                     Vector3 half = shape.scale * 0.5f;
-                    position = new Vector3(Random.Range(-half.x, half.x), Random.Range(-half.y, half.y), 0f);
+                    position = new Vector3(UnityRandom.Range(-half.x, half.x), UnityRandom.Range(-half.y, half.y), 0f);
                     direction = Vector3.forward;
                     break;
                 }
@@ -197,7 +193,7 @@ namespace TinyUtilities.Extensions.Unity {
                 case ParticleSystemShapeType.Mesh: {
                     if (shape.mesh != null && shape.mesh.vertexCount > 0) {
                         Vector3[] verts = shape.mesh.vertices;
-                        position = verts[Random.Range(0, verts.Length)];
+                        position = verts[UnityRandom.Range(0, verts.Length)];
                         direction = Vector3.up;
                     }
                     
@@ -211,7 +207,7 @@ namespace TinyUtilities.Extensions.Unity {
                         Vector3[] verts = baked.vertices;
                         
                         if (verts.Length > 0) {
-                            position = verts[Random.Range(0, verts.Length)];
+                            position = verts[UnityRandom.Range(0, verts.Length)];
                         }
                         
                         direction = Vector3.up;
@@ -229,20 +225,21 @@ namespace TinyUtilities.Extensions.Unity {
             position = Quaternion.Euler(shape.rotation) * position + shape.position;
         }
         
+        
         private static float EvaluateCurve(ParticleSystem.MinMaxCurve curve) {
             switch (curve.mode) {
                 case ParticleSystemCurveMode.Constant:
                     return curve.constant;
                 
                 case ParticleSystemCurveMode.TwoConstants:
-                    return Random.Range(curve.constantMin, curve.constantMax);
+                    return UnityRandom.Range(curve.constantMin, curve.constantMax);
                 
                 case ParticleSystemCurveMode.Curve:
-                    return curve.curve.Evaluate(Random.value) * curve.curveMultiplier;
+                    return curve.curve.Evaluate(UnityRandom.value) * curve.curveMultiplier;
                 
                 case ParticleSystemCurveMode.TwoCurves:
-                    float t = Random.value;
-                    return Mathf.Lerp(curve.curveMin.Evaluate(t) * curve.curveMultiplier, curve.curveMax.Evaluate(t) * curve.curveMultiplier, Random.value);
+                    float t = UnityRandom.value;
+                    return Mathf.Lerp(curve.curveMin.Evaluate(t) * curve.curveMultiplier, curve.curveMax.Evaluate(t) * curve.curveMultiplier, UnityRandom.value);
                 
                 default:
                     return curve.constant;
@@ -255,16 +252,16 @@ namespace TinyUtilities.Extensions.Unity {
                     return gradient.color;
                 
                 case ParticleSystemGradientMode.TwoColors:
-                    return Color.Lerp(gradient.colorMin, gradient.colorMax, Random.value);
+                    return Color.Lerp(gradient.colorMin, gradient.colorMax, UnityRandom.value);
                 
                 case ParticleSystemGradientMode.Gradient:
-                    return gradient.gradient.Evaluate(Random.value);
+                    return gradient.gradient.Evaluate(UnityRandom.value);
                 
                 case ParticleSystemGradientMode.TwoGradients:
-                    return Color.Lerp(gradient.gradientMin.Evaluate(Random.value), gradient.gradientMax.Evaluate(Random.value), Random.value);
+                    return Color.Lerp(gradient.gradientMin.Evaluate(UnityRandom.value), gradient.gradientMax.Evaluate(UnityRandom.value), UnityRandom.value);
                 
                 case ParticleSystemGradientMode.RandomColor:
-                    return gradient.gradient.Evaluate(Random.value);
+                    return gradient.gradient.Evaluate(UnityRandom.value);
                 
                 default:
                     return gradient.color;
@@ -276,25 +273,25 @@ namespace TinyUtilities.Extensions.Unity {
             float py = half.x * half.z;
             float pz = half.x * half.y;
             float total = 2f * (px + py + pz);
-            float r = Random.value * total;
+            float r = UnityRandom.value * total;
             
             if (r < 2f * px) {
-                return new Vector3(r < px ? -half.x : half.x, Random.Range(-half.y, half.y), Random.Range(-half.z, half.z));
+                return new Vector3(r < px ? -half.x : half.x, UnityRandom.Range(-half.y, half.y), UnityRandom.Range(-half.z, half.z));
             }
             
             r -= 2f * px;
             
             if (r < 2f * py) {
-                return new Vector3(Random.Range(-half.x, half.x), r < py ? -half.y : half.y, Random.Range(-half.z, half.z));
+                return new Vector3(UnityRandom.Range(-half.x, half.x), r < py ? -half.y : half.y, UnityRandom.Range(-half.z, half.z));
             }
             
             r -= 2f * py;
-            return new Vector3(Random.Range(-half.x, half.x), Random.Range(-half.y, half.y), r < pz ? -half.z : half.z);
+            return new Vector3(UnityRandom.Range(-half.x, half.x), UnityRandom.Range(-half.y, half.y), r < pz ? -half.z : half.z);
         }
         
         private static Vector3 RandomOnBoxEdge(Vector3 half) {
-            int edge = Random.Range(0, 12);
-            float t = Random.Range(-1f, 1f);
+            int edge = UnityRandom.Range(0, 12);
+            float t = UnityRandom.Range(-1f, 1f);
             
             switch (edge) {
                 case 0: return new Vector3(t * half.x, -half.y, -half.z);
