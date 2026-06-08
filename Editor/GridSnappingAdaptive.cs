@@ -29,7 +29,11 @@ namespace TinyUtilities.Editor {
                 if (type is ObjectChangeKind.ChangeGameObjectOrComponentProperties) {
                     stream.GetChangeGameObjectOrComponentPropertiesEvent(eventId, out ChangeGameObjectOrComponentPropertiesEventArgs data);
                     
+                #if UNITY_6000_3
                     if (EditorUtility.EntityIdToObject(data.instanceId) is Transform) {
+                    #else
+                        if (EditorUtility.InstanceIDToObject(data.instanceId) is Transform) {
+                    #endif
                         isMoveOrCreate = true;
                         break;
                     }
