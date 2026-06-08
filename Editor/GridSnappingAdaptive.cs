@@ -8,27 +8,48 @@ using UnityEditor.SceneManagement;
 using UnityEngine;
 
 namespace TinyUtilities.Editor {
-    public static class GridSnappingInstantiate {
+    [InitializeOnLoad]
+    public static class GridSnappingAdaptive {
         private static int _lastUndoGroup;
         
-        private static readonly HashSet<GameObject> _processed = new HashSet<GameObject>();
+        private static readonly HashSet<GameObject> _processed;
         
-        [InitializeOnLoadMethod]
-        private static void Initialize() {
+        static GridSnappingAdaptive() {
             _lastUndoGroup = -1;
-            EditorApplication.hierarchyChanged += OnHierarchyChanged;
+            _processed = new HashSet<GameObject>();
+            ObjectChangeEvents.changesPublished += OnObjectChange;
         }
         
-        private static void OnHierarchyChanged() {
-            int currentUndoGroup = Undo.GetCurrentGroup();
+        private static void OnObjectChange(ref ObjectChangeEventStream stream) {
+            bool isMoveOrCreate = false;
             
-            if (currentUndoGroup == _lastUndoGroup) {
-                return;
+            for (int eventId = 0; eventId < stream.length; eventId++) {
+                ObjectChangeKind type = stream.GetEventType(eventId);
+                
+                if (type is ObjectChangeKind.ChangeGameObjectOrComponentProperties) {
+                    stream.GetChangeGameObjectOrComponentPropertiesEvent(eventId, out ChangeGameObjectOrComponentPropertiesEventArgs data);
+                    
+                    if (EditorUtility.EntityIdToObject(data.instanceId) is Transform) {
+                        isMoveOrCreate = true;
+                        break;
+                    }
+                }
+                
+                if (type is ObjectChangeKind.CreateGameObjectHierarchy) {
+                    isMoveOrCreate = true;
+                    break;
+                }
             }
             
-            _lastUndoGroup = currentUndoGroup;
-            
-            if (IsActiveSnap()) {
+            if (isMoveOrCreate && IsActiveSnap()) {
+                int currentUndoGroup = Undo.GetCurrentGroup();
+                
+                if (currentUndoGroup == _lastUndoGroup) {
+                    return;
+                }
+                
+                _lastUndoGroup = currentUndoGroup;
+                
                 SnapToGrid();
             }
         }
