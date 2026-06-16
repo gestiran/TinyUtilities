@@ -20,8 +20,6 @@ namespace TinyUtilities.Components {
         [field: SerializeField]
         public ResizeData constant { get; private set; } = new ResizeData(1f, 1f, 30f);
         
-        private void Start() => RecalculateConstant();
-        
         private void LateUpdate() {
             if (constraintActive) {
                 float size = source.CalculateObjectResize(transform.position, constant);
