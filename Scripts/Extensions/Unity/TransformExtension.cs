@@ -37,6 +37,15 @@ namespace TinyUtilities.Extensions.Unity {
             }
         }
         
+        public static void SetLossyScale(this Transform transform, Vector3 lossyScale) {
+            if (transform.parent != null) {
+                Vector3 parentScale = transform.parent.lossyScale.ZeroUpscale();
+                transform.localScale = new Vector3(lossyScale.x / parentScale.x, lossyScale.y / parentScale.y, lossyScale.z / parentScale.z);
+            } else {
+                transform.localScale = lossyScale;
+            }
+        }
+        
         public static void DestroyChildren(this Transform transform) {
             int childCount = transform.childCount;
             

@@ -229,17 +229,26 @@ namespace TinyUtilities.Extensions.Unity {
         }
         
         [Pure]
+        public static Vector3 ZeroUpscale(this in Vector3 vector) {
+            float x = vector.x == 0 ? vector.x + 0.000001f : vector.x;
+            float y = vector.y == 0 ? vector.y + 0.000001f : vector.y;
+            float z = vector.z == 0 ? vector.z + 0.000001f : vector.z;
+            
+            return new Vector3(x, y, z);
+        }
+        
+        [Pure]
         private static Vector3 RotateAroundX(Vector3 point, Vector3 center, float angle) {
             float sin = Mathf.Sin(angle);
             float cos = Mathf.Cos(angle);
             
-            float XX = point.x - center.x;
-            float YY = point.y - center.y;
-            float ZZ = point.z - center.z;
+            float xx = point.x - center.x;
+            float yy = point.y - center.y;
+            float zz = point.z - center.z;
             
-            point.x = center.x + XX;
-            point.y = center.y + YY * cos - ZZ * sin;
-            point.z = center.z + YY * sin + ZZ * cos;
+            point.x = center.x + xx;
+            point.y = center.y + yy * cos - zz * sin;
+            point.z = center.z + yy * sin + zz * cos;
             
             return point;
         }
@@ -249,13 +258,13 @@ namespace TinyUtilities.Extensions.Unity {
             float sin = Mathf.Sin(angle);
             float cos = Mathf.Cos(angle);
             
-            float XX = point.x - center.x;
-            float YY = point.y - center.y;
-            float ZZ = point.z - center.z;
+            float xx = point.x - center.x;
+            float yy = point.y - center.y;
+            float zz = point.z - center.z;
             
-            point.x = center.x + XX * cos + ZZ * sin;
-            point.y = center.y + YY;
-            point.z = center.z - XX * sin + ZZ * cos;
+            point.x = center.x + xx * cos + zz * sin;
+            point.y = center.y + yy;
+            point.z = center.z - xx * sin + zz * cos;
             
             return point;
         }
@@ -265,13 +274,13 @@ namespace TinyUtilities.Extensions.Unity {
             float sin = Mathf.Sin(angle);
             float cos = Mathf.Cos(angle);
             
-            float XX = point.x - center.x;
-            float YY = point.y - center.y;
-            float ZZ = point.z - center.z;
+            float xx = point.x - center.x;
+            float yy = point.y - center.y;
+            float zz = point.z - center.z;
             
-            point.x = center.x + XX * cos - YY * sin;
-            point.y = center.y + XX * sin + YY * cos;
-            point.z = center.z + ZZ;
+            point.x = center.x + xx * cos - yy * sin;
+            point.y = center.y + xx * sin + yy * cos;
+            point.z = center.z + zz;
             
             return point;
         }
