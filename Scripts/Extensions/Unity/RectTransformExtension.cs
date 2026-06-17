@@ -1,6 +1,7 @@
 // Copyright (c) 2023 Derek Sliman
 // Licensed under the MIT License. See LICENSE.md for details.
 
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace TinyUtilities.Extensions.Unity {
@@ -25,6 +26,12 @@ namespace TinyUtilities.Extensions.Unity {
             rectTransform.offsetMax = Vector2.zero;
             
             rectTransform.ForceUpdateRectTransforms();
+        }
+        
+        public static void SetParent<T>(this T rectTransforms, Transform parent, bool worldPositionStays = true) where T : IEnumerable<RectTransform> {
+            foreach (RectTransform rectTransform in rectTransforms) {
+                rectTransform.SetParent(parent, worldPositionStays);
+            }
         }
     }
 }
