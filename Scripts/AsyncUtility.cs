@@ -2,6 +2,7 @@
 // Licensed under the MIT License. See LICENSE.md for details.
 
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
@@ -21,13 +22,21 @@ namespace TinyUtilities {
             _cancellation = new CancellationTokenSource();
         }
         
-        public static async UniTask CallAfterFrame(Action callback, CancellationToken cancellation) {
-            await UniTask.Yield(cancellation);
-            callback();
+        public static UniTask Run<T>(List<T> arr, Action<T> action, int iterations, int delay, DelayType delayType) {
+            return Run(arr, action, iterations, delay, delayType, CancellationToken.None);
         }
         
-        public static async UniTask CallAfterFrame(Action callback) {
-            await UniTask.Yield();
+        public static async UniTask Run<T>(List<T> arr, Action<T> action, int iterations, int delay, DelayType delayType, CancellationToken cancellation) {
+            for (int i = 0; i < iterations; i++) {
+                Run(arr, iterations, i, action);
+                await UniTask.Delay(delay, delayType, PlayerLoopTiming.Update, cancellation);
+            }
+        }
+        
+        public static UniTask CallAfterFrame(Action callback) => CallAfterFrame(callback, CancellationToken.None);
+        
+        public static async UniTask CallAfterFrame(Action callback, CancellationToken cancellation) {
+            await UniTask.Yield(cancellation);
             callback();
         }
         
@@ -86,6 +95,19 @@ namespace TinyUtilities {
                 }
                 
                 await UniTask.Yield(cancellation);
+            }
+        }
+        
+        public static void Run<T>(List<T> arr, int count, int id, Action<T> action) {
+            int total = arr.Count;
+            int baseSize = total / count;
+            int remainder = total % count;
+            
+            int start = id * baseSize + Mathf.Min(id, remainder);
+            int end = start + baseSize + (id < remainder ? 1 : 0);
+            
+            for (int i = start; i < end; i++) {
+                action(arr[i]);
             }
         }
         
