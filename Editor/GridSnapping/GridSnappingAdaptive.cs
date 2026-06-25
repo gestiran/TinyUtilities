@@ -7,7 +7,7 @@ using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 
-namespace TinyUtilities.Editor {
+namespace TinyUtilities.Editor.GridSnapping {
     [InitializeOnLoad]
     public static class GridSnappingAdaptive {
         private static int _lastUndoGroup;
@@ -21,40 +21,43 @@ namespace TinyUtilities.Editor {
         }
         
         private static void OnObjectChange(ref ObjectChangeEventStream stream) {
-            bool isMoveOrCreate = false;
-            
-            for (int eventId = 0; eventId < stream.length; eventId++) {
-                ObjectChangeKind type = stream.GetEventType(eventId);
+            if (GridSnappingProjectSettings.isEnable) {
+                bool isMoveOrCreate = false;
                 
-                if (type is ObjectChangeKind.ChangeGameObjectOrComponentProperties) {
-                    stream.GetChangeGameObjectOrComponentPropertiesEvent(eventId, out ChangeGameObjectOrComponentPropertiesEventArgs data);
+                for (int eventId = 0; eventId < stream.length; eventId++) {
+                    ObjectChangeKind type = stream.GetEventType(eventId);
                     
-                #if UNITY_6000_3
-                    if (EditorUtility.EntityIdToObject(data.instanceId) is Transform) {
+                    if (type is ObjectChangeKind.ChangeGameObjectOrComponentProperties) {
+                        stream.GetChangeGameObjectOrComponentPropertiesEvent(eventId, out ChangeGameObjectOrComponentPropertiesEventArgs data);
+                        
+                    #if UNITY_6000_3
+                        if (EditorUtility.EntityIdToObject(data.instanceId) is Transform)
                     #else
-                        if (EditorUtility.InstanceIDToObject(data.instanceId) is Transform) {
+                        if (EditorUtility.InstanceIDToObject(data.instanceId) is Transform)
                     #endif
+                        {
+                            isMoveOrCreate = true;
+                            break;
+                        }
+                    }
+                    
+                    if (type is ObjectChangeKind.CreateGameObjectHierarchy) {
                         isMoveOrCreate = true;
                         break;
                     }
                 }
                 
-                if (type is ObjectChangeKind.CreateGameObjectHierarchy) {
-                    isMoveOrCreate = true;
-                    break;
+                if (isMoveOrCreate && IsActiveSnap()) {
+                    int currentUndoGroup = Undo.GetCurrentGroup();
+                    
+                    if (currentUndoGroup == _lastUndoGroup) {
+                        return;
+                    }
+                    
+                    _lastUndoGroup = currentUndoGroup;
+                    
+                    SnapToGrid();
                 }
-            }
-            
-            if (isMoveOrCreate && IsActiveSnap()) {
-                int currentUndoGroup = Undo.GetCurrentGroup();
-                
-                if (currentUndoGroup == _lastUndoGroup) {
-                    return;
-                }
-                
-                _lastUndoGroup = currentUndoGroup;
-                
-                SnapToGrid();
             }
         }
         
