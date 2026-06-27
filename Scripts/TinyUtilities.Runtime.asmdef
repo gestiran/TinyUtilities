@@ -39,6 +39,11 @@
             "name": "Sirenix.Serialization",
             "expression": "1.0.0",
             "define": "ODIN_SERIALIZATION"
+        },
+        {
+            "name": "Unity",
+            "expression": "1.0.0",
+            "define": "UNITY_ENGINE"
         }
     ],
     "noEngineReferences": false

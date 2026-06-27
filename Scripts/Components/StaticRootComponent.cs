@@ -1,12 +1,13 @@
 // Copyright (c) 2023 Derek Sliman
 // Licensed under the MIT License. See LICENSE.md for details.
 
+#if UNITY_ENGINE
 using UnityEngine;
 
 namespace TinyUtilities.Components {
     public sealed class StaticRootComponent : MonoBehaviour {
         private void Start() {
-            StaticBatchingUtility.Combine(GetChildObjects(),gameObject);
+            StaticBatchingUtility.Combine(GetChildObjects(), gameObject);
         }
         
         private GameObject[] GetChildObjects() {
@@ -21,3 +22,4 @@ namespace TinyUtilities.Components {
         }
     }
 }
+#endif

@@ -1,11 +1,15 @@
 // Copyright (c) 2023 Derek Sliman
 // Licensed under the MIT License. See LICENSE.md for details.
 
+#if UNITY_ENGINE
 using System.Diagnostics.Contracts;
-using DG.Tweening;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+
+#if DOTWEEN
+using DG.Tweening;     
+#endif
 
 #if ODIN_INSPECTOR
 using Sirenix.OdinInspector;
@@ -118,7 +122,9 @@ namespace TinyUtilities.Components {
                 localPosition = new Vector3(_contentLocalPosition.x, _contentLocalPosition.y - (cellSize.y + spacing.y) * currentId);
             }
             
+        #if DOTWEEN
             _thisScrollRect.content.DOLocalMove(localPosition, durationOpen).SetUpdate(ignoreTimeScale);
+        #endif
             
             float startPosition;
             
@@ -137,8 +143,10 @@ namespace TinyUtilities.Components {
                     localPosition = new Vector3(offsetCenter.x, startPosition + (cellSize.y + spacing.y) * cardId);
                 }
                 
+            #if DOTWEEN
                 card.DOScale(scaleMain, durationOpen).SetUpdate(ignoreTimeScale);
                 card.DOLocalMove(localPosition, durationOpen).SetUpdate(ignoreTimeScale);
+            #endif
             }
             
             _thisScrollRect.enabled = true;
@@ -152,7 +160,9 @@ namespace TinyUtilities.Components {
             
             StopAnimation();
             
+        #if DOTWEEN
             _thisScrollRect.content.DOLocalMove(_contentLocalPosition, durationClose).SetUpdate(ignoreTimeScale);
+        #endif
             
             GetCardIds(_cards.Length, out int leftId, out int rightId);
             
@@ -160,18 +170,26 @@ namespace TinyUtilities.Components {
                 Transform card = _cards[cardId];
                 
                 if (cardId == currentId) {
+                #if DOTWEEN
                     card.DOLocalMove(new Vector3(offsetCenter.x, offsetCenter.y), durationClose).SetUpdate(ignoreTimeScale);
+                #endif
                 } else if (cardId == leftId) {
                     Vector3 localPosition = new Vector3(offsetCenter.x - offsetSubCards.x, offsetCenter.y - offsetSubCards.y);
+                #if DOTWEEN
                     card.DOLocalMove(localPosition, durationClose).SetUpdate(ignoreTimeScale);
                     card.DOScale(scaleSub, durationClose).SetUpdate(ignoreTimeScale);
+                #endif
                 } else if (cardId == rightId) {
                     Vector3 localPosition = new Vector3(offsetCenter.x + offsetSubCards.x, offsetCenter.y + offsetSubCards.y);
+                #if DOTWEEN
                     card.DOLocalMove(localPosition, durationClose).SetUpdate(ignoreTimeScale);
                     card.DOScale(scaleSub, durationClose).SetUpdate(ignoreTimeScale);
+                #endif
                 } else {
+                #if DOTWEEN
                     card.DOLocalMove(new Vector3(offsetCenter.x, offsetCenter.y), durationClose).SetUpdate(ignoreTimeScale);
                     card.DOScale(scaleSub * 0.5f, durationClose).SetUpdate(ignoreTimeScale);
+                #endif
                 }
             }
             
@@ -194,11 +212,13 @@ namespace TinyUtilities.Components {
         public void RecalculateContentLocalPosition() => _thisScrollRect.content.localPosition = _contentLocalPosition;
         
         private void StopAnimation() {
+        #if DOTWEEN
             _thisScrollRect.content.DOKill();
             
             for (int childId = 0; childId < _cards.Length; childId++) {
                 _cards[childId].DOKill();
             }
+        #endif
         }
         
         private void GetCardIds(int max, out int leftId, out int rightId) {
@@ -278,3 +298,4 @@ namespace TinyUtilities.Components {
     #endif
     }
 }
+#endif

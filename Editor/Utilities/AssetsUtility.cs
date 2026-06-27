@@ -1,6 +1,7 @@
 ﻿// Copyright (c) 2023 Derek Sliman
 // Licensed under the MIT License. See LICENSE.md for details.
 
+#if UNITY_ENGINE
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
@@ -10,15 +11,15 @@ namespace TinyUtilities.Editor.Utilities {
     public static class AssetsUtility {
         public static T GetAsset<T>(string path) where T : UnityObject {
             string[] assets = AssetDatabase.FindAssets("", new[] { path });
-
+            
             for (int assetId = 0; assetId < assets.Length; assetId++) {
                 T asset = AssetDatabase.LoadAssetAtPath<T>(AssetDatabase.GUIDToAssetPath(assets[assetId]));
-
+                
                 if (asset != null) {
                     return asset;
                 }
             }
-
+            
             return null;
         }
         
@@ -53,8 +54,8 @@ namespace TinyUtilities.Editor.Utilities {
             
             if (prefixes != null) {
                 foreach (string prefix in prefixes) {
-                    name = name.Replace($"{prefix}_","");
-                }   
+                    name = name.Replace($"{prefix}_", "");
+                }
             }
             
             return name;
@@ -67,3 +68,4 @@ namespace TinyUtilities.Editor.Utilities {
         }
     }
 }
+#endif

@@ -1,6 +1,7 @@
 // Copyright (c) 2023 Derek Sliman
 // Licensed under the MIT License. See LICENSE.md for details.
 
+#if UNITY_ENGINE
 using System.Diagnostics.Contracts;
 using TinyUtilities.CustomTypes;
 using UnityEngine;
@@ -22,3 +23,4 @@ namespace TinyUtilities.Extensions.Unity {
         }
     }
 }
+#endif

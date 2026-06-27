@@ -40,6 +40,11 @@
             "name": "com.unity.nuget.newtonsoft-json",
             "expression": "1.0.0",
             "define": "NEWTONSOFT_JSON"
+        },
+        {
+            "name": "Unity",
+            "expression": "1.0.0",
+            "define": "UNITY_ENGINE"
         }
     ],
     "noEngineReferences": false

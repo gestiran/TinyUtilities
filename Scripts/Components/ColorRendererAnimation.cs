@@ -1,8 +1,12 @@
 // Copyright (c) 2023 Derek Sliman
 // Licensed under the MIT License. See LICENSE.md for details.
 
-using DG.Tweening;
+#if UNITY_ENGINE
 using UnityEngine;
+
+#if DOTWEEN
+using DG.Tweening;
+#endif
 
 #if ODIN_INSPECTOR
 using Sirenix.OdinInspector;
@@ -30,8 +34,10 @@ namespace TinyUtilities.Components {
         [field: SerializeField, BoxGroup("Loop"), HorizontalGroup("Loop/H1"), HideLabel, SuffixLabel("loops", true), ShowIf(nameof(isLoop))]
         public int loops { get; private set; } = int.MaxValue;
         
+    #if DOTWEEN
         [field: SerializeField, HorizontalGroup("Loop/H1"), HideLabel, ShowIf(nameof(isLoop))]
         public LoopType loopType { get; private set; }
+    #endif
         
         [SerializeField, FoldoutGroup(InspectorNames.GENERATED), ReadOnly, Required]
         private Renderer _thisRenderer;
@@ -51,15 +57,21 @@ namespace TinyUtilities.Components {
             Init();
             
             if (isLoop) {
+            #if DOTWEEN
                 this.DOColor(to, duration).From(from).SetLoops(loops, loopType).SetEase(Ease.Linear).SetUpdate(ignoreTimeScale);
+            #endif
             } else {
+            #if DOTWEEN
                 this.DOColor(to, duration).From(from).SetEase(Ease.Linear).SetUpdate(ignoreTimeScale);
+            #endif
             }
         }
         
         public void Kill(bool complete = false) {
             Init();
+        #if DOTWEEN
             this.DOKill(complete);
+        #endif
         }
         
         public Color GetColor() {
@@ -128,3 +140,4 @@ namespace TinyUtilities.Components {
     #endif
     }
 }
+#endif

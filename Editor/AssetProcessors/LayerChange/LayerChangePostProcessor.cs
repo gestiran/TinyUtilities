@@ -1,6 +1,7 @@
 // Copyright (c) 2023 Derek Sliman
 // Licensed under the MIT License. See LICENSE.md for details.
 
+#if UNITY_ENGINE
 using TinyUtilities.Editor.AssetProcessors.ShadowsImport;
 using TinyUtilities.Extensions.Unity;
 using UnityEditor;
@@ -25,3 +26,4 @@ namespace TinyUtilities.Editor.AssetProcessors.LayerChange {
         public override int GetPostprocessOrder() => ORDER;
     }
 }
+#endif

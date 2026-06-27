@@ -1,6 +1,7 @@
 ﻿// Copyright (c) 2023 Derek Sliman
 // Licensed under the MIT License. See LICENSE.md for details.
 
+#if UNITY_ENGINE
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
@@ -242,3 +243,4 @@ namespace TinyUtilities.Extensions.Unity {
         private static void GetAllChildrenNR(this Transform transform, List<Transform> output) => transform.GetAllChildren(output);
     }
 }
+#endif

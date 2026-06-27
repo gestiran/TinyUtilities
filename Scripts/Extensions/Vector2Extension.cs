@@ -2,12 +2,19 @@
 // Licensed under the MIT License. See LICENSE.md for details.
 
 using System.Collections.Generic;
-using UnityEngine;
+using System.Diagnostics.Contracts;
 
-namespace TinyUtilities.Extensions.Unity {
+#if UNITY_ENGINE
+using UnityEngine;
+#else
+using System.Numerics;
+#endif
+
+namespace TinyUtilities.Extensions {
     public static class Vector2Extension {
+        [Pure]
         public static bool TryCalculateAverage(this List<Vector2> positions, out Vector2 result) {
-            result = Vector2.zero;
+            result = new Vector2(0, 0);
             
             if (positions.Count == 0) {
                 return false;
@@ -18,12 +25,12 @@ namespace TinyUtilities.Extensions.Unity {
             }
             
             result /= positions.Count;
-            
             return true;
         }
         
+        [Pure]
         public static bool TryCalculateAverage(this Vector2[] positions, out Vector2 result) {
-            result = Vector2.zero;
+            result = new Vector2(0, 0);
             
             if (positions.Length == 0) {
                 return false;
@@ -34,7 +41,6 @@ namespace TinyUtilities.Extensions.Unity {
             }
             
             result /= positions.Length;
-            
             return true;
         }
     }

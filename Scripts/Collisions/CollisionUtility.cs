@@ -1,8 +1,9 @@
 ﻿// Copyright (c) 2023 Derek Sliman
 // Licensed under the MIT License. See LICENSE.md for details.
 
+#if UNITY_ENGINE
 using System.Collections.Generic;
-using TinyUtilities.Extensions.Unity;
+using TinyUtilities.Extensions;
 using UnityEngine;
 
 namespace TinyUtilities.Collisions {
@@ -121,7 +122,7 @@ namespace TinyUtilities.Collisions {
             Vector2 offset = new Vector2(raycast.origin.x - raycast.point.x, raycast.origin.z - raycast.point.z);
             Vector2 endPoint = new Vector2(raycast.origin.x + offset.x * 1.25f, raycast.origin.z + offset.y * 1.25f);
             
-            var result = Vector2.MoveTowards(new Vector2(raycast.origin.x, raycast.origin.z), endPoint, radius - raycast.distance);
+            Vector2 result = Vector2.MoveTowards(new Vector2(raycast.origin.x, raycast.origin.z), endPoint, radius - raycast.distance);
             
             Debug.DrawLine(raycast.origin, new Vector3(result.x, raycast.origin.y, result.y), Color.blue, 0.2f);
             
@@ -139,3 +140,4 @@ namespace TinyUtilities.Collisions {
     #endif
     }
 }
+#endif

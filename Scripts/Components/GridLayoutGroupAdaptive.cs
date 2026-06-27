@@ -1,8 +1,11 @@
 ﻿// Copyright (c) 2023 Derek Sliman
 // Licensed under the MIT License. See LICENSE.md for details.
 
+#if UNITY_ENGINE
 using UnityEngine;
 using UnityEngine.UI;
+
+// ReSharper disable InconsistentNaming
 
 namespace TinyUtilities.Components {
     [AddComponentMenu("Layout/Grid Layout Group Adaptive", 152)]
@@ -78,13 +81,13 @@ namespace TinyUtilities.Components {
         
         protected GridLayoutGroupAdaptive() { }
         
-        #if UNITY_EDITOR
+    #if UNITY_EDITOR
         protected override void OnValidate() {
             base.OnValidate();
             constraintCount = constraintCount;
         }
         
-        #endif
+    #endif
         
         public override void CalculateLayoutInputHorizontal() {
             base.CalculateLayoutInputHorizontal();
@@ -104,8 +107,7 @@ namespace TinyUtilities.Components {
             SetLayoutInputForAxis(padding.horizontal + (cellSize.x + spacing.x) * minColumns - spacing.x,
                                   padding.horizontal + (cellSize.x + spacing.x) * preferredColumns - spacing.x,
                                   -1,
-                                  0
-            );
+                                  0);
         }
         
         public override void CalculateLayoutInputVertical() {
@@ -151,7 +153,9 @@ namespace TinyUtilities.Components {
                 for (int i = 0; i < rectChildrenCount; i++) {
                     RectTransform rect = rectChildren[i];
                     
-                    m_Tracker.Add(this, rect, DrivenTransformProperties.Anchors | DrivenTransformProperties.AnchoredPosition | DrivenTransformProperties.SizeDelta);
+                    m_Tracker.Add(this,
+                                  rect,
+                                  DrivenTransformProperties.Anchors | DrivenTransformProperties.AnchoredPosition | DrivenTransformProperties.SizeDelta);
                     
                     rect.anchorMin = Vector2.up;
                     rect.anchorMax = Vector2.up;
@@ -203,8 +207,7 @@ namespace TinyUtilities.Components {
             }
             
             Vector2 requiredSpace = new Vector2(actualCellCountX * cellSize.x + (actualCellCountX - 1) * spacing.x,
-                                                actualCellCountY * cellSize.y + (actualCellCountY - 1) * spacing.y
-            );
+                                                actualCellCountY * cellSize.y + (actualCellCountY - 1) * spacing.y);
             
             Vector2 startOffset = new Vector2(GetStartOffset(0, requiredSpace.x), GetStartOffset(1, requiredSpace.y));
             
@@ -325,3 +328,4 @@ namespace TinyUtilities.Components {
         }
     }
 }
+#endif

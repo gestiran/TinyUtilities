@@ -1,9 +1,15 @@
-using UnityEngine;
+// Copyright (c) 2023 Derek Sliman
+// Licensed under the MIT License. See LICENSE.md for details.
+
+#if UNITY_ENGINE
+using System.Diagnostics.Contracts;
 using UnityEngine.Events;
+using UnityObject = UnityEngine.Object;
 
 namespace TinyUtilities.Extensions.Unity {
     public static class UnityEventExtension {
-        public static bool IsStartCurrent<T>(this UnityEvent targetEvent, T current, string methodName, bool excludeCallStateOff = true) where T : Object {
+        [Pure]
+        public static bool IsStartCurrent<T>(this UnityEvent targetEvent, T current, string methodName, bool excludeCallStateOff = true) where T : UnityObject {
             int currentId = current.GetInstanceID();
             int eventsCount = targetEvent.GetPersistentEventCount();
             
@@ -12,7 +18,7 @@ namespace TinyUtilities.Extensions.Unity {
                     continue;
                 }
                 
-                Object targetObject = targetEvent.GetPersistentTarget(eventId);
+                UnityObject targetObject = targetEvent.GetPersistentTarget(eventId);
                 
                 if (targetObject is T target && target.GetInstanceID() == currentId) {
                     return targetEvent.GetPersistentMethodName(eventId) == methodName;
@@ -23,3 +29,4 @@ namespace TinyUtilities.Extensions.Unity {
         }
     }
 }
+#endif

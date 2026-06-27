@@ -3,12 +3,15 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
-using JetBrains.Annotations;
+
+#if UNITY_ENGINE
 using UnityEngine;
-using UnityRandom = UnityEngine.Random;
+using Random = UnityEngine.Random;
+#endif
 
 namespace TinyUtilities.Extensions.Global {
     public static class ArrayExtension {
@@ -134,7 +137,7 @@ namespace TinyUtilities.Extensions.Global {
         [Pure]
         public static T Any<T>(this T[] array, T defaultValue = default) {
             if (array.Length > 0) {
-                return array[UnityRandom.Range(0, array.Length - 1)];
+                return array[Random.Range(0, array.Length - 1)];
             }
             
             return defaultValue;
@@ -143,7 +146,7 @@ namespace TinyUtilities.Extensions.Global {
         [Pure]
         public static T Any<T>(this T[] array, out int index, T defaultValue = default) {
             if (array.Length > 0) {
-                index = UnityRandom.Range(0, array.Length - 1);
+                index = Random.Range(0, array.Length - 1);
                 return array[index];
             }
             
@@ -252,7 +255,7 @@ namespace TinyUtilities.Extensions.Global {
         
         public static T[] Shuffle<T>(this T[] array) {
             for (int i = 0; i < array.Length; i++) {
-                int index = UnityRandom.Range(0, array.Length);
+                int index = Random.Range(0, array.Length);
                 
                 if (index == i) {
                     continue;
@@ -264,7 +267,7 @@ namespace TinyUtilities.Extensions.Global {
             return array;
         }
         
-        [CollectionAccess(CollectionAccessType.ModifyExistingContent)]
+        [JetBrains.Annotations.CollectionAccess(JetBrains.Annotations.CollectionAccessType.ModifyExistingContent)]
         public static T[] Reverse<T>(this T[] array) {
             int length = array.Length / 2;
             

@@ -1,6 +1,7 @@
 // Copyright (c) 2023 Derek Sliman
 // Licensed under the MIT License. See LICENSE.md for details.
 
+#if UNITY_ENGINE
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,6 +9,8 @@ using UnityEngine.EventSystems;
 using UnityEngine.Pool;
 using UnityEngine.Rendering;
 using UnityEngine.UI;
+
+// ReSharper disable InconsistentNaming
 
 namespace TinyUtilities.Components {
     [ExecuteAlways]
@@ -164,3 +167,4 @@ namespace TinyUtilities.Components {
         }
     }
 }
+#endif

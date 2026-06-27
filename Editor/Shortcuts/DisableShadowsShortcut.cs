@@ -1,6 +1,7 @@
 // Copyright (c) 2023 Derek Sliman
 // Licensed under the MIT License. See LICENSE.md for details.
 
+#if UNITY_ENGINE
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -89,3 +90,4 @@ namespace TinyUtilities.Editor.Shortcuts {
         }
     }
 }
+#endif

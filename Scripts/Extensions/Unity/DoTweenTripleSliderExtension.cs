@@ -1,12 +1,13 @@
 // Copyright (c) 2023 Derek Sliman
 // Licensed under the MIT License. See LICENSE.md for details.
 
+#if UNITY_ENGINE && DOTWEEN
 using DG.Tweening;
 using DG.Tweening.Core;
 using DG.Tweening.Plugins.Options;
 using TinyUtilities.Components;
 
-namespace TinyUtilities.Extensions {
+namespace TinyUtilities.Extensions.Unity {
     public static class DoTweenTripleSliderExtension {
         public static TweenerCore<float, float, FloatOptions> DoFirstValue(this TripleSlider target, float endValue, float duration, bool snapping = false) {
             TweenerCore<float, float, FloatOptions> t = DOTween.To(() => target.firstValue, x => target.firstValue = x, endValue, duration);
@@ -27,3 +28,4 @@ namespace TinyUtilities.Extensions {
         }
     }
 }
+#endif

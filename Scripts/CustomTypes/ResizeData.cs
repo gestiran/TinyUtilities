@@ -1,11 +1,12 @@
 // Copyright (c) 2023 Derek Sliman
 // Licensed under the MIT License. See LICENSE.md for details.
 
+#if UNITY_ENGINE
 using System;
 using UnityEngine;
 
 #if ODIN_INSPECTOR
-using Sirenix.OdinInspector;     
+using Sirenix.OdinInspector;
 #endif
 
 namespace TinyUtilities.CustomTypes {
@@ -39,3 +40,4 @@ namespace TinyUtilities.CustomTypes {
         }
     }
 }
+#endif

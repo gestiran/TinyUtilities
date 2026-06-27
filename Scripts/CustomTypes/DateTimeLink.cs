@@ -1,6 +1,7 @@
 ﻿// Copyright (c) 2023 Derek Sliman
 // Licensed under the MIT License. See LICENSE.md for details.
 
+#if UNITY_ENGINE
 using System;
 using UnityEngine;
 
@@ -14,7 +15,11 @@ namespace TinyUtilities.CustomTypes {
         public DateTime time {
             get {
             #if UNITY_EDITOR
-                return new DateTime(Mathf.Clamp(_year, 1, 3000), Mathf.Clamp(_month, 1, 12), Mathf.Clamp(_day, 1, 31), Mathf.Clamp(_hour, 0, 23), Mathf.Clamp(_minute, 0, 59),
+                return new DateTime(Mathf.Clamp(_year, 1, 3000),
+                                    Mathf.Clamp(_month, 1, 12),
+                                    Mathf.Clamp(_day, 1, 31),
+                                    Mathf.Clamp(_hour, 0, 23),
+                                    Mathf.Clamp(_minute, 0, 59),
                                     Mathf.Clamp(_second, 0, 59));
             #endif
                 
@@ -50,7 +55,8 @@ namespace TinyUtilities.CustomTypes {
         }
         
         public bool Equals(DateTime other) {
-            return other.Year == _year && other.Month == _month && other.Day == _day && other.Hour == _hour && other.Minute == _minute && other.Second == _second;
+            return other.Year == _year && other.Month == _month && other.Day == _day && other.Hour == _hour && other.Minute == _minute
+                && other.Second == _second;
         }
         
         public override bool Equals(object obj) {
@@ -101,3 +107,4 @@ namespace TinyUtilities.CustomTypes {
         }
     }
 }
+#endif

@@ -1,6 +1,7 @@
 // Copyright (c) 2023 Derek Sliman
 // Licensed under the MIT License. See LICENSE.md for details.
 
+#if UNITY_ENGINE
 using System;
 using System.IO;
 using System.Threading;
@@ -145,3 +146,4 @@ namespace TinyUtilities.Editor.MergeScripts.Handlers {
         private string GetDataPath() => Path.GetDirectoryName(Application.dataPath);
     }
 }
+#endif

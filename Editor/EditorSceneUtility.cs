@@ -1,6 +1,7 @@
 ﻿// Copyright (c) 2023 Derek Sliman
 // Licensed under the MIT License. See LICENSE.md for details.
 
+#if UNITY_ENGINE
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,7 +19,10 @@ namespace TinyUtilities.Editor {
         }
         
         public static void InvokeOnAllScenes(string scenesFolderPath, Action action) {
-            bool confirm = EditorUtility.DisplayDialog("Confirm action", "Are you sure you want to perform this on all scenes? it could take quite a while", "Yes", "No");
+            bool confirm = EditorUtility.DisplayDialog("Confirm action",
+                                                       "Are you sure you want to perform this on all scenes? it could take quite a while",
+                                                       "Yes",
+                                                       "No");
             
             if (!confirm) {
                 return;
@@ -75,3 +79,4 @@ namespace TinyUtilities.Editor {
         }
     }
 }
+#endif

@@ -1,6 +1,7 @@
 ﻿// Copyright (c) 2023 Derek Sliman
 // Licensed under the MIT License. See LICENSE.md for details.
 
+#if UNITY_ENGINE
 using System;
 using UnityEngine;
 using UnityEngine.Events;
@@ -140,11 +141,11 @@ namespace TinyUtilities.Components {
         protected DoubleSlider() { }
         
         public void Rebuild(CanvasUpdate executing) {
-            #if UNITY_EDITOR
+        #if UNITY_EDITOR
             if (executing == CanvasUpdate.Prelayout) {
                 onValueChanged.Invoke(_firstValue, _secondValue);
             }
-            #endif
+        #endif
         }
         
         public void LayoutComplete() { }
@@ -297,11 +298,11 @@ namespace TinyUtilities.Components {
         }
         
         private void UpdateVisuals() {
-            #if UNITY_EDITOR
+        #if UNITY_EDITOR
             if (!Application.isPlaying) {
                 UpdateCachedReferences();
             }
-            #endif
+        #endif
             
             if (_fillContainerRect != null) {
                 Vector2 anchorMin = Vector2.zero;
@@ -350,7 +351,7 @@ namespace TinyUtilities.Components {
             }
         }
         
-        #if UNITY_EDITOR
+    #if UNITY_EDITOR
         protected override void OnValidate() {
             if (wholeNumbers) {
                 _size = Mathf.Round(_size);
@@ -393,6 +394,7 @@ namespace TinyUtilities.Components {
             base.OnValidate();
         }
         
-        #endif
+    #endif
     }
 }
+#endif

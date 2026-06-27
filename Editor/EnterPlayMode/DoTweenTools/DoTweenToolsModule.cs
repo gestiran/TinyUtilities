@@ -1,24 +1,28 @@
 ﻿// Copyright (c) 2023 Derek Sliman
 // Licensed under the MIT License. See LICENSE.md for details.
 
-using DG.Tweening;
+#if UNITY_ENGINE
 using TinyUtilities.Editor.Utilities;
 using UnityEditor;
 using UnityEngine;
+
+#if DOTWEEN
+using DG.Tweening;     
+#endif
 
 namespace TinyUtilities.Editor.EnterPlayMode.DoTweenTools {
     public sealed class DoTweenToolsModule {
         private bool _isEnable;
         
         private readonly DoTweenToolsPrefs _prefs;
-
+        
         public DoTweenToolsModule() {
             _prefs = new DoTweenToolsPrefs();
             Init();
         }
         
         public void Init() => _isEnable = _prefs.LoadIsEnable();
-
+        
         public void PlayModeStateChanged(PlayModeStateChange state) {
             if (_isEnable == false) {
                 return;
@@ -30,15 +34,18 @@ namespace TinyUtilities.Editor.EnterPlayMode.DoTweenTools {
             
             StopTween();
         }
-
+        
         public void Draw() {
             _isEnable = GUIDrawUtility.DrawToggle("Restart DoTween", _isEnable, _prefs.SaveIsEnable);
         }
         
         private static void StopTween() {
+        #if DOTWEEN
             DOTween.ClearCachedTweens();
             DOTween.Clear(true);
+        #endif
             Application.Quit(0);
         }
     }
 }
+#endif

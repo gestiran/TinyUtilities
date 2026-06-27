@@ -1,11 +1,12 @@
 ﻿// Copyright (c) 2023 Derek Sliman
 // Licensed under the MIT License. See LICENSE.md for details.
 
+#if UNITY_ENGINE
 using System.Collections.Generic;
-using JetBrains.Annotations;
+using System.Diagnostics.Contracts;
 using UnityEngine;
 
-namespace TinyUtilities.Extensions.Unity {
+namespace TinyUtilities.Extensions {
     public static class Vector3Extension {
         [Pure]
         public static Vector3 Abs(this Vector3 source) {
@@ -74,7 +75,8 @@ namespace TinyUtilities.Extensions.Unity {
             
             for (int pointId = 0, endPointId = points.Length - 1; pointId < points.Length; endPointId = pointId++) {
                 if (points[pointId].z > position.z != points[endPointId].z > position.z && position.x
-                    < (points[endPointId].x - points[pointId].x) * (position.z - points[pointId].z) / (points[endPointId].z - points[pointId].z) + points[pointId].x) {
+                    < (points[endPointId].x - points[pointId].x) * (position.z - points[pointId].z) / (points[endPointId].z - points[pointId].z)
+                    + points[pointId].x) {
                     isInside = !isInside;
                 }
             }
@@ -286,3 +288,4 @@ namespace TinyUtilities.Extensions.Unity {
         }
     }
 }
+#endif

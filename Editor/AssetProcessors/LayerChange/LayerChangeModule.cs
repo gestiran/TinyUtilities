@@ -1,6 +1,7 @@
 // Copyright (c) 2023 Derek Sliman
 // Licensed under the MIT License. See LICENSE.md for details.
 
+#if UNITY_ENGINE
 using TinyUtilities.Editor.Utilities;
 using UnityEditor;
 using UnityEngine;
@@ -34,3 +35,4 @@ namespace TinyUtilities.Editor.AssetProcessors.LayerChange {
         }
     }
 }
+#endif

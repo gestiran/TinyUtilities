@@ -1,9 +1,12 @@
 ﻿// Copyright (c) 2023 Derek Sliman
 // Licensed under the MIT License. See LICENSE.md for details.
 
+#if UNITY_ENGINE
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+
+// ReSharper disable InconsistentNaming
 
 namespace TinyUtilities.Components {
     [AddComponentMenu("Layout/Content Size Fitter Adaptive", 141)]
@@ -35,9 +38,9 @@ namespace TinyUtilities.Components {
         }
         
         // field is never assigned warning
-        #pragma warning disable 649
+    #pragma warning disable 649
         private DrivenRectTransformTracker m_Tracker;
-        #pragma warning restore 649
+    #pragma warning restore 649
         
         protected override void OnEnable() {
             base.OnEnable();
@@ -102,11 +105,12 @@ namespace TinyUtilities.Components {
             LayoutRebuilder.MarkLayoutForRebuild(rectTransform);
         }
         
-        #if UNITY_EDITOR
+    #if UNITY_EDITOR
         protected override void OnValidate() {
             SetDirty();
         }
         
-        #endif
+    #endif
     }
 }
+#endif
