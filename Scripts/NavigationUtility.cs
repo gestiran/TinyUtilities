@@ -2,8 +2,7 @@
 // Licensed under the MIT License. See LICENSE.md for details.
 
 using System.Collections.Generic;
-using TinyUtilities.Extensions.Global;
-using TinyUtilities.Unity;
+using TinyUtilities.Extensions;
 using UnityEngine;
 using UnityEngine.AI;
 

@@ -11,6 +11,7 @@
     "allowUnsafeCode": true,
     "overrideReferences": true,
     "precompiledReferences": [
+        "com.ges.tinyutilities.dll",
         "Sirenix.OdinInspector.Attributes.dll",
         "Sirenix.Serialization.dll",
         "Sirenix.Serialization.Config.dll",
@@ -39,11 +40,6 @@
             "name": "Sirenix.Serialization",
             "expression": "1.0.0",
             "define": "ODIN_SERIALIZATION"
-        },
-        {
-            "name": "Unity",
-            "expression": "1.0.0",
-            "define": "UNITY_ENGINE"
         }
     ],
     "noEngineReferences": false

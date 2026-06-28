@@ -1,12 +1,10 @@
 // Copyright (c) 2023 Derek Sliman
 // Licensed under the MIT License. See LICENSE.md for details.
 
-#if UNITY_ENGINE
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using TinyUtilities.Extensions.Global;
-using TinyUtilities.Extensions.Unity;
+using TinyUtilities.Extensions;
 using TinyUtilities.Validation;
 using UnityEngine;
 using UnityEngine.Events;
@@ -401,4 +399,3 @@ namespace TinyUtilities.Components {
     #endif
     }
 }
-#endif

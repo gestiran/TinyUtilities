@@ -1,0 +1,10 @@
+/home/gestiran/Projects/Unity/PackagesProject/Packages/com.ges.tinyutilities/Libraries~/obj/Release/netstandard2.1/com.ges.tinyutilities.GeneratedMSBuildEditorConfig.editorconfig
+/home/gestiran/Projects/Unity/PackagesProject/Packages/com.ges.tinyutilities/Libraries~/obj/Release/netstandard2.1/com.ges.tinyutilities.AssemblyInfoInputs.cache
+/home/gestiran/Projects/Unity/PackagesProject/Packages/com.ges.tinyutilities/Libraries~/obj/Release/netstandard2.1/com.ges.tinyutilities.AssemblyInfo.cs
+/home/gestiran/Projects/Unity/PackagesProject/Packages/com.ges.tinyutilities/Libraries~/obj/Release/netstandard2.1/com.ges.tinyutilities.csproj.CoreCompileInputs.cache
+/home/gestiran/Projects/Unity/PackagesProject/Packages/com.ges.tinyutilities/Libraries~/obj/Release/netstandard2.1/com.ges.tinyutilities.sourcelink.json
+/home/gestiran/Projects/Unity/PackagesProject/Packages/com.ges.tinyutilities/Libraries~/bin/Release/netstandard2.1/com.ges.tinyutilities.deps.json
+/home/gestiran/Projects/Unity/PackagesProject/Packages/com.ges.tinyutilities/Libraries~/bin/Release/netstandard2.1/com.ges.tinyutilities.dll
+/home/gestiran/Projects/Unity/PackagesProject/Packages/com.ges.tinyutilities/Libraries~/bin/Release/netstandard2.1/com.ges.tinyutilities.pdb
+/home/gestiran/Projects/Unity/PackagesProject/Packages/com.ges.tinyutilities/Libraries~/obj/Release/netstandard2.1/com.ges.tinyutilities.dll
+/home/gestiran/Projects/Unity/PackagesProject/Packages/com.ges.tinyutilities/Libraries~/obj/Release/netstandard2.1/com.ges.tinyutilities.pdb

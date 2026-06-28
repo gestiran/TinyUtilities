@@ -1,7 +1,6 @@
 // Copyright (c) 2023 Derek Sliman
 // Licensed under the MIT License. See LICENSE.md for details.
 
-#if UNITY_ENGINE
 using System;
 using TinyUtilities.Extensions;
 using UnityEngine;
@@ -80,4 +79,3 @@ namespace TinyUtilities.CustomTypes {
         public override string ToString() => $"MeshCorners(x: {xMin}::{xMax}, y: {yMin}::{yMax}, z: {zMin}::{zMax})";
     }
 }
-#endif

@@ -1,13 +1,12 @@
 // Copyright (c) 2023 Derek Sliman
 // Licensed under the MIT License. See LICENSE.md for details.
 
-#if UNITY_ENGINE
 using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using TinyUtilities.Editor.MergeScripts.Handlers;
 using TinyUtilities.Editor.MergeScripts.Pairs;
-using TinyUtilities.Extensions.Global;
+using TinyUtilities.Extensions;
 using UnityEditor;
 using UnityEngine;
 
@@ -96,4 +95,3 @@ namespace TinyUtilities.Editor.MergeScripts {
         private bool IsActive() => _cancellation != null;
     }
 }
-#endif

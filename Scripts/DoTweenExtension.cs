@@ -2,15 +2,19 @@
 // Licensed under the MIT License. See LICENSE.md for details.
 
 using System.Collections.Generic;
-using DG.Tweening;
-using DG.Tweening.Core;
-using DG.Tweening.Plugins.Options;
 using TinyUtilities.Components;
 using UnityEngine;
 using UnityEngine.UI;
 
+#if DOTWEEN
+using DG.Tweening;
+using DG.Tweening.Core;
+using DG.Tweening.Plugins.Options;
+#endif
+
 namespace TinyUtilities {
     public static class DoTweenExtension {
+    #if DOTWEEN
         public static TweenerCore<float, float, FloatOptions> DOMaxValue(this Slider target, float endValue, float duration, bool snapping = false) {
             TweenerCore<float, float, FloatOptions> t = DOTween.To(() => target.maxValue, x => target.maxValue = x, endValue, duration);
             t.SetOptions(snapping).SetTarget(target);
@@ -29,7 +33,8 @@ namespace TinyUtilities {
             return t;
         }
         
-        public static TweenerCore<Color, Color, ColorOptions> DOColor(this ColorRendererAnimation target, Color endValue, float duration, bool snapping = false) {
+        public static TweenerCore<Color, Color, ColorOptions>
+            DOColor(this ColorRendererAnimation target, Color endValue, float duration, bool snapping = false) {
             TweenerCore<Color, Color, ColorOptions> t = DOTween.To(target.GetColor, target.SetColor, endValue, duration);
             t.SetOptions(snapping).SetTarget(target);
             return t;
@@ -52,6 +57,8 @@ namespace TinyUtilities {
             t.SetTarget(target);
             return t;
         }
+        
+    #endif
         
         public static void DoKill<T>(this T components) where T : IEnumerable<Component> {
             foreach (Component component in components) {

@@ -3,12 +3,7 @@
 
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
-
-#if UNITY_ENGINE
 using UnityEngine;
-#else
-using System.Numerics;
-#endif
 
 namespace TinyUtilities.Extensions {
     public static class Vector2Extension {

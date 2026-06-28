@@ -1,7 +1,7 @@
 ﻿// Copyright (c) 2023 Derek Sliman
 // Licensed under the MIT License. See LICENSE.md for details.
 
-#if ODIN_INSPECTOR && ODIN_VALIDATOR && UNITY_ENGINE
+#if ODIN_INSPECTOR && ODIN_VALIDATOR
 using Sirenix.OdinInspector.Editor.Validation;
 using TinyUtilities.Editor.TexturesCompressor;
 using UnityEditor;
@@ -83,5 +83,4 @@ namespace TinyUtilities.Editor.TexturesCompressor {
         }
     }
 }
-
 #endif

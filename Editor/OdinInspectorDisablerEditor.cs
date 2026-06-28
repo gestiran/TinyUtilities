@@ -1,4 +1,4 @@
-#if !ODIN_INSPECTOR && UNITY_ENGINE
+#if !ODIN_INSPECTOR
     using UnityEngine;
     
     namespace TinyUtilities.Editor {

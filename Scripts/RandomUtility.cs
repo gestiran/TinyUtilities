@@ -3,10 +3,7 @@
 
 using System;
 using System.Diagnostics.Contracts;
-
-#if UNITY_ENGINE
 using Random = UnityEngine.Random;
-#endif
 
 namespace TinyUtilities {
     public static class RandomUtility {
