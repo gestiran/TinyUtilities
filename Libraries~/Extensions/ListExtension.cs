@@ -7,6 +7,7 @@ using System.Text;
 
 namespace TinyUtilities.Extensions {
     public static class ListExtension {
+    #if EXTERNAL_DEPENDENCIES
         public static void Shuffle<T>(this List<T> list) {
             for (int i = 0; i < list.Count; i++) {
                 int newIndex = RandomUtility.Range(0, list.Count);
@@ -18,6 +19,7 @@ namespace TinyUtilities.Extensions {
                 (list[newIndex], list[i]) = (list[i], list[newIndex]);
             }
         }
+    #endif
         
         public static void AddRange<T>(this List<T> list, T[] elements) {
             list.Capacity += elements.Length;
@@ -71,6 +73,7 @@ namespace TinyUtilities.Extensions {
             return false;
         }
         
+    #if EXTERNAL_DEPENDENCIES
         public static T Any<T>(this List<T> list, T defaultValue = default) {
             if (list.Count > 0) {
                 return list[RandomUtility.Range(0, list.Count - 1)];
@@ -78,6 +81,7 @@ namespace TinyUtilities.Extensions {
             
             return defaultValue;
         }
+    #endif
         
         public static int GetUniqueCount<T>(this List<T> list) => list.GetUniqueCount(value => value.GetHashCode());
         

@@ -118,6 +118,7 @@ namespace TinyUtilities.Extensions {
             return builder.ToString();
         }
         
+    #if EXTERNAL_DEPENDENCIES
         [Pure]
         public static T Any<T>(this T[] array, T defaultValue = default) {
             if (array.Length > 0) {
@@ -137,6 +138,7 @@ namespace TinyUtilities.Extensions {
             index = 0;
             return defaultValue;
         }
+    
         
         [Pure]
         public static T[] Any<T>(this T[] origin, int count) {
@@ -188,6 +190,7 @@ namespace TinyUtilities.Extensions {
             
             return result;
         }
+    #endif
         
         [Pure]
         public static T[] RemoveRange<T>(this T[] array, T[] objects) {
@@ -237,6 +240,7 @@ namespace TinyUtilities.Extensions {
             return closestIndex;
         }
         
+    #if EXTERNAL_DEPENDENCIES
         public static T[] Shuffle<T>(this T[] array) {
             for (int i = 0; i < array.Length; i++) {
                 int index = RandomUtility.Range(0, array.Length);
@@ -250,6 +254,7 @@ namespace TinyUtilities.Extensions {
             
             return array;
         }
+    #endif
         
         public static T[] Reverse<T>(this T[] array) {
             int length = array.Length / 2;
