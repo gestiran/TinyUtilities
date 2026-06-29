@@ -1,6 +1,7 @@
 // Copyright (c) 2023 Derek Sliman
 // Licensed under the MIT License. See LICENSE.md for details.
 
+#if EXTERNAL_DEPENDENCIES
 using System.Diagnostics.Contracts;
 using System;
 
@@ -38,3 +39,4 @@ namespace TinyUtilities {
         public static int Offset(int value, int offset) => _random.Next(value - offset, value + offset);
     }
 }
+#endif
