@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "com.ges.tinyutilities", "com.ges.tinyutilities\com.ges.tinyutilities.csproj", "{3B3FEA54-AC45-46BE-8394-AC48A94103F2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "com.ges.tinyanalyser", "com.ges.tinyanalyser\com.ges.tinyanalyser.csproj", "{97C8C7A6-FC93-4028-AAF6-12B2DEC846C0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3B3FEA54-AC45-46BE-8394-AC48A94103F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3B3FEA54-AC45-46BE-8394-AC48A94103F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3B3FEA54-AC45-46BE-8394-AC48A94103F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3B3FEA54-AC45-46BE-8394-AC48A94103F2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{97C8C7A6-FC93-4028-AAF6-12B2DEC846C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{97C8C7A6-FC93-4028-AAF6-12B2DEC846C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{97C8C7A6-FC93-4028-AAF6-12B2DEC846C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{97C8C7A6-FC93-4028-AAF6-12B2DEC846C0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

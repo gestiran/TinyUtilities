@@ -6,8 +6,10 @@ using System.Collections.Generic;
 namespace TinyUtilities.Extensions {
     public static class DictionaryExtensions {
         public static void AddOrSet<T>(this Dictionary<T, int> source, T key, int value) {
-            if (!source.TryAdd(key, value)) {
+            if (source.ContainsKey(key)) {
                 source[key] += value;
+            } else {
+                source[key] = value;
             }
         }
     }

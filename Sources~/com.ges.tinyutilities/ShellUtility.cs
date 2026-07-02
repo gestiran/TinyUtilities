@@ -19,7 +19,7 @@ namespace TinyUtilities {
         
         [Pure]
         public static async Task<string> Process(string path, string command) {
-            using Process process = new Process();
+            Process process = new Process();
             process.StartInfo.FileName = path;
             process.StartInfo.Arguments = command;
             process.StartInfo.RedirectStandardOutput = true;

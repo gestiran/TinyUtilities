@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: bc29da19469179b41afa1c7821defa68
+guid: 659c67e81baff099b98650ca48bcf2e0
 labels:
 - RoslynAnalyzer
 PluginImporter:
@@ -28,7 +28,6 @@ PluginImporter:
         Exclude OSXUniversal: 1
         Exclude Win: 1
         Exclude Win64: 1
-        Exclude iOS: 1
     Editor:
       enabled: 0
       settings:
@@ -55,13 +54,6 @@ PluginImporter:
       enabled: 0
       settings:
         CPU: AnyCPU
-    iOS:
-      enabled: 0
-      settings:
-        AddToEmbeddedBinaries: false
-        CPU: AnyCPU
-        CompileFlags: 
-        FrameworkDependencies: 
   userData: 
   assetBundleName: 
   assetBundleVariant: 

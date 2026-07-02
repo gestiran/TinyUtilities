@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+        <RootNamespace>TinyUtilities</RootNamespace>
+        <Nullable>disable</Nullable>
+        
+        <ExternalDependencies Condition="'$(ExternalDependencies)' == ''">true</ExternalDependencies>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(ExternalDependencies)' == 'true'">
+        <DefineConstants>$(DefineConstants);EXTERNAL_DEPENDENCIES</DefineConstants>
+    </PropertyGroup>
+
+    <ItemGroup Condition="'$(ExternalDependencies)' == 'true'">
+        <PackageReference Include="System.Text.Json" Version="10.0.9" />
+    </ItemGroup>
+    
+</Project>

@@ -9,7 +9,7 @@ namespace TinyUtilities {
             string[] names = Enum.GetNames(typeof(T));
             
             for (int nameId = 0; nameId < names.Length; nameId++) {
-                action(Enum.Parse<T>(names[nameId]));
+                action((T)Enum.Parse(typeof(T), names[nameId]));
             }
         }
         
