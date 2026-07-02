@@ -1,20 +1,17 @@
 ﻿// Copyright (c) 2023 Derek Sliman
 // Licensed under the MIT License. See LICENSE.md for details.
 
+#if DOTWEEN
 using System.Collections.Generic;
 using TinyUtilities.Components;
 using UnityEngine;
 using UnityEngine.UI;
-
-#if DOTWEEN
 using DG.Tweening;
 using DG.Tweening.Core;
 using DG.Tweening.Plugins.Options;
-#endif
 
 namespace TinyUtilities {
     public static class DoTweenExtension {
-    #if DOTWEEN
         public static TweenerCore<float, float, FloatOptions> DOMaxValue(this Slider target, float endValue, float duration, bool snapping = false) {
             TweenerCore<float, float, FloatOptions> t = DOTween.To(() => target.maxValue, x => target.maxValue = x, endValue, duration);
             t.SetOptions(snapping).SetTarget(target);
@@ -58,8 +55,6 @@ namespace TinyUtilities {
             return t;
         }
         
-    #endif
-        
         public static void DoKill<T>(this T components) where T : IEnumerable<Component> {
             foreach (Component component in components) {
                 component.DOKill();
@@ -82,3 +77,4 @@ namespace TinyUtilities {
         }
     }
 }
+#endif

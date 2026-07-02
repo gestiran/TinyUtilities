@@ -40,24 +40,34 @@ namespace TinyUtilities {
             callback();
         }
         
-        public static async UniTask WaitFrames(int framesCount) {
+        public static UniTask WaitFrames(int framesCount) => WaitFrames(framesCount, CancellationToken.None);
+        
+        public static async UniTask WaitFrames(int framesCount, CancellationToken cancellation) {
             while (framesCount > 0) {
-                await UniTask.Yield();
+                await UniTask.Yield(cancellation);
                 framesCount--;
             }
         }
         
-        public static async UniTask Delay(int millisecondsDelay, CancellationToken cancellationToken = default) {
+        public static UniTask Delay(int millisecondsDelay) => Delay(millisecondsDelay, CancellationToken.None);
+        
+        public static async UniTask Delay(int millisecondsDelay, CancellationToken cancellationToken) {
             await UniTask.Delay(millisecondsDelay, DelayType.DeltaTime, PlayerLoopTiming.Update, cancellationToken);
         }
         
-        public static async UniTask DelayUnscaled(int millisecondsDelay, CancellationToken cancellationToken = default) {
+        public static UniTask DelayUnscaled(int millisecondsDelay) => DelayUnscaled(millisecondsDelay, CancellationToken.None);
+        
+        public static async UniTask DelayUnscaled(int millisecondsDelay, CancellationToken cancellationToken) {
             await UniTask.Delay(millisecondsDelay, DelayType.UnscaledDeltaTime, PlayerLoopTiming.Update, cancellationToken);
         }
         
-        public static async UniTask DelayRealtime(int millisecondsDelay, CancellationToken cancellationToken = default) {
+        public static UniTask DelayRealtime(int millisecondsDelay) => DelayRealtime(millisecondsDelay, CancellationToken.None);
+        
+        public static async UniTask DelayRealtime(int millisecondsDelay, CancellationToken cancellationToken) {
             await UniTask.Delay(millisecondsDelay, DelayType.Realtime, PlayerLoopTiming.Update, cancellationToken);
         }
+        
+        public static UniTask WaitAnyInput(Action action) => WaitAnyInput(action, CancellationToken.None);
         
         public static async UniTask WaitAnyInput(Action action, CancellationToken cancellation) {
             Vector3 pressPosition = Vector3.zero;
@@ -74,6 +84,8 @@ namespace TinyUtilities {
             await UniTask.WhenAny(WaitMove(pressPosition, cancellation), WaitClick(cancellation));
             action.Invoke();
         }
+        
+        public static UniTask WaitMove(Vector3 pressPosition) => WaitMove(pressPosition, CancellationToken.None);
         
         private static async UniTask WaitMove(Vector3 pressPosition, CancellationToken cancellation) {
             float moveDistance = _aspect * _MOVE_DISTANCE;
