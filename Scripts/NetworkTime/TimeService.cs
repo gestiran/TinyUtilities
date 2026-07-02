@@ -35,7 +35,6 @@ namespace TinyUtilities.NetworkTime {
             }
             
             _isProcess = true;
-            Debug.LogError("XX");
             
             try {
                 for (int providerId = 0; providerId < _providers.Length; providerId++) {
@@ -45,8 +44,6 @@ namespace TinyUtilities.NetworkTime {
                         if (result.isSuccess) {
                             Initialize(result.time);
                             break;
-                        } else {
-                            Debug.LogError("F");
                         }
                     } catch (Exception exception) {
                         Debug.LogWarning(exception);
