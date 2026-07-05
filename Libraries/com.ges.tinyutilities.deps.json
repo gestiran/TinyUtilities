@@ -1,13 +1,13 @@
 {
   "runtimeTarget": {
-    "name": ".NETStandard,Version=v2.0/",
+    "name": ".NETStandard,Version=v2.1/",
     "signature": ""
   },
   "compilationOptions": {},
   "targets": {
-    ".NETStandard,Version=v2.0": {},
-    ".NETStandard,Version=v2.0/": {
-      "com.ges.tinyutilities/1.0.0": {
+    ".NETStandard,Version=v2.1": {},
+    ".NETStandard,Version=v2.1/": {
+      "com.ges.tinyutilities/1.3.6": {
         "runtime": {
           "com.ges.tinyutilities.dll": {}
         }
@@ -15,7 +15,7 @@
     }
   },
   "libraries": {
-    "com.ges.tinyutilities/1.0.0": {
+    "com.ges.tinyutilities/1.3.6": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
