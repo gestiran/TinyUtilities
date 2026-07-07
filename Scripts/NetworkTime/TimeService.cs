@@ -2,6 +2,7 @@
 // Licensed under the MIT License. See LICENSE.md for details.
 
 using System;
+using System.Diagnostics.Contracts;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using TinyUtilities.NetworkTime.Providers;
@@ -52,6 +53,17 @@ namespace TinyUtilities.NetworkTime {
             } finally {
                 _isProcess = false;
             }
+        }
+        
+        [Pure]
+        public static async UniTask<DateTime> GetTime(CancellationToken cancellation) {
+            DateTime networkTime;
+            
+            while (TryGetTime(out networkTime) == false) {
+                await UniTask.Delay(1000, DelayType.UnscaledDeltaTime, PlayerLoopTiming.Update, cancellation);
+            }
+            
+            return networkTime;
         }
         
         public static bool TryGetTime(out DateTime time) {
