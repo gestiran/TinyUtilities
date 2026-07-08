@@ -1,6 +1,7 @@
 // Copyright (c) 2023 Derek Sliman
 // Licensed under the MIT License. See LICENSE.md for details.
 
+#if EXTERNAL_DEPENDENCIES
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -96,3 +97,4 @@ namespace TinyUtilities {
         }
     }
 }
+#endif

@@ -5,7 +5,7 @@ using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 
-namespace TinyUtilities.Timers {
+namespace TinyUtilities {
     public static class TimerUtility {
         private static readonly CancellationTokenSource _global;
         
