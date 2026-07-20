@@ -64,10 +64,10 @@ namespace TinyUtilities.Components {
         [SerializeField]
         public UnityEvent<int> onMoveEnd;
         
-        [SerializeField, FoldoutGroup(InspectorNames.GENERATED), Required, ReadOnly]
+        [SerializeField, BoxGroup(InspectorNames.GENERATED), Required, ReadOnly]
         private ScrollRect _thisScrollRect;
         
-        [SerializeField, FoldoutGroup(InspectorNames.GENERATED), Required, ReadOnly]
+        [SerializeField, BoxGroup(InspectorNames.GENERATED), Required, ReadOnly]
         private HorizontalOrVerticalLayoutGroup _contentLayoutGroup;
         
         private Coroutine _calculateProcess;
@@ -100,10 +100,12 @@ namespace TinyUtilities.Components {
             HideButtons();
         }
         
-        public void OnEndDrag(PointerEventData eventData) => MoveToElement(currentElement);
-        
         public void OnDrag(PointerEventData eventData) {
             UpdateCurrentElement();
+        }
+        
+        public void OnEndDrag(PointerEventData eventData) {
+            MoveToElement(currentElement);
             onMoveEnd.Invoke(currentElement);
         }
         
