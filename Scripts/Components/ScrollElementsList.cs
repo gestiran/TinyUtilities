@@ -24,8 +24,7 @@ using Sirenix.OdinInspector;
 namespace TinyUtilities.Components {
     [SelectionBase]
     [DisallowMultipleComponent]
-    [RequireComponent(typeof(ScrollRect))]
-    [RequireComponent(typeof(RectTransform))]
+    [RequireComponent(typeof(ScrollRect), typeof(RectTransform))]
     public sealed class ScrollElementsList : UIBehaviour, ISelfValidator, ICoroutineRunner, IBeginDragHandler, IDragHandler, IEndDragHandler {
         public ScrollRect scroll => _thisScrollRect;
         
@@ -57,7 +56,13 @@ namespace TinyUtilities.Components {
         private ScrollButtonMove[] _buttons;
         
         [SerializeField]
+        public UnityEvent onMoveBegin;
+        
+        [SerializeField]
         public UnityEvent<int> onCurrentElementChanged;
+        
+        [SerializeField]
+        public UnityEvent<int> onMoveEnd;
         
         [SerializeField, FoldoutGroup(InspectorNames.GENERATED), Required, ReadOnly]
         private ScrollRect _thisScrollRect;
@@ -90,11 +95,17 @@ namespace TinyUtilities.Components {
             base.OnDisable();
         }
         
-        public void OnBeginDrag(PointerEventData eventData) => HideButtons();
+        public void OnBeginDrag(PointerEventData eventData) {
+            onMoveBegin.Invoke();
+            HideButtons();
+        }
         
         public void OnEndDrag(PointerEventData eventData) => MoveToElement(currentElement);
         
-        public void OnDrag(PointerEventData eventData) => UpdateCurrentElement();
+        public void OnDrag(PointerEventData eventData) {
+            UpdateCurrentElement();
+            onMoveEnd.Invoke(currentElement);
+        }
         
         public void SetInvertedState(bool value) {
             isInverted = value;
@@ -289,7 +300,7 @@ namespace TinyUtilities.Components {
             int childCount = parent.childCount;
             
             if (activeOnly) {
-                for (int childId = 0; childId < childCount; childId++) {
+                for (int childId = childCount - 1; childId >= 0; childId--) {
                     if (parent.GetChild(childId).gameObject.activeSelf == false) {
                         childCount--;
                     }
