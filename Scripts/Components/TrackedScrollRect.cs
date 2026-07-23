@@ -4,7 +4,7 @@
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-namespace TinyUtilities {
+namespace TinyUtilities.Components {
     public class TrackedScrollRect : ScrollRect {
         public bool IsDragging { get; private set; }
         

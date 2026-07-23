@@ -3,14 +3,14 @@
 
 #if DOTWEEN
 using System.Collections.Generic;
-using TinyUtilities.Components;
-using UnityEngine;
-using UnityEngine.UI;
 using DG.Tweening;
 using DG.Tweening.Core;
 using DG.Tweening.Plugins.Options;
+using TinyUtilities.Components;
+using UnityEngine;
+using UnityEngine.UI;
 
-namespace TinyUtilities {
+namespace TinyUtilities.Extensions {
     public static class DoTweenExtension {
         public static TweenerCore<float, float, FloatOptions> DOMaxValue(this Slider target, float endValue, float duration, bool snapping = false) {
             TweenerCore<float, float, FloatOptions> t = DOTween.To(() => target.maxValue, x => target.maxValue = x, endValue, duration);

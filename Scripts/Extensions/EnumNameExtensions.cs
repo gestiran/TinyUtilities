@@ -2,8 +2,9 @@
 // Licensed under the MIT License. See LICENSE.md for details.
 
 using System;
+using TinyUtilities.CustomTypes;
 
-namespace TinyUtilities.CustomTypes {
+namespace TinyUtilities.Extensions {
     public static class EnumNameExtensions {
         public static bool IsContains<T>(this EnumName<T>[] enums, T value) where T : Enum {
             for (int i = 0; i < enums.Length; i++) {
