@@ -7,6 +7,11 @@ using System.Threading;
 namespace TinyUtilities.Extensions {
     public static class CancellationTokenSourceExtension {
         [Pure]
+        public static CancellationTokenSource Create(this CancellationTokenSource cancellation) {
+            return ObjectExtension.Create(cancellation);
+        }
+        
+        [Pure]
         public static CancellationTokenSource Create(this CancellationTokenSource cancellation, params CancellationToken[] tokens) {
             if (cancellation == null) {
                 return CancellationTokenSource.CreateLinkedTokenSource(tokens);
