@@ -18,7 +18,7 @@ namespace TinyUtilities.Logger {
             Debug.WriteLine(message, type.ToString());
         }
         
-        private static ConsoleColor ToColor(this in LogType type) {
+        private static ConsoleColor ToColor(this LogType type) {
             switch (type) {
                 case LogType.Log: return Console.ForegroundColor;
                 case LogType.Warning: return ConsoleColor.Yellow;

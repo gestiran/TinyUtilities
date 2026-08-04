@@ -60,35 +60,35 @@ namespace TinyUtilities.Components {
         }
         
         public float firstValue {
-            get => wholeNumbers ? Mathf.Round(_firstValue) : _firstValue;
+            get => wholeNumbers ? UnityEngine.Mathf.Round(_firstValue) : _firstValue;
             set => SetFirstValue(value);
         }
         
         public float secondValue {
-            get => wholeNumbers ? Mathf.Round(_secondValue) : _secondValue;
+            get => wholeNumbers ? UnityEngine.Mathf.Round(_secondValue) : _secondValue;
             set => SetSecondValue(value);
         }
         
         public float normalizedFirstValue {
             get {
-                if (Mathf.Approximately(0, size)) {
+                if (UnityEngine.Mathf.Approximately(0, size)) {
                     return 0;
                 }
                 
-                return Mathf.InverseLerp(0, size, _firstValue);
+                return UnityEngine.Mathf.InverseLerp(0, size, _firstValue);
             }
-            set => firstValue = Mathf.Lerp(0, size, value);
+            set => firstValue = UnityEngine.Mathf.Lerp(0, size, value);
         }
         
         public float normalizedSecondValue {
             get {
-                if (Mathf.Approximately(0, size)) {
+                if (UnityEngine.Mathf.Approximately(0, size)) {
                     return 0;
                 }
                 
-                return Mathf.InverseLerp(0, size, _secondValue);
+                return UnityEngine.Mathf.InverseLerp(0, size, _secondValue);
             }
-            set => secondValue = Mathf.Lerp(0, size, value);
+            set => secondValue = UnityEngine.Mathf.Lerp(0, size, value);
         }
         
         public DoubleSliderEvent onValueChanged {
@@ -184,10 +184,10 @@ namespace TinyUtilities.Components {
             
             UpdateVisuals();
             
-            if (Mathf.Approximately(oldNormalizedFirstValue, normalizedFirstValue)) {
+            if (UnityEngine.Mathf.Approximately(oldNormalizedFirstValue, normalizedFirstValue)) {
                 UISystemProfilerApi.AddMarker("DoubleSlider.firstValue", this);
                 onValueChanged.Invoke(_firstValue, _secondValue);
-            } else if (Mathf.Approximately(oldNormalizedSecondValue, normalizedSecondValue)) {
+            } else if (UnityEngine.Mathf.Approximately(oldNormalizedSecondValue, normalizedSecondValue)) {
                 UISystemProfilerApi.AddMarker("DoubleSlider.secondValue", this);
                 onValueChanged.Invoke(_firstValue, _secondValue);
             }
@@ -236,20 +236,20 @@ namespace TinyUtilities.Components {
         }
         
         private float ClampFirstValue(float newValue) {
-            newValue = Mathf.Clamp(newValue, 0, size - _secondValue);
+            newValue = UnityEngine.Mathf.Clamp(newValue, 0, size - _secondValue);
             
             if (wholeNumbers) {
-                newValue = Mathf.Round(newValue);
+                newValue = UnityEngine.Mathf.Round(newValue);
             }
             
             return newValue;
         }
         
         private float ClampSecondValue(float newValue) {
-            newValue = Mathf.Clamp(newValue, 0, size - _firstValue);
+            newValue = UnityEngine.Mathf.Clamp(newValue, 0, size - _firstValue);
             
             if (wholeNumbers) {
-                newValue = Mathf.Round(newValue);
+                newValue = UnityEngine.Mathf.Round(newValue);
             }
             
             return newValue;
@@ -258,7 +258,7 @@ namespace TinyUtilities.Components {
         private void SetFirstValue(float newValue, bool sendCallback = true) {
             newValue = ClampFirstValue(newValue);
             
-            if (Mathf.Approximately(_firstValue, newValue)) {
+            if (UnityEngine.Mathf.Approximately(_firstValue, newValue)) {
                 return;
             }
             
@@ -274,7 +274,7 @@ namespace TinyUtilities.Components {
         private void SetSecondValue(float newValue, bool sendCallback = true) {
             newValue = ClampSecondValue(newValue);
             
-            if (Mathf.Approximately(_secondValue, newValue)) {
+            if (UnityEngine.Mathf.Approximately(_secondValue, newValue)) {
                 return;
             }
             
@@ -353,7 +353,7 @@ namespace TinyUtilities.Components {
     #if UNITY_EDITOR
         protected override void OnValidate() {
             if (wholeNumbers) {
-                _size = Mathf.Round(_size);
+                _size = UnityEngine.Mathf.Round(_size);
             }
             
             if (_size == 0) {

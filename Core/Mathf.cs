@@ -1,11 +1,10 @@
 // Copyright (c) 2023 Derek Sliman
 // Licensed under the MIT License. See LICENSE.md for details.
 
-#if EXTERNAL_DEPENDENCIES
 using System;
 
 namespace TinyUtilities {
-    public struct MathfUtility {
+    public static class Mathf {
         public const float PI = 3.1415927f;
         public const float INFINITY = float.PositiveInfinity;
         public const float NEGATIVE_INFINITY = float.NegativeInfinity;
@@ -288,7 +287,7 @@ namespace TinyUtilities {
         
         public static bool Approximately(float value, params float[] values) {
             for (int i = 0; i < values.Length; i++) {
-                if (MathfUtility.Approximately(value, values[i])) {
+                if (Mathf.Approximately(value, values[i])) {
                     continue;
                 }
                 
@@ -352,4 +351,3 @@ namespace TinyUtilities {
         }
     }
 }
-#endif

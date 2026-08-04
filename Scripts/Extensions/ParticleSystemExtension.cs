@@ -120,7 +120,7 @@ namespace TinyUtilities.Extensions {
                 
                 case ParticleSystemShapeType.Hemisphere: {
                     Vector3 onSphere = UnityRandom.onUnitSphere;
-                    onSphere.y = Mathf.Abs(onSphere.y);
+                    onSphere.y = UnityEngine.Mathf.Abs(onSphere.y);
                     float minR = shape.radius * (1f - shape.radiusThickness);
                     float maxR = shape.radius;
                     position = onSphere * UnityRandom.Range(minR, maxR);
@@ -130,16 +130,16 @@ namespace TinyUtilities.Extensions {
                 
                 case ParticleSystemShapeType.Cone:
                 case ParticleSystemShapeType.ConeVolume: {
-                    float angleRad = shape.angle * Mathf.Deg2Rad;
+                    float angleRad = shape.angle * UnityEngine.Mathf.Deg2Rad;
                     float minR = shape.radius * (1f - shape.radiusThickness);
                     float maxR = shape.radius;
                     
-                    float theta = UnityRandom.value * Mathf.PI * 2f;
-                    float rPoint = Mathf.Sqrt(UnityRandom.value) * (maxR - minR) + minR;
+                    float theta = UnityRandom.value * UnityEngine.Mathf.PI * 2f;
+                    float rPoint = UnityEngine.Mathf.Sqrt(UnityRandom.value) * (maxR - minR) + minR;
                     
-                    Vector3 basePos = new Vector3(rPoint * Mathf.Cos(theta), 0f, rPoint * Mathf.Sin(theta));
+                    Vector3 basePos = new Vector3(rPoint * UnityEngine.Mathf.Cos(theta), 0f, rPoint * UnityEngine.Mathf.Sin(theta));
                     
-                    float spread = Mathf.Tan(angleRad);
+                    float spread = UnityEngine.Mathf.Tan(angleRad);
                     direction = new Vector3(basePos.x * spread, 1f, basePos.z * spread).normalized;
                     
                     if (shape.shapeType == ParticleSystemShapeType.ConeVolume) {
@@ -169,10 +169,10 @@ namespace TinyUtilities.Extensions {
                 }
                 
                 case ParticleSystemShapeType.Circle: {
-                    float theta = UnityRandom.value * Mathf.PI * 2f;
+                    float theta = UnityRandom.value * UnityEngine.Mathf.PI * 2f;
                     float minR = shape.radius * (1f - shape.radiusThickness);
                     float r = UnityRandom.Range(minR, shape.radius);
-                    position = new Vector3(r * Mathf.Cos(theta), 0f, r * Mathf.Sin(theta));
+                    position = new Vector3(r * UnityEngine.Mathf.Cos(theta), 0f, r * UnityEngine.Mathf.Sin(theta));
                     direction = Vector3.up;
                     break;
                 }
@@ -239,7 +239,7 @@ namespace TinyUtilities.Extensions {
                 
                 case ParticleSystemCurveMode.TwoCurves:
                     float t = UnityRandom.value;
-                    return Mathf.Lerp(curve.curveMin.Evaluate(t) * curve.curveMultiplier, curve.curveMax.Evaluate(t) * curve.curveMultiplier, UnityRandom.value);
+                    return UnityEngine.Mathf.Lerp(curve.curveMin.Evaluate(t) * curve.curveMultiplier, curve.curveMax.Evaluate(t) * curve.curveMultiplier, UnityRandom.value);
                 
                 default:
                     return curve.constant;

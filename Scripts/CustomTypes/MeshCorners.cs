@@ -72,7 +72,7 @@ namespace TinyUtilities.CustomTypes {
             return current;
         }
         
-        public float SizeMax() => Mathf.Max(xSize, ySize, zSize);
+        public float SizeMax() => UnityEngine.Mathf.Max(xSize, ySize, zSize);
         
         public Vector3 Center() => new Vector3((min.x + max.x) * 0.5f, (min.y + max.y) * 0.5f, (min.z + max.z) * 0.5f);
         

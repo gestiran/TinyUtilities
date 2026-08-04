@@ -36,13 +36,13 @@ namespace TinyUtilities.CustomTypes {
         public float GetRandom() => UnityRandom.Range(min, max);
         
         [Pure]
-        public float Clamp(float value) => Mathf.Clamp(value, min, max);
+        public float Clamp(float value) => UnityEngine.Mathf.Clamp(value, min, max);
         
     #if UNITY_EDITOR && ODIN_VALIDATOR
         
         public void Validate(SelfValidationResult result) {
-            min = Mathf.Min(min, max);
-            max = Mathf.Max(min, max);
+            min = UnityEngine.Mathf.Min(min, max);
+            max = UnityEngine.Mathf.Max(min, max);
         }
         
     #endif

@@ -108,7 +108,7 @@ namespace TinyUtilities.Components {
         
         public void Validate(SelfValidationResult result) {
         #if UNITY_EDITOR
-            duration = Mathf.Max(0.01f, duration);
+            duration = UnityEngine.Mathf.Max(0.01f, duration);
             
             if (_thisRenderer != null) {
                 if (_thisRenderer.sharedMaterial == null) {

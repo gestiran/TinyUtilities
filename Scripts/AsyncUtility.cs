@@ -115,7 +115,7 @@ namespace TinyUtilities {
             int baseSize = total / count;
             int remainder = total % count;
             
-            int start = id * baseSize + Mathf.Min(id, remainder);
+            int start = id * baseSize + UnityEngine.Mathf.Min(id, remainder);
             int end = start + baseSize + (id < remainder ? 1 : 0);
             
             for (int i = start; i < end; i++) {

@@ -9,7 +9,7 @@ namespace TinyUtilities.Extensions {
     public static class Vector3Extension {
         [Pure]
         public static Vector3 Abs(this Vector3 source) {
-            return new Vector3(Mathf.Abs(source.x), Mathf.Abs(source.y), Mathf.Abs(source.z));
+            return new Vector3(UnityEngine.Mathf.Abs(source.x), UnityEngine.Mathf.Abs(source.y), UnityEngine.Mathf.Abs(source.z));
         }
         
         [Pure]
@@ -157,9 +157,9 @@ namespace TinyUtilities.Extensions {
         
         [Pure]
         public static Vector3 Rotate(this Vector3 point, Vector3 center, Vector3 rotate) {
-            point = RotateAroundX(point, center, rotate.x * Mathf.Deg2Rad);
-            point = RotateAroundY(point, center, rotate.y * Mathf.Deg2Rad);
-            point = RotateAroundZ(point, center, rotate.z * Mathf.Deg2Rad);
+            point = RotateAroundX(point, center, rotate.x * UnityEngine.Mathf.Deg2Rad);
+            point = RotateAroundY(point, center, rotate.y * UnityEngine.Mathf.Deg2Rad);
+            point = RotateAroundZ(point, center, rotate.z * UnityEngine.Mathf.Deg2Rad);
             
             return point;
         }
@@ -240,8 +240,8 @@ namespace TinyUtilities.Extensions {
         
         [Pure]
         private static Vector3 RotateAroundX(Vector3 point, Vector3 center, float angle) {
-            float sin = Mathf.Sin(angle);
-            float cos = Mathf.Cos(angle);
+            float sin = UnityEngine.Mathf.Sin(angle);
+            float cos = UnityEngine.Mathf.Cos(angle);
             
             float xx = point.x - center.x;
             float yy = point.y - center.y;
@@ -256,8 +256,8 @@ namespace TinyUtilities.Extensions {
         
         [Pure]
         private static Vector3 RotateAroundY(Vector3 point, Vector3 center, float angle) {
-            float sin = Mathf.Sin(angle);
-            float cos = Mathf.Cos(angle);
+            float sin = UnityEngine.Mathf.Sin(angle);
+            float cos = UnityEngine.Mathf.Cos(angle);
             
             float xx = point.x - center.x;
             float yy = point.y - center.y;
@@ -272,8 +272,8 @@ namespace TinyUtilities.Extensions {
         
         [Pure]
         private static Vector3 RotateAroundZ(Vector3 point, Vector3 center, float angle) {
-            float sin = Mathf.Sin(angle);
-            float cos = Mathf.Cos(angle);
+            float sin = UnityEngine.Mathf.Sin(angle);
+            float cos = UnityEngine.Mathf.Cos(angle);
             
             float xx = point.x - center.x;
             float yy = point.y - center.y;

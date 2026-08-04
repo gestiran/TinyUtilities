@@ -27,7 +27,7 @@ namespace TinyUtilities {
         public static NavMeshQueryFilter CreateFilter(int areaMask, int agentId = 0) {
             NavMeshQueryFilter filter = new NavMeshQueryFilter();
             filter.areaMask = areaMask;
-            filter.agentTypeID = _agentIds[Mathf.Clamp(agentId, 0, _agentIds.Length)];
+            filter.agentTypeID = _agentIds[UnityEngine.Mathf.Clamp(agentId, 0, _agentIds.Length)];
             return filter;
         }
         

@@ -19,10 +19,10 @@ namespace TinyUtilities.CustomTypes {
         public List<Vector3Int> GetPointsInside() {
             List<Vector3Int> result = new List<Vector3Int>();
             
-            int minX = Mathf.FloorToInt(Mathf.Min(a.x, Mathf.Min(b.x, c.x))) - 1;
-            int minZ = Mathf.FloorToInt(Mathf.Min(a.z, Mathf.Min(b.z, c.z))) - 1;
-            int maxX = Mathf.CeilToInt(Mathf.Max(a.x, Mathf.Max(b.x, c.x))) + 1;
-            int maxZ = Mathf.CeilToInt(Mathf.Max(a.z, Mathf.Max(b.z, c.z))) + 1;
+            int minX = UnityEngine.Mathf.FloorToInt(UnityEngine.Mathf.Min(a.x, UnityEngine.Mathf.Min(b.x, c.x))) - 1;
+            int minZ = UnityEngine.Mathf.FloorToInt(UnityEngine.Mathf.Min(a.z, UnityEngine.Mathf.Min(b.z, c.z))) - 1;
+            int maxX = UnityEngine.Mathf.CeilToInt(UnityEngine.Mathf.Max(a.x, UnityEngine.Mathf.Max(b.x, c.x))) + 1;
+            int maxZ = UnityEngine.Mathf.CeilToInt(UnityEngine.Mathf.Max(a.z, UnityEngine.Mathf.Max(b.z, c.z))) + 1;
             
             Vector3 center = (a + b + c) / 3f;
             

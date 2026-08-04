@@ -2,6 +2,7 @@
     "name": "TinyUtilities.Runtime",
     "rootNamespace": "TinyUtilities",
     "references": [
+        "TinyUtilities.Core",
         "UniTask",
         "Unity.TextMeshPro",
         "I2LocalizationRuntime"
@@ -11,7 +12,6 @@
     "allowUnsafeCode": true,
     "overrideReferences": true,
     "precompiledReferences": [
-        "com.ges.tinyutilities.dll",
         "Sirenix.OdinInspector.Attributes.dll",
         "Sirenix.Serialization.dll",
         "Sirenix.Serialization.Config.dll",

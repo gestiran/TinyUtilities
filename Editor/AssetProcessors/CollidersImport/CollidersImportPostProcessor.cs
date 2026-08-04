@@ -57,20 +57,20 @@ namespace TinyUtilities.Editor.AssetProcessors.CollidersImport {
             CapsuleCollider collider = target.parent.gameObject.AddComponent<CapsuleCollider>();
             Bounds bounds = RotateBounds(target);
             
-            float x = Mathf.Abs(bounds.size.x);
-            float y = Mathf.Abs(bounds.size.y);
-            float z = Mathf.Abs(bounds.size.z);
+            float x = UnityEngine.Mathf.Abs(bounds.size.x);
+            float y = UnityEngine.Mathf.Abs(bounds.size.y);
+            float z = UnityEngine.Mathf.Abs(bounds.size.z);
             
-            float height = Mathf.Max(x, y, z);
+            float height = UnityEngine.Mathf.Max(x, y, z);
             
             collider.center = bounds.center;
             collider.direction = height.Equals(x) ? 0 : height.Equals(y) ? 1 : 2;
             collider.height = height;
-            collider.radius = Mathf.Min(x, y, z);
+            collider.radius = UnityEngine.Mathf.Min(x, y, z);
         }
         
         private T AddCollider<T>(Transform target) where T : Collider {
-            if (1 - Mathf.Abs(Quaternion.Dot(target.parent.rotation, target.rotation)) > 0.1f) {
+            if (1 - UnityEngine.Mathf.Abs(Quaternion.Dot(target.parent.rotation, target.rotation)) > 0.1f) {
                 Debug.LogWarning("Collision mesh transform doesn't match the parent transform rotation, Colliders may not have translated correctly.");
             }
             

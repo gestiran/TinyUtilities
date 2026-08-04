@@ -54,7 +54,7 @@ namespace TinyUtilities.Components {
         
         public int constraintCount {
             get => m_ConstraintCount;
-            set => SetProperty(ref m_ConstraintCount, Mathf.Max(1, value));
+            set => SetProperty(ref m_ConstraintCount, UnityEngine.Mathf.Max(1, value));
         }
         
         [SerializeField]
@@ -97,10 +97,10 @@ namespace TinyUtilities.Components {
             if (m_Constraint == Constraint.FixedColumnCount) {
                 minColumns = preferredColumns = m_ConstraintCount;
             } else if (m_Constraint == Constraint.FixedRowCount) {
-                minColumns = preferredColumns = Mathf.CeilToInt(rectChildren.Count / (float)m_ConstraintCount - 0.001f);
+                minColumns = preferredColumns = UnityEngine.Mathf.CeilToInt(rectChildren.Count / (float)m_ConstraintCount - 0.001f);
             } else {
                 minColumns = 1;
-                preferredColumns = Mathf.CeilToInt(Mathf.Sqrt(rectChildren.Count));
+                preferredColumns = UnityEngine.Mathf.CeilToInt(UnityEngine.Mathf.Sqrt(rectChildren.Count));
             }
             
             SetLayoutInputForAxis(padding.horizontal + (cellSize.x + spacing.x) * minColumns - spacing.x,
@@ -113,13 +113,13 @@ namespace TinyUtilities.Components {
             int minRows = 0;
             
             if (m_Constraint == Constraint.FixedColumnCount) {
-                minRows = Mathf.CeilToInt(rectChildren.Count / (float)m_ConstraintCount - 0.001f);
+                minRows = UnityEngine.Mathf.CeilToInt(rectChildren.Count / (float)m_ConstraintCount - 0.001f);
             } else if (m_Constraint == Constraint.FixedRowCount) {
                 minRows = m_ConstraintCount;
             } else {
                 float width = rectTransform.rect.width;
-                int cellCountX = Mathf.Max(1, Mathf.FloorToInt((width - padding.horizontal + spacing.x + 0.001f) / (cellSize.x + spacing.x)));
-                minRows = Mathf.CeilToInt(rectChildren.Count / (float)cellCountX);
+                int cellCountX = UnityEngine.Mathf.Max(1, UnityEngine.Mathf.FloorToInt((width - padding.horizontal + spacing.x + 0.001f) / (cellSize.x + spacing.x)));
+                minRows = UnityEngine.Mathf.CeilToInt(rectChildren.Count / (float)cellCountX);
             }
             
             float minSpace = padding.vertical + (cellSize.y + spacing.y) * minRows - spacing.y;
@@ -182,12 +182,12 @@ namespace TinyUtilities.Components {
                 if (cellSize.x + spacing.x <= 0)
                     cellCountX = int.MaxValue;
                 else
-                    cellCountX = Mathf.Max(1, Mathf.FloorToInt((width - padding.horizontal + spacing.x + 0.001f) / (cellSize.x + spacing.x)));
+                    cellCountX = UnityEngine.Mathf.Max(1, UnityEngine.Mathf.FloorToInt((width - padding.horizontal + spacing.x + 0.001f) / (cellSize.x + spacing.x)));
                 
                 if (cellSize.y + spacing.y <= 0)
                     cellCountY = int.MaxValue;
                 else
-                    cellCountY = Mathf.Max(1, Mathf.FloorToInt((height - padding.vertical + spacing.y + 0.001f) / (cellSize.y + spacing.y)));
+                    cellCountY = UnityEngine.Mathf.Max(1, UnityEngine.Mathf.FloorToInt((height - padding.vertical + spacing.y + 0.001f) / (cellSize.y + spacing.y)));
             }
             
             int cornerX = (int)startCorner % 2;
@@ -197,12 +197,12 @@ namespace TinyUtilities.Components {
             
             if (startAxis == Axis.Horizontal) {
                 cellsPerMainAxis = cellCountX;
-                actualCellCountX = Mathf.Clamp(cellCountX, 1, rectChildrenCount);
-                actualCellCountY = Mathf.Clamp(cellCountY, 1, Mathf.CeilToInt(rectChildrenCount / (float)cellsPerMainAxis));
+                actualCellCountX = UnityEngine.Mathf.Clamp(cellCountX, 1, rectChildrenCount);
+                actualCellCountY = UnityEngine.Mathf.Clamp(cellCountY, 1, UnityEngine.Mathf.CeilToInt(rectChildrenCount / (float)cellsPerMainAxis));
             } else {
                 cellsPerMainAxis = cellCountY;
-                actualCellCountY = Mathf.Clamp(cellCountY, 1, rectChildrenCount);
-                actualCellCountX = Mathf.Clamp(cellCountX, 1, Mathf.CeilToInt(rectChildrenCount / (float)cellsPerMainAxis));
+                actualCellCountY = UnityEngine.Mathf.Clamp(cellCountY, 1, rectChildrenCount);
+                actualCellCountX = UnityEngine.Mathf.Clamp(cellCountX, 1, UnityEngine.Mathf.CeilToInt(rectChildrenCount / (float)cellsPerMainAxis));
             }
             
             Vector2 requiredSpace = new Vector2(actualCellCountX * cellSize.x + (actualCellCountX - 1) * spacing.x,

@@ -9,7 +9,7 @@ namespace TinyUtilities {
         public static float DistanceXZ(Vector3 from, Vector3 to) {
             float xDiff = from.x - to.x;
             float zDiff = from.z - to.z;
-            return Mathf.Sqrt(xDiff * xDiff + zDiff * zDiff);
+            return UnityEngine.Mathf.Sqrt(xDiff * xDiff + zDiff * zDiff);
         }
         
         public static Vector3 Avg(Vector3[] values) {

@@ -73,51 +73,51 @@ namespace TinyUtilities.Components {
         }
         
         public float firstValue {
-            get => wholeNumbers ? Mathf.Round(_firstValue) : _firstValue;
+            get => wholeNumbers ? UnityEngine.Mathf.Round(_firstValue) : _firstValue;
             set => SetFirstValue(value);
         }
         
         public float secondValue {
-            get => wholeNumbers ? Mathf.Round(_secondValue) : _secondValue;
+            get => wholeNumbers ? UnityEngine.Mathf.Round(_secondValue) : _secondValue;
             set => SetSecondValue(value);
         }
         
         public float thirdValue {
-            get => wholeNumbers ? Mathf.Round(_thirdValue) : _thirdValue;
+            get => wholeNumbers ? UnityEngine.Mathf.Round(_thirdValue) : _thirdValue;
             set => SetThirdValue(value);
         }
         
         public float normalizedFirstValue {
             get {
-                if (Mathf.Approximately(0, size)) {
+                if (UnityEngine.Mathf.Approximately(0, size)) {
                     return 0;
                 }
                 
-                return _firstValue / Mathf.Max(1f, size);
+                return _firstValue / UnityEngine.Mathf.Max(1f, size);
             }
-            set => firstValue = value / Mathf.Max(1f, size);
+            set => firstValue = value / UnityEngine.Mathf.Max(1f, size);
         }
         
         public float normalizedSecondValue {
             get {
-                if (Mathf.Approximately(0, size)) {
+                if (UnityEngine.Mathf.Approximately(0, size)) {
                     return 0;
                 }
                 
-                return _secondValue / Mathf.Max(1f, size);
+                return _secondValue / UnityEngine.Mathf.Max(1f, size);
             }
-            set => secondValue = value / Mathf.Max(1f, size);
+            set => secondValue = value / UnityEngine.Mathf.Max(1f, size);
         }
         
         public float normalizedThirdValue {
             get {
-                if (Mathf.Approximately(0, size)) {
+                if (UnityEngine.Mathf.Approximately(0, size)) {
                     return 0;
                 }
                 
-                return _thirdValue / Mathf.Max(1f, size);
+                return _thirdValue / UnityEngine.Mathf.Max(1f, size);
             }
-            set => secondValue = value / Mathf.Max(1f, size);
+            set => secondValue = value / UnityEngine.Mathf.Max(1f, size);
         }
         
         public DoubleSliderEvent onValueChanged {
@@ -209,13 +209,13 @@ namespace TinyUtilities.Components {
             
             UpdateVisuals();
             
-            if (Mathf.Approximately(oldNormalizedFirstValue, normalizedFirstValue)) {
+            if (UnityEngine.Mathf.Approximately(oldNormalizedFirstValue, normalizedFirstValue)) {
                 UISystemProfilerApi.AddMarker("DoubleSlider.firstValue", this);
                 onValueChanged.Invoke(_firstValue, _secondValue, _thirdValue);
-            } else if (Mathf.Approximately(oldNormalizedSecondValue, normalizedSecondValue)) {
+            } else if (UnityEngine.Mathf.Approximately(oldNormalizedSecondValue, normalizedSecondValue)) {
                 UISystemProfilerApi.AddMarker("DoubleSlider.secondValue", this);
                 onValueChanged.Invoke(_firstValue, _secondValue, _thirdValue);
-            } else if (Mathf.Approximately(oldNormalizedThirdValue, normalizedThirdValue)) {
+            } else if (UnityEngine.Mathf.Approximately(oldNormalizedThirdValue, normalizedThirdValue)) {
                 UISystemProfilerApi.AddMarker("DoubleSlider.thirdValue", this);
                 onValueChanged.Invoke(_firstValue, _secondValue, _thirdValue);
             }
@@ -278,30 +278,30 @@ namespace TinyUtilities.Components {
         }
         
         private float ClampFirstValue(float newValue) {
-            newValue = Mathf.Clamp(newValue, 0, size - _secondValue - _thirdValue);
+            newValue = UnityEngine.Mathf.Clamp(newValue, 0, size - _secondValue - _thirdValue);
             
             if (wholeNumbers) {
-                newValue = Mathf.Round(newValue);
+                newValue = UnityEngine.Mathf.Round(newValue);
             }
             
             return newValue;
         }
         
         private float ClampSecondValue(float newValue) {
-            newValue = Mathf.Clamp(newValue, 0, size - _firstValue - _thirdValue);
+            newValue = UnityEngine.Mathf.Clamp(newValue, 0, size - _firstValue - _thirdValue);
             
             if (wholeNumbers) {
-                newValue = Mathf.Round(newValue);
+                newValue = UnityEngine.Mathf.Round(newValue);
             }
             
             return newValue;
         }
         
         private float ClampThirdValue(float newValue) {
-            newValue = Mathf.Clamp(newValue, 0, size - _firstValue - _secondValue);
+            newValue = UnityEngine.Mathf.Clamp(newValue, 0, size - _firstValue - _secondValue);
             
             if (wholeNumbers) {
-                newValue = Mathf.Round(newValue);
+                newValue = UnityEngine.Mathf.Round(newValue);
             }
             
             return newValue;
@@ -310,7 +310,7 @@ namespace TinyUtilities.Components {
         private void SetFirstValue(float newValue, bool sendCallback = true) {
             newValue = ClampFirstValue(newValue);
             
-            if (Mathf.Approximately(_firstValue, newValue)) {
+            if (UnityEngine.Mathf.Approximately(_firstValue, newValue)) {
                 return;
             }
             
@@ -326,7 +326,7 @@ namespace TinyUtilities.Components {
         private void SetSecondValue(float newValue, bool sendCallback = true) {
             newValue = ClampSecondValue(newValue);
             
-            if (Mathf.Approximately(_secondValue, newValue)) {
+            if (UnityEngine.Mathf.Approximately(_secondValue, newValue)) {
                 return;
             }
             
@@ -342,7 +342,7 @@ namespace TinyUtilities.Components {
         private void SetThirdValue(float newValue, bool sendCallback = true) {
             newValue = ClampThirdValue(newValue);
             
-            if (Mathf.Approximately(_thirdValue, newValue)) {
+            if (UnityEngine.Mathf.Approximately(_thirdValue, newValue)) {
                 return;
             }
             
@@ -435,7 +435,7 @@ namespace TinyUtilities.Components {
     #if UNITY_EDITOR
         protected override void OnValidate() {
             if (wholeNumbers) {
-                _size = Mathf.Round(_size);
+                _size = UnityEngine.Mathf.Round(_size);
             }
             
             if (_size == 0) {
@@ -464,15 +464,15 @@ namespace TinyUtilities.Components {
                 if (realSize > 0) {
                     float limit = 1f;
                     
-                    float normalized = Mathf.Min(normalizedFirstValue, limit);
+                    float normalized = UnityEngine.Mathf.Min(normalizedFirstValue, limit);
                     _firstValue = _size * normalized;
-                    limit = Mathf.Max(0, limit - normalized);
+                    limit = UnityEngine.Mathf.Max(0, limit - normalized);
                     
-                    normalized = Mathf.Min(normalizedSecondValue, limit);
+                    normalized = UnityEngine.Mathf.Min(normalizedSecondValue, limit);
                     _secondValue = _size * normalized;
-                    limit = Mathf.Max(0, limit - normalized);
+                    limit = UnityEngine.Mathf.Max(0, limit - normalized);
                     
-                    normalized = Mathf.Min(normalizedThirdValue, limit);
+                    normalized = UnityEngine.Mathf.Min(normalizedThirdValue, limit);
                     _thirdValue = _size * normalized;
                 }
             }

@@ -14,12 +14,12 @@ namespace TinyUtilities.CustomTypes {
         public DateTime time {
             get {
             #if UNITY_EDITOR
-                return new DateTime(Mathf.Clamp(_year, 1, 3000),
-                                    Mathf.Clamp(_month, 1, 12),
-                                    Mathf.Clamp(_day, 1, 31),
-                                    Mathf.Clamp(_hour, 0, 23),
-                                    Mathf.Clamp(_minute, 0, 59),
-                                    Mathf.Clamp(_second, 0, 59));
+                return new DateTime(UnityEngine.Mathf.Clamp(_year, 1, 3000),
+                                    UnityEngine.Mathf.Clamp(_month, 1, 12),
+                                    UnityEngine.Mathf.Clamp(_day, 1, 31),
+                                    UnityEngine.Mathf.Clamp(_hour, 0, 23),
+                                    UnityEngine.Mathf.Clamp(_minute, 0, 59),
+                                    UnityEngine.Mathf.Clamp(_second, 0, 59));
             #endif
                 
                 return new DateTime(_year, _month, _day, _hour, _minute, _second);

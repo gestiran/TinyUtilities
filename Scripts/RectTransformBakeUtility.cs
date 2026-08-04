@@ -67,7 +67,7 @@ namespace TinyUtilities {
         
         private static void BakeImageScale(RectTransform rectTransform, Vector3 scale) {
             if (rectTransform.TryGetComponent(out Image image)) {
-                image.pixelsPerUnitMultiplier /= Mathf.Max(scale.x, scale.y);
+                image.pixelsPerUnitMultiplier /= UnityEngine.Mathf.Max(scale.x, scale.y);
                 
             #if UNITY_EDITOR
                 SetDirty(image);
@@ -77,7 +77,7 @@ namespace TinyUtilities {
         
         private static void BakeTextScale(RectTransform rectTransform, Vector3 scale) {
             if (rectTransform.TryGetComponent(out Text text)) {
-                text.fontSize = Mathf.RoundToInt(text.fontSize * scale.y);
+                text.fontSize = UnityEngine.Mathf.RoundToInt(text.fontSize * scale.y);
                 
             #if UNITY_EDITOR
                 SetDirty(text);
@@ -160,10 +160,10 @@ namespace TinyUtilities {
         }
         
         private static void ApplyScaleToPadding(RectOffset padding, Vector3 scale) {
-            padding.left = Mathf.RoundToInt(padding.left * scale.x);
-            padding.right = Mathf.RoundToInt(padding.right * scale.x);
-            padding.top = Mathf.RoundToInt(padding.top * scale.y);
-            padding.bottom = Mathf.RoundToInt(padding.bottom * scale.y);
+            padding.left = UnityEngine.Mathf.RoundToInt(padding.left * scale.x);
+            padding.right = UnityEngine.Mathf.RoundToInt(padding.right * scale.x);
+            padding.top = UnityEngine.Mathf.RoundToInt(padding.top * scale.y);
+            padding.bottom = UnityEngine.Mathf.RoundToInt(padding.bottom * scale.y);
         }
         
     #if UNITY_EDITOR

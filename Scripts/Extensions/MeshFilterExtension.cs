@@ -132,7 +132,7 @@ namespace TinyUtilities.Extensions {
             Vector3 rayCrossEdgeAc = Vector3.Cross(ray.direction, edgeAc);
             float determinant = Vector3.Dot(edgeAb, rayCrossEdgeAc);
             
-            if (Mathf.Abs(determinant) < Mathf.Epsilon) {
+            if (UnityEngine.Mathf.Abs(determinant) < UnityEngine.Mathf.Epsilon) {
                 hit = default;
                 return false;
             }
@@ -157,7 +157,7 @@ namespace TinyUtilities.Extensions {
             
             float hitDistance = Vector3.Dot(edgeAc, originToVertexACross) * inverseDeterminant;
             
-            if (hitDistance < Mathf.Epsilon) {
+            if (hitDistance < UnityEngine.Mathf.Epsilon) {
                 hit = default;
                 return false;
             }

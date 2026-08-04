@@ -113,7 +113,7 @@ namespace TinyUtilities.Editor.GridSnapping {
                 return value;
             }
             
-            return Mathf.Round(value / gridSize) * gridSize;
+            return UnityEngine.Mathf.Round(value / gridSize) * gridSize;
         }
     }
 }

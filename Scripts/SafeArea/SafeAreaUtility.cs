@@ -40,15 +40,15 @@ namespace TinyUtilities.SafeArea {
             Vector2 anchorMin = rectTransform.anchorMin;
             Vector2 anchorMax = rectTransform.anchorMax;
             
-            if (Mathf.Approximately(anchorMin.y, 1f) && Mathf.Approximately(anchorMax.y, 1f)) {
+            if (UnityEngine.Mathf.Approximately(anchorMin.y, 1f) && UnityEngine.Mathf.Approximately(anchorMax.y, 1f)) {
                 result |= Anchors.Top;
-            } else if (Mathf.Approximately(anchorMin.y, 0f) && Mathf.Approximately(anchorMax.y, 0f)) {
+            } else if (UnityEngine.Mathf.Approximately(anchorMin.y, 0f) && UnityEngine.Mathf.Approximately(anchorMax.y, 0f)) {
                 result |= Anchors.Bottom;
             }
             
-            if (Mathf.Approximately(anchorMin.x, 1f) && Mathf.Approximately(anchorMax.x, 1f)) {
+            if (UnityEngine.Mathf.Approximately(anchorMin.x, 1f) && UnityEngine.Mathf.Approximately(anchorMax.x, 1f)) {
                 result |= Anchors.Right;
-            } else if (Mathf.Approximately(anchorMin.x, 0f) && Mathf.Approximately(anchorMax.x, 0f)) {
+            } else if (UnityEngine.Mathf.Approximately(anchorMin.x, 0f) && UnityEngine.Mathf.Approximately(anchorMax.x, 0f)) {
                 result |= Anchors.Left;
             }
             
@@ -135,7 +135,7 @@ namespace TinyUtilities.SafeArea {
         
         private static bool Approximately(float value, params float[] values) {
             for (int i = 0; i < values.Length; i++) {
-                if (Mathf.Approximately(value, values[i])) {
+                if (UnityEngine.Mathf.Approximately(value, values[i])) {
                     continue;
                 }
                 

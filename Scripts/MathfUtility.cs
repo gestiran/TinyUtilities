@@ -7,7 +7,7 @@ namespace TinyUtilities {
     public static class MathfUtility {
         public static bool Approximately(float value, params float[] values) {
             for (int i = 0; i < values.Length; i++) {
-                if (Mathf.Approximately(value, values[i])) {
+                if (UnityEngine.Mathf.Approximately(value, values[i])) {
                     continue;
                 }
                 
@@ -54,9 +54,9 @@ namespace TinyUtilities {
         public static int ApplyPercent(int value, int current, int max) => ApplyPercent(value, CalculatePercent(current, max));
         
         public static int RoundToInt(float value) {
-            int roundedValue = (int)Mathf.Round(value);
+            int roundedValue = (int)UnityEngine.Mathf.Round(value);
             
-            if (roundedValue % 2 == 0 && Mathf.Abs(value - roundedValue + 1) < Mathf.Abs(value - roundedValue)) {
+            if (roundedValue % 2 == 0 && UnityEngine.Mathf.Abs(value - roundedValue + 1) < UnityEngine.Mathf.Abs(value - roundedValue)) {
                 roundedValue++;
             }
             

@@ -46,7 +46,7 @@ namespace TinyUtilities.Collisions {
                 float currentMagnitude = currentVelocity.magnitude;
                 
                 if (currentMagnitude > lastMagnitude) {
-                    float downgrade = Mathf.Sqrt(lastMagnitude / currentMagnitude);
+                    float downgrade = UnityEngine.Mathf.Sqrt(lastMagnitude / currentMagnitude);
                     endPoint = new Vector2(nextPosition.x + currentVelocity.x * downgrade, nextPosition.z + currentVelocity.y * downgrade);
                 }
             }
@@ -70,7 +70,7 @@ namespace TinyUtilities.Collisions {
             }
             
             if (Physics.Raycast(origin, Vector3.down, out hit, height + 0.5f, mask)) {
-                return Mathf.Max(positionY + Physics.gravity.y * Time.fixedDeltaTime, hit.point.y);
+                return UnityEngine.Mathf.Max(positionY + Physics.gravity.y * Time.fixedDeltaTime, hit.point.y);
             }
             
             return positionY + Physics.gravity.y * Time.fixedDeltaTime;

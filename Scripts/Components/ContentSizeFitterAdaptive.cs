@@ -77,7 +77,7 @@ namespace TinyUtilities.Components {
                 float current = LayoutUtility.GetMinSize(m_Rect, axis);
                 float preferred = LayoutUtility.GetPreferredSize(m_Rect, axis);
                 
-                rectTransform.SetSizeWithCurrentAnchors((RectTransform.Axis)axis, Mathf.Clamp(current, current, preferred));
+                rectTransform.SetSizeWithCurrentAnchors((RectTransform.Axis)axis, UnityEngine.Mathf.Clamp(current, current, preferred));
             }
         }
         
