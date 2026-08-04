@@ -4,7 +4,7 @@
 using System;
 
 namespace TinyUtilities {
-    public static class Mathf {
+    public static class MathfCore {
         public const float PI = 3.1415927f;
         public const float INFINITY = float.PositiveInfinity;
         public const float NEGATIVE_INFINITY = float.NegativeInfinity;
@@ -287,7 +287,7 @@ namespace TinyUtilities {
         
         public static bool Approximately(float value, params float[] values) {
             for (int i = 0; i < values.Length; i++) {
-                if (Mathf.Approximately(value, values[i])) {
+                if (MathfCore.Approximately(value, values[i])) {
                     continue;
                 }
                 
