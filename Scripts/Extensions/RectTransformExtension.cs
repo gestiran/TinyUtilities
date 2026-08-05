@@ -28,6 +28,14 @@ namespace TinyUtilities.Extensions {
             rectTransform.ForceUpdateRectTransforms();
         }
         
+        public static void LerpBetween(this RectTransform rectTransform, RectTransform from, RectTransform to, float t) {
+            rectTransform.anchorMin = Vector2.Lerp(from.anchorMin, to.anchorMin, t);
+            rectTransform.anchorMax = Vector2.Lerp(from.anchorMax, to.anchorMax, t);
+            
+            rectTransform.offsetMin = Vector2.Lerp(from.offsetMin, to.offsetMin, t);
+            rectTransform.offsetMax = Vector2.Lerp(from.offsetMax, to.offsetMax, t);
+        }
+        
         public static void SetParent<T>(this T rectTransforms, Transform parent, bool worldPositionStays = true) where T : IEnumerable<RectTransform> {
             foreach (RectTransform rectTransform in rectTransforms) {
                 rectTransform.SetParent(parent, worldPositionStays);
