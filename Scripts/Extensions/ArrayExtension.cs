@@ -27,7 +27,6 @@ namespace TinyUtilities.Extensions {
             index = 0;
             return defaultValue;
         }
-    
         
         [Pure]
         public static T[] Any<T>(this T[] origin, int count) {
