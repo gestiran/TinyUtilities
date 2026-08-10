@@ -2,10 +2,12 @@
 // Licensed under the MIT License. See LICENSE.md for details.
 
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using UnityEngine;
 
 namespace TinyUtilities.Extensions {
     public static class MonoBehaviourExtension {
+        [Pure]
         public static T[] GetComponents<T>(this ICollection<MonoBehaviour> objects) where T : Object {
             List<T> result = new List<T>(objects.Count);
             

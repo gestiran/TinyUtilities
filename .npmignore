@@ -79,8 +79,10 @@ _ReSharper*/
 
 # Build artifacts
 /.intellijPlatform/
-Sources~/*/[Bb]in/
-Sources~/*/[Oo]bj/
+Documentation~/*
+Documentation~
+Roslyn~/*
+Roslyn~
 build
 output
 .gradle
