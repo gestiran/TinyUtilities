@@ -198,7 +198,7 @@ namespace TinyUtilities.Components {
             isOpened = false;
         }
         
-        public void ChangeCurrent(int value) => currentId = UnityEngine.Mathf.Clamp(value, 0, _cards.Length - 1);
+        public void ChangeCurrent(int value) => currentId = Mathf.Clamp(value, 0, _cards.Length - 1);
         
         public void RecalculateContentSize() {
             if (orientation == Orientation.Horizontal) {

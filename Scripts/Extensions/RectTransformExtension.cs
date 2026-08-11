@@ -28,6 +28,16 @@ namespace TinyUtilities.Extensions {
             rectTransform.ForceUpdateRectTransforms();
         }
         
+        public static RectTransform FromReference(this RectTransform rectTransform, RectTransform reference) {
+            rectTransform.anchorMin = reference.anchorMin;
+            rectTransform.anchorMax = reference.anchorMax;
+            
+            rectTransform.offsetMin = reference.offsetMin;
+            rectTransform.offsetMax = reference.offsetMax;
+            
+            return rectTransform;
+        }
+        
         public static void LerpBetween(this RectTransform rectTransform, RectTransform from, RectTransform to, float t) {
             rectTransform.anchorMin = Vector2.Lerp(from.anchorMin, to.anchorMin, t);
             rectTransform.anchorMax = Vector2.Lerp(from.anchorMax, to.anchorMax, t);

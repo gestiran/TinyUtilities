@@ -78,6 +78,19 @@ namespace TinyUtilities.Components {
             UpdateCurrentElement();
         }
         
+        public void FixContent() {
+            RectTransform content = _thisScrollRect.content;
+            
+            if (content != null) {
+                float offset = isInverted ? 0f : 1f;
+                Vector2 anchors = _orientation == Orientation.Vertical ? new Vector2(0.5f, offset) : new Vector2(offset, 0.5f);
+                
+                content.anchorMin = anchors;
+                content.anchorMax = anchors;
+                content.pivot = anchors;
+            }
+        }
+        
         public void Recalculate() => Recalculate(() => { });
         
         public void Recalculate(Action onComplete) {
@@ -133,7 +146,7 @@ namespace TinyUtilities.Components {
         private void CalculateOffsets() {
             RectTransform content = _thisScrollRect.content;
             int childCount = CalculateChildCount(content);
-            List<float> positions = new List<float>(UnityEngine.Mathf.Max(1, childCount));
+            List<float> positions = new List<float>(Mathf.Max(1, childCount));
             
             float position = 0;
             
@@ -223,23 +236,6 @@ namespace TinyUtilities.Components {
             if (_thisScrollRect != null) {
                 if (_thisScrollRect.content == null) {
                     result.AddError($"{nameof(ScrollRect)} content is required!");
-                } else {
-                    RectTransform content = _thisScrollRect.content;
-                    
-                    float offset = isInverted ? 0f : 1f;
-                    Vector2 anchors = _orientation == Orientation.Vertical ? new Vector2(0.5f, offset) : new Vector2(offset, 0.5f);
-                    
-                    if (content.anchorMin != anchors) {
-                        result.AddError("Invalid content anchors!").WithFix(() => content.anchorMin = anchors);
-                    }
-                    
-                    if (content.anchorMax != anchors) {
-                        result.AddError("Invalid content anchors!").WithFix(() => content.anchorMax = anchors);
-                    }
-                    
-                    if (content.pivot != anchors) {
-                        result.AddError("Invalid content pivot!").WithFix(() => content.pivot = anchors);
-                    }
                 }
             }
         #endif
@@ -251,7 +247,6 @@ namespace TinyUtilities.Components {
         protected override void Reset() {
             _thisScrollRect = GetComponent<ScrollRect>();
             ApplyOrientation();
-            
             UnityEditor.EditorUtility.SetDirty(this);
         }
         

@@ -143,11 +143,11 @@ namespace TinyUtilities.Components {
             Tweener tween;
             
             if (_orientation == Orientation.Vertical) {
-                float duration = UnityEngine.Mathf.Abs(_thisScrollRect.content.anchoredPosition.y - _positions[elementId]) / speed;
-                tween = DOAnchorPosY(_thisScrollRect.content, _positions[elementId], UnityEngine.Mathf.Min(duration, _MAX_DURATION));
+                float duration = Mathf.Abs(_thisScrollRect.content.anchoredPosition.y - _positions[elementId]) / speed;
+                tween = DOAnchorPosY(_thisScrollRect.content, _positions[elementId], Mathf.Min(duration, _MAX_DURATION));
             } else {
-                float duration = UnityEngine.Mathf.Abs(_thisScrollRect.content.anchoredPosition.x - _positions[elementId]) / speed;
-                tween = DOAnchorPosX(_thisScrollRect.content, _positions[elementId], UnityEngine.Mathf.Min(duration, _MAX_DURATION));
+                float duration = Mathf.Abs(_thisScrollRect.content.anchoredPosition.x - _positions[elementId]) / speed;
+                tween = DOAnchorPosX(_thisScrollRect.content, _positions[elementId], Mathf.Min(duration, _MAX_DURATION));
             }
             
             tween.SetEase(ease).OnComplete(EnableScroll).SetUpdate(true);
@@ -229,7 +229,7 @@ namespace TinyUtilities.Components {
         private void CalculateOffsets() {
             RectTransform content = _thisScrollRect.content;
             int childCount = CalculateChildCount(content);
-            List<float> positions = new List<float>(UnityEngine.Mathf.Max(1, childCount));
+            List<float> positions = new List<float>(Mathf.Max(1, childCount));
             
             float spacing = _contentLayoutGroup.spacing;
             float position = 0;
@@ -289,7 +289,7 @@ namespace TinyUtilities.Components {
             
             _positions = positions.ToArray();
             
-            int elementId = UnityEngine.Mathf.Clamp(currentElement, 0, _positions.Length - 1);
+            int elementId = Mathf.Clamp(currentElement, 0, _positions.Length - 1);
             
             if (elementId != currentElement) {
                 onCurrentElementChanged.Invoke(elementId);
