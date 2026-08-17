@@ -12,6 +12,10 @@ namespace TinyUtilities.NetworkTime {
     public static class TimeService {
         public static bool isInitialized { get; private set; }
         
+    #if UNITY_EDITOR
+        public static bool isDebug;
+    #endif
+        
         private static DateTime _networkTime;
         private static float _startTime;
         private static bool _isProcess;
@@ -68,7 +72,13 @@ namespace TinyUtilities.NetworkTime {
         
         public static bool TryGetTime(out DateTime time) {
             if (isInitialized) {
-                time = _networkTime.AddSeconds(Time.unscaledTime - _startTime);
+                float current = Time.unscaledTime;
+            #if UNITY_EDITOR
+                if (isDebug) {
+                    current *= 60;
+                }
+            #endif
+                time = _networkTime.AddSeconds(current - _startTime);
                 return true;
             }
             
