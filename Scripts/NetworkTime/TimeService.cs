@@ -13,7 +13,7 @@ namespace TinyUtilities.NetworkTime {
         public static bool isInitialized { get; private set; }
         
     #if UNITY_EDITOR
-        public static bool isDebug;
+        public static float debugTimeScale;
     #endif
         
         private static DateTime _networkTime;
@@ -23,6 +23,10 @@ namespace TinyUtilities.NetworkTime {
         private static readonly ITimeProvider[] _providers;
         
         static TimeService() {
+        #if UNITY_EDITOR
+            debugTimeScale = 1f;
+        #endif
+            
             _providers = new ITimeProvider[] {
                 new GoogleHeaderTimeProvider(),
                 new DuckDuckGoHeaderTimeProvider(),
@@ -74,9 +78,7 @@ namespace TinyUtilities.NetworkTime {
             if (isInitialized) {
                 float current = Time.unscaledTime;
             #if UNITY_EDITOR
-                if (isDebug) {
-                    current *= 60;
-                }
+                current *= debugTimeScale;
             #endif
                 time = _networkTime.AddSeconds(current - _startTime);
                 return true;
