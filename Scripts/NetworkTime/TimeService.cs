@@ -18,9 +18,13 @@ namespace TinyUtilities.NetworkTime {
         
         private static DateTime _networkTime;
         private static float _startTime;
+        private static float _lastConnectionTime;
+        private static bool _lastConnectionStatus;
         private static bool _isProcess;
         
         private static readonly ITimeProvider[] _providers;
+        
+        private const float _CONNECT_CHECK_DELAY = 60f;
         
         static TimeService() {
         #if UNITY_EDITOR
@@ -39,24 +43,23 @@ namespace TinyUtilities.NetworkTime {
         public static UniTask Sync() => Sync(CancellationToken.None);
         
         public static async UniTask Sync(CancellationToken cancellation) {
-            if (_isProcess || isInitialized) {
+            if (isInitialized) {
+                Debug.LogWarning("TimeService.Sync - Already initialized!");
+                return;
+            }
+            
+            if (_isProcess) {
+                Debug.LogWarning("TimeService.Sync - Operation is started!");
                 return;
             }
             
             _isProcess = true;
             
             try {
-                for (int providerId = 0; providerId < _providers.Length; providerId++) {
-                    try {
-                        TimeResult result = await _providers[providerId].GetTime(cancellation);
-                        
-                        if (result.isSuccess) {
-                            Initialize(result.time);
-                            break;
-                        }
-                    } catch (Exception exception) {
-                        Debug.LogWarning(exception);
-                    }
+                TimeResult result = await TryGetNetworkTime(cancellation);
+                
+                if (result.isSuccess) {
+                    Initialize(result.time);
                 }
             } finally {
                 _isProcess = false;
@@ -64,14 +67,35 @@ namespace TinyUtilities.NetworkTime {
         }
         
         [Pure]
-        public static async UniTask<DateTime> GetTime(CancellationToken cancellation) {
-            DateTime networkTime;
-            
-            while (TryGetTime(out networkTime) == false) {
-                await UniTask.Delay(1000, DelayType.UnscaledDeltaTime, PlayerLoopTiming.Update, cancellation);
+        public static UniTask<bool> IsConnected() => IsConnected(CancellationToken.None);
+        
+        [Pure]
+        public static async UniTask<bool> IsConnected(CancellationToken cancellation) {
+            if (isInitialized) {
+                if (Time.unscaledTime - _lastConnectionTime > _CONNECT_CHECK_DELAY) {
+                    TimeResult _ = await TryGetNetworkTime(cancellation);   
+                }
+            } else {
+                Debug.LogError("TimeService.IsConnected - Isn't initialized, use TimeService.Sync to start initialization!");
             }
             
-            return networkTime;
+            return _lastConnectionStatus;
+        }
+        
+        [Pure]
+        public static async UniTask<DateTime> GetTime(CancellationToken cancellation) {
+            if (isInitialized) {
+                DateTime networkTime;
+                
+                while (TryGetTime(out networkTime) == false) {
+                    await UniTask.Delay(1000, DelayType.UnscaledDeltaTime, PlayerLoopTiming.Update, cancellation);
+                }
+                
+                return networkTime;
+            }
+            
+            Debug.LogError("TimeService.GetTime - Isn't initialized, use TimeService.Sync to start initialization!");
+            return default;
         }
         
         public static bool TryGetTime(out DateTime time) {
@@ -84,6 +108,7 @@ namespace TinyUtilities.NetworkTime {
                 return true;
             }
             
+            Debug.LogError("TimeService.TryGetTime - Isn't initialized, use TimeService.Sync to start initialization!");
             time = default;
             return false;
         }
@@ -92,6 +117,27 @@ namespace TinyUtilities.NetworkTime {
             _networkTime = time.AddHours(LoadOffset(time));
             _startTime = Time.unscaledTime;
             isInitialized = true;
+        }
+        
+        [Pure]
+        private static async UniTask<TimeResult> TryGetNetworkTime(CancellationToken cancellation) {
+            _lastConnectionTime = Time.unscaledTime;
+            
+            for (int providerId = 0; providerId < _providers.Length; providerId++) {
+                try {
+                    TimeResult result = await _providers[providerId].GetTime(cancellation);
+                    
+                    if (result.isSuccess) {
+                        _lastConnectionStatus = true;
+                        return result;
+                    }
+                } catch (Exception exception) {
+                    Debug.LogWarning(exception);
+                }
+            }
+            
+            _lastConnectionStatus = false;
+            return new TimeResult(default, false);
         }
         
         private static int LoadOffset(in DateTime time) {
