@@ -1,3 +1,6 @@
+// Copyright (c) 2023 Derek Sliman
+// Licensed under the MIT License. See LICENSE.md for details.
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
@@ -17,7 +20,15 @@ namespace TinyUtilities.Roslyn.Extensions {
                     continue;
                 }
                 
+                if (other.Modifiers.Any(SyntaxKind.PublicKeyword) == false) {
+                    continue;
+                }
+                
                 if (other.ParameterList.Parameters.Count > 0) {
+                    continue;
+                }
+                
+                if (other.ReturnType.ToString() != "void") {
                     continue;
                 }
                 
