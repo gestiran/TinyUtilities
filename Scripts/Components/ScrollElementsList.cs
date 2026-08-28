@@ -125,7 +125,9 @@ namespace TinyUtilities.Components {
             _calculateProcess = this.RestartCoroutine(_calculateProcess, CalculateAfterFrameProcess(onComplete));
         }
         
-        public void MoveToElement(int elementId) {
+        public void MoveToElement(int elementId) => MoveToElement(elementId, () => { });
+        
+        public void MoveToElement(int elementId, Action onComplete) {
             if (IsCanMove(elementId) == false) {
                 UpdateButtons();
                 return;
@@ -150,10 +152,17 @@ namespace TinyUtilities.Components {
                 tween = DOAnchorPosX(_thisScrollRect.content, _positions[elementId], Mathf.Min(duration, _MAX_DURATION));
             }
             
-            tween.SetEase(ease).OnComplete(EnableScroll).SetUpdate(true);
+            Action onCompleteEnable = () =>
+            {
+                onComplete.Invoke();
+                EnableScroll();
+            };
+            
+            tween.SetEase(ease).OnComplete(onCompleteEnable.Invoke).SetUpdate(true);
             
         #else
             MoveToElementForce(elementId);
+            onComplete.Invoke();
         #endif
         }
         
