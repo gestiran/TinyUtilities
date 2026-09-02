@@ -125,9 +125,11 @@ namespace TinyUtilities.Components {
             _calculateProcess = this.RestartCoroutine(_calculateProcess, CalculateAfterFrameProcess(onComplete));
         }
         
-        public void MoveToElement(int elementId) => MoveToElement(elementId, () => { });
+        public void MoveToElement(int elementId, float speedScale = 1f) => MoveToElement(elementId, speedScale, () => { });
         
-        public void MoveToElement(int elementId, Action onComplete) {
+        public void MoveToElement(int elementId, Action onComplete) => MoveToElement(elementId, 1f, onComplete);
+        
+        public void MoveToElement(int elementId, float speedScale, Action onComplete) {
             if (IsCanMove(elementId) == false) {
                 UpdateButtons();
                 return;
@@ -145,10 +147,10 @@ namespace TinyUtilities.Components {
             Tweener tween;
             
             if (_orientation == Orientation.Vertical) {
-                float duration = Mathf.Abs(_thisScrollRect.content.anchoredPosition.y - _positions[elementId]) / speed;
+                float duration = Mathf.Abs(_thisScrollRect.content.anchoredPosition.y - _positions[elementId]) / (speed * speedScale);
                 tween = DOAnchorPosY(_thisScrollRect.content, _positions[elementId], Mathf.Min(duration, _MAX_DURATION));
             } else {
-                float duration = Mathf.Abs(_thisScrollRect.content.anchoredPosition.x - _positions[elementId]) / speed;
+                float duration = Mathf.Abs(_thisScrollRect.content.anchoredPosition.x - _positions[elementId]) / (speed * speedScale);
                 tween = DOAnchorPosX(_thisScrollRect.content, _positions[elementId], Mathf.Min(duration, _MAX_DURATION));
             }
             
