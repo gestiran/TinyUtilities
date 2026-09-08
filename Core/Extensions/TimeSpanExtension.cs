@@ -15,7 +15,7 @@ namespace TinyUtilities.Extensions {
         
         public static int TotalHours(this TimeSpan timeSpan) => timeSpan.Days * 24 + timeSpan.Hours;
         
-        public static int TotalMinutes(this TimeSpan timeSpan) => timeSpan.Hours * 60 + timeSpan.Minutes;
+        public static int TotalMinutes(this TimeSpan timeSpan) => timeSpan.TotalHours() * 60 + timeSpan.Minutes;
         
         public static string ToXMLString(this TimeSpan timeSpan) {
             XElement root = new XElement(_ROOT_KEY);
@@ -34,15 +34,31 @@ namespace TinyUtilities.Extensions {
         public static bool TryConvertToTimeSpan(this string value, out TimeSpan timeSpan) => TryConvertToTimeSpan(value, out timeSpan, TimeSpan.Zero);
         
         public static bool TryConvertToTimeSpan(this string value, out TimeSpan timeSpan, TimeSpan defaultValue) {
-            if (String.IsNullOrEmpty(value)) return ReturnDefaultTimeSpan(out timeSpan, defaultValue);
+            if (String.IsNullOrEmpty(value)) {
+                return ReturnDefaultTimeSpan(out timeSpan, defaultValue);
+            }
             
             XElement root = XElement.Parse(value);
             
-            if (!TryExtractValue(root, _DAY_KEY, out int day)) return ReturnDefaultTimeSpan(out timeSpan, defaultValue);
-            if (!TryExtractValue(root, _HOUR_KEY, out int hour)) return ReturnDefaultTimeSpan(out timeSpan, defaultValue);
-            if (!TryExtractValue(root, _MINUTE_KEY, out int minute)) return ReturnDefaultTimeSpan(out timeSpan, defaultValue);
-            if (!TryExtractValue(root, _SECOND_KEY, out int second)) return ReturnDefaultTimeSpan(out timeSpan, defaultValue);
-            if (!TryExtractValue(root, _MILLISECOND_KEY, out int millisecond)) return ReturnDefaultTimeSpan(out timeSpan, defaultValue);
+            if (!TryExtractValue(root, _DAY_KEY, out int day)) {
+                return ReturnDefaultTimeSpan(out timeSpan, defaultValue);
+            }
+            
+            if (!TryExtractValue(root, _HOUR_KEY, out int hour)) {
+                return ReturnDefaultTimeSpan(out timeSpan, defaultValue);
+            }
+            
+            if (!TryExtractValue(root, _MINUTE_KEY, out int minute)) {
+                return ReturnDefaultTimeSpan(out timeSpan, defaultValue);
+            }
+            
+            if (!TryExtractValue(root, _SECOND_KEY, out int second)) {
+                return ReturnDefaultTimeSpan(out timeSpan, defaultValue);
+            }
+            
+            if (!TryExtractValue(root, _MILLISECOND_KEY, out int millisecond)) {
+                return ReturnDefaultTimeSpan(out timeSpan, defaultValue);
+            }
             
             timeSpan = new TimeSpan(day, hour, minute, second, millisecond);
             
@@ -52,7 +68,9 @@ namespace TinyUtilities.Extensions {
         private static bool TryExtractValue(XElement root, string key, out int resultValue) {
             XAttribute attribute = root.Attribute(key);
             
-            if (attribute != null && int.TryParse(attribute.Value, out resultValue)) return true;
+            if (attribute != null && int.TryParse(attribute.Value, out resultValue)) {
+                return true;
+            }
             
             resultValue = default;
             
