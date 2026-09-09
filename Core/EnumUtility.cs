@@ -2,18 +2,32 @@
 // Licensed under the MIT License. See LICENSE.md for details.
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 
 namespace TinyUtilities {
     public static class EnumUtility {
+        [Pure]
+        public static IEnumerable<T> All<T>() where T : struct {
+            Array values = Enum.GetValues(typeof(T));
+            
+            foreach (object value in values) {
+                yield return (T)value;
+            }
+        }
+        
         public static void RunAll<T>(Action<T> action) where T : struct {
-            foreach (object value in Enum.GetValues(typeof(T))) {
+            Array values = Enum.GetValues(typeof(T));
+            
+            foreach (object value in values) {
                 action((T)value);
             }
         }
         
         public static bool RunFirst<T>(Func<T, bool> func, bool targetResult = true) where T : struct {
-            foreach (object value in Enum.GetValues(typeof(T))) {
+            Array values = Enum.GetValues(typeof(T));
+            
+            foreach (object value in values) {
                 if (func((T)value) == targetResult) {
                     return true;
                 }
