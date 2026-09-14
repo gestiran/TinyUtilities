@@ -7,6 +7,8 @@ using System.Text;
 
 namespace TinyUtilities.Extensions {
     public static class ListExtension {
+        private const int _INSERTION_THRESHOLD = 16;
+        
     #if EXTERNAL_DEPENDENCIES
         public static void Shuffle<T>(this List<T> list) {
             for (int i = 0; i < list.Count; i++) {
@@ -167,6 +169,98 @@ namespace TinyUtilities.Extensions {
             }
             
             return list;
+        }
+        
+        public static void SortStable<T>(this List<T> list) where T : IComparable<T> {
+            if (list == null) {
+                throw new ArgumentNullException(nameof(list));
+            }
+            
+            int count = list.Count;
+            
+            if (count < 2) {
+                return;
+            }
+            
+            T[] buffer = new T[count];
+            
+            MergeSort(list, buffer, 0, count);
+        }
+        
+        private static void MergeSortNR<T>(List<T> list, T[] buffer, int left, int right) where T : IComparable<T> {
+            MergeSort(list, buffer, left, right);
+        }
+        
+        private static void MergeSort<T>(List<T> list, T[] buffer, int left, int right) where T : IComparable<T> {
+            int length = right - left;
+            
+            if (length < 2) {
+                return;
+            }
+            
+            if (length <= _INSERTION_THRESHOLD) {
+                InsertionSort(list, left, right);
+                return;
+            }
+            
+            int middle = left + length / 2;
+            
+            MergeSortNR(list, buffer, left, middle);
+            MergeSortNR(list, buffer, middle, right);
+            
+            if (list[middle - 1].CompareTo(list[middle]) <= 0) {
+                return;
+            }
+            
+            Merge(list, buffer, left, middle, right);
+        }
+        
+        private static void InsertionSort<T>(List<T> list, int left, int right) where T : IComparable<T> {
+            for (int i = left + 1; i < right; i++) {
+                T current = list[i];
+                int j = i - 1;
+                
+                while (j >= left && list[j].CompareTo(current) > 0) {
+                    list[j + 1] = list[j];
+                    j--;
+                }
+                
+                list[j + 1] = current;
+            }
+        }
+        
+        private static void Merge<T>(List<T> list, T[] buffer, int left, int middle, int right) where T : IComparable<T> {
+            int i = left;
+            int j = middle;
+            int k = left;
+            
+            while (i < middle && j < right) {
+                if (list[i].CompareTo(list[j]) <= 0) {
+                    buffer[k] = list[i];
+                    i++;
+                } else {
+                    buffer[k] = list[j];
+                    j++;
+                }
+                
+                k++;
+            }
+            
+            while (i < middle) {
+                buffer[k] = list[i];
+                i++;
+                k++;
+            }
+            
+            while (j < right) {
+                buffer[k] = list[j];
+                j++;
+                k++;
+            }
+            
+            for (int p = left; p < right; p++) {
+                list[p] = buffer[p];
+            }
         }
     }
 }

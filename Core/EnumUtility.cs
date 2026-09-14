@@ -9,10 +9,8 @@ namespace TinyUtilities {
     public static class EnumUtility {
         [Pure]
         public static IEnumerable<T> All<T>() where T : struct {
-            Array values = Enum.GetValues(typeof(T));
-            
-            foreach (object value in values) {
-                yield return (T)value;
+            foreach (T value in Enum.GetValues(typeof(T))) {
+                yield return value;
             }
         }
         
