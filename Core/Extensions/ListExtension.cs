@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Text;
 
 namespace TinyUtilities.Extensions {
@@ -63,7 +64,8 @@ namespace TinyUtilities.Extensions {
             }
         }
         
-        public static bool IsContainValue<T>(this List<T> list, T value) {
+        [Pure]
+        public static bool IsContainValue<T>(this IList<T> list, T value) {
             for (int elementId = 0; elementId < list.Count; elementId++) {
                 if (!list[elementId].Equals(value)) {
                     continue;
@@ -85,9 +87,11 @@ namespace TinyUtilities.Extensions {
         }
     #endif
         
-        public static int GetUniqueCount<T>(this List<T> list) => list.GetUniqueCount(value => value.GetHashCode());
+        [Pure]
+        public static int GetUniqueCount<T>(this IList<T> list) => list.GetUniqueCount(value => value.GetHashCode());
         
-        public static int GetUniqueCount<T>(this List<T> list, Func<T, int> getHashCode) {
+        [Pure]
+        public static int GetUniqueCount<T>(this IList<T> list, Func<T, int> getHashCode) {
             List<int> diff = new List<int>();
             
             for (int i = 0; i < list.Count; i++) {
@@ -103,9 +107,11 @@ namespace TinyUtilities.Extensions {
             return diff.Count;
         }
         
-        public static bool IsAllUniqueElements<T>(this List<T> list) => list.IsAllUniqueElements(value => value.GetHashCode());
+        [Pure]
+        public static bool IsAllUniqueElements<T>(this IList<T> list) => list.IsAllUniqueElements(value => value.GetHashCode());
         
-        public static bool IsAllUniqueElements<T>(this List<T> list, Func<T, int> getHashCode) {
+        [Pure]
+        public static bool IsAllUniqueElements<T>(this IList<T> list, Func<T, int> getHashCode) {
             List<int> diff = new List<int>();
             
             for (int i = 0; i < list.Count; i++) {
@@ -121,7 +127,8 @@ namespace TinyUtilities.Extensions {
             return true;
         }
         
-        public static bool TryGetValue<T>(this List<T> list, int hash, out T result) {
+        [Pure]
+        public static bool TryGetValue<T>(this IList<T> list, int hash, out T result) {
             for (int i = 0; i < list.Count; i++) {
                 if (list[i].GetHashCode() != hash) {
                     continue;
@@ -135,7 +142,8 @@ namespace TinyUtilities.Extensions {
             return false;
         }
         
-        public static string ToStringArray<T>(this List<T> list) {
+        [Pure]
+        public static string ToStringArray<T>(this IList<T> list) {
             StringBuilder builder = new StringBuilder(list.Count);
             
             for (int i = 0; i < list.Count; i++) {
@@ -171,7 +179,7 @@ namespace TinyUtilities.Extensions {
             return list;
         }
         
-        public static void SortStable<T>(this List<T> list) where T : IComparable<T> {
+        public static void SortStable<T>(this IList<T> list) where T : IComparable<T> {
             if (list == null) {
                 throw new ArgumentNullException(nameof(list));
             }
@@ -187,11 +195,11 @@ namespace TinyUtilities.Extensions {
             MergeSort(list, buffer, 0, count);
         }
         
-        private static void MergeSortNR<T>(List<T> list, T[] buffer, int left, int right) where T : IComparable<T> {
+        private static void MergeSortNR<T>(IList<T> list, T[] buffer, int left, int right) where T : IComparable<T> {
             MergeSort(list, buffer, left, right);
         }
         
-        private static void MergeSort<T>(List<T> list, T[] buffer, int left, int right) where T : IComparable<T> {
+        private static void MergeSort<T>(IList<T> list, T[] buffer, int left, int right) where T : IComparable<T> {
             int length = right - left;
             
             if (length < 2) {
@@ -215,7 +223,7 @@ namespace TinyUtilities.Extensions {
             Merge(list, buffer, left, middle, right);
         }
         
-        private static void InsertionSort<T>(List<T> list, int left, int right) where T : IComparable<T> {
+        private static void InsertionSort<T>(IList<T> list, int left, int right) where T : IComparable<T> {
             for (int i = left + 1; i < right; i++) {
                 T current = list[i];
                 int j = i - 1;
@@ -229,7 +237,7 @@ namespace TinyUtilities.Extensions {
             }
         }
         
-        private static void Merge<T>(List<T> list, T[] buffer, int left, int middle, int right) where T : IComparable<T> {
+        private static void Merge<T>(IList<T> list, T[] buffer, int left, int middle, int right) where T : IComparable<T> {
             int i = left;
             int j = middle;
             int k = left;
