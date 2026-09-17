@@ -80,7 +80,7 @@ namespace TinyUtilities.Extensions {
     #if EXTERNAL_DEPENDENCIES
         public static T Any<T>(this List<T> list, T defaultValue = default) {
             if (list.Count > 0) {
-                return list[RandomUtility.Range(0, list.Count - 1)];
+                return list[RandomUtility.Range(0, list.Count)];
             }
             
             return defaultValue;
