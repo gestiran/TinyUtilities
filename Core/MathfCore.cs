@@ -10,7 +10,7 @@ namespace TinyUtilities {
         public const float NEGATIVE_INFINITY = float.NegativeInfinity;
         public const float DEG2_RAD = 0.017453292f;
         public const float RAD2_DEG = 57.29578f;
-        public const float EPSILON = 2.7182818284590452354f;
+        public const float EPSILON = 1.4e-45f;
         
         public static float Sin(float f) => (float)Math.Sin(f);
         
