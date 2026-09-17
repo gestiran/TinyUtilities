@@ -8,11 +8,7 @@ using System.Threading.Tasks;
 
 namespace TinyUtilities {
     public static class TimerUtility {
-        private static readonly CancellationTokenSource _global;
-        
         private const int _SECOND = 1000;
-        
-        static TimerUtility() => _global = new CancellationTokenSource();
         
         public static TimeSpan GetTimeToNextDay() {
             DateTime now = DateTime.Now;
@@ -25,35 +21,46 @@ namespace TinyUtilities {
         }
         
         public static Task StartTimer(TimeSpan time, Action onComplete, int updateDelay) {
-            return StartTimer(time, _ => { }, onComplete, _global.Token, true, updateDelay);
+            return StartTimer(time, _ => { }, onComplete, updateDelay, CancellationToken.None);
         }
         
-        public static Task StartTimer(TimeSpan time, Action onComplete, CancellationToken cancellation, int updateDelay) {
-            return StartTimer(time, _ => { }, onComplete, cancellation, true, updateDelay);
+        public static Task StartTimer(TimeSpan time, Action onComplete) {
+            return StartTimer(time, _ => { }, onComplete, _SECOND, CancellationToken.None);
         }
         
-        public static Task StartTimer(TimeSpan time, Action<TimeSpan> setTime, Action onComplete, int updateDelay) {
-            return StartTimer(time, setTime, onComplete, _global.Token, true, updateDelay);
+        public static Task StartTimer(TimeSpan time, Action<TimeSpan> setTime, int updateDelay) {
+            return StartTimer(time, setTime, () => { }, updateDelay, CancellationToken.None);
         }
         
-        public static Task StartTimer(TimeSpan time, Action<TimeSpan> setTime, Action onComplete, CancellationToken cancellation, int updateDelay) {
-            return StartTimer(time, setTime, onComplete, cancellation, true, updateDelay);
+        public static Task StartTimer(TimeSpan time, Action<TimeSpan> setTime) {
+            return StartTimer(time, setTime, () => { }, _SECOND, CancellationToken.None);
         }
         
-        public static Task StartTimer(TimeSpan time, Action onComplete, bool ignoreTimeScale = true, int updateDelay = 1000) {
-            return StartTimer(time, _ => { }, onComplete, _global.Token, ignoreTimeScale, updateDelay);
+        public static Task StartTimer(TimeSpan time, Action<TimeSpan> setTime, Action onComplete) {
+            return StartTimer(time, setTime, onComplete, _SECOND, CancellationToken.None);
         }
         
-        public static Task StartTimer(TimeSpan time, Action onComplete, CancellationToken cancellation, bool ignoreTimeScale = true, int updateDelay = 1000) {
-            return StartTimer(time, _ => { }, onComplete, cancellation, ignoreTimeScale, updateDelay);
+        public static Task StartTimer(TimeSpan time, Action onComplete, int updateDelay, CancellationToken cancellation) {
+            return StartTimer(time, _ => { }, onComplete, updateDelay, cancellation);
         }
         
-        public static Task StartTimer(TimeSpan time, Action<TimeSpan> setTime, Action onComplete, bool ignoreTimeScale = true, int updateDelay = 1000) {
-            return StartTimer(time, setTime, onComplete, _global.Token, ignoreTimeScale, updateDelay);
+        public static Task StartTimer(TimeSpan time, Action onComplete, CancellationToken cancellation) {
+            return StartTimer(time, _ => { }, onComplete, _SECOND, cancellation);
         }
         
-        public static async Task StartTimer(TimeSpan time, Action<TimeSpan> setTime, Action onComplete, CancellationToken cancellation,
-                                            bool ignoreTimeScale = true, int updateDelay = 1000) {
+        public static Task StartTimer(TimeSpan time, Action<TimeSpan> setTime, int updateDelay, CancellationToken cancellation) {
+            return StartTimer(time, setTime, () => { }, updateDelay, cancellation);
+        }
+        
+        public static Task StartTimer(TimeSpan time, Action<TimeSpan> setTime, CancellationToken cancellation) {
+            return StartTimer(time, setTime, () => { }, _SECOND, cancellation);
+        }
+        
+        public static Task StartTimer(TimeSpan time, Action<TimeSpan> setTime, Action onComplete, CancellationToken cancellation) {
+            return StartTimer(time, setTime, onComplete, _SECOND, cancellation);
+        }
+        
+        public static async Task StartTimer(TimeSpan time, Action<TimeSpan> setTime, Action onComplete, int updateDelay, CancellationToken cancellation) {
             TimeSpan delay = new TimeSpan(0, 0, 0, 0, updateDelay);
             
             do {

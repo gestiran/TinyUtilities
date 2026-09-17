@@ -43,7 +43,8 @@ namespace TinyUtilities {
             return StartTimer(time, _ => { }, onComplete, _global.Token, ignoreTimeScale, updateDelay);
         }
         
-        public static UniTask StartTimer(TimeSpan time, Action onComplete, CancellationToken cancellation, bool ignoreTimeScale = true, int updateDelay = 1000) {
+        public static UniTask StartTimer(TimeSpan time, Action onComplete, CancellationToken cancellation, bool ignoreTimeScale = true,
+                                         int updateDelay = 1000) {
             return StartTimer(time, _ => { }, onComplete, cancellation, ignoreTimeScale, updateDelay);
         }
         
@@ -51,8 +52,8 @@ namespace TinyUtilities {
             return StartTimer(time, setTime, onComplete, _global.Token, ignoreTimeScale, updateDelay);
         }
         
-        public static async UniTask StartTimer(TimeSpan time, Action<TimeSpan> setTime, Action onComplete, CancellationToken cancellation, bool ignoreTimeScale = true,
-                                               int updateDelay = 1000) {
+        public static async UniTask StartTimer(TimeSpan time, Action<TimeSpan> setTime, Action onComplete, CancellationToken cancellation,
+                                               bool ignoreTimeScale = true, int updateDelay = 1000) {
             TimeSpan delay = new TimeSpan(0, 0, 0, 0, updateDelay);
             
             do {
