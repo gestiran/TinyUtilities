@@ -12,7 +12,7 @@ namespace TinyUtilities {
         public void UnPause() => _isPause = false;
         
         public async Task Waiting() {
-            if (_isPause) {
+            while (_isPause) {
                 await Task.Yield();
             }
         }
