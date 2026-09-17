@@ -90,9 +90,14 @@ namespace TinyUtilities.Extensions {
             return CancellationTokenSource.CreateLinkedTokenSource(tokens);
         }
         
-        public static void CancelAndDispose(this CancellationTokenSource cancellation) {
-            cancellation.Cancel();
-            cancellation.Dispose();
+        private static void CancelAndDispose(this CancellationTokenSource cancellation) {
+            try {
+                if (cancellation.IsCancellationRequested == false) {
+                    cancellation.Cancel();
+                }
+            } finally {
+                cancellation.Dispose();
+            }
         }
     }
 }
