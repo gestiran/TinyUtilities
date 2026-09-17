@@ -17,10 +17,10 @@ namespace TinyUtilities {
         [Pure]
         public static float Range(float from, float to) {
             if (from > to) {
-                return from + (from - to * _random.Next(0, 1000));
+                (from, to) = (to, from);
             }
             
-            return to + (to - from * _random.Next(0, 1000));
+            return from + (to - from) * (_random.Next(0, 100001) / 100000f);
         }
         
         [Pure]
