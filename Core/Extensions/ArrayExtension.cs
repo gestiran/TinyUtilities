@@ -118,7 +118,7 @@ namespace TinyUtilities.Extensions {
         [Pure]
         public static T Any<T>(this T[] array, T defaultValue = default) {
             if (array.Length > 0) {
-                return array[RandomUtility.Range(0, array.Length - 1)];
+                return array[RandomUtility.Range(0, array.Length)];
             }
             
             return defaultValue;
@@ -127,7 +127,7 @@ namespace TinyUtilities.Extensions {
         [Pure]
         public static T Any<T>(this T[] array, out int index, T defaultValue = default) {
             if (array.Length > 0) {
-                index = RandomUtility.Range(0, array.Length - 1);
+                index = RandomUtility.Range(0, array.Length);
                 return array[index];
             }
             
@@ -169,8 +169,8 @@ namespace TinyUtilities.Extensions {
             
             List<int> ids = new List<int>(array.Length);
             
-            for (int i = 0; i < ids.Count; i++) {
-                ids[i] = i;
+            for (int i = 0; i < array.Length; i++) {
+                ids.Add(i);
             }
             
             T[] result = new T[count];
