@@ -53,18 +53,14 @@ namespace TinyUtilities.Extensions {
                 array = Array.Empty<T>();
             }
             
-            T[] result = new T[array.Length - 1];
-            
-            for (int i = 0, removeId = 0; i < array.Length; i++) {
-                if (removeId == id) {
-                    continue;
-                }
-                
-                result[removeId] = array[i];
-                removeId++;
+            if (id >= 0 && id < array.Length) {
+                T[] result = new T[array.Length - 1];
+                Array.Copy(array, 0, result, 0, id);
+                Array.Copy(array, id + 1, result, id, array.Length - id - 1);
+                return result;
             }
             
-            return result;
+            return array;
         }
         
         [Pure]
