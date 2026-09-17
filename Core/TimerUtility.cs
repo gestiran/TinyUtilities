@@ -5,9 +5,11 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using TinyUtilities.Logger;
 
 namespace TinyUtilities {
     public static class TimerUtility {
+        private const int _MIN_UPDATE_DELAY = 10;
         private const int _SECOND = 1000;
         
         public static TimeSpan GetTimeToNextDay() {
@@ -61,14 +63,20 @@ namespace TinyUtilities {
         }
         
         public static async Task StartTimer(TimeSpan time, Action<TimeSpan> setTime, Action onComplete, int updateDelay, CancellationToken cancellation) {
-            TimeSpan delay = new TimeSpan(0, 0, 0, 0, updateDelay);
+            updateDelay = MathfCore.Max(updateDelay, _MIN_UPDATE_DELAY);
             
-            do {
-                setTime(time);
-                await Task.Delay(updateDelay, cancellation);
-                
-                time = time.Subtract(delay);
-            } while (time > TimeSpan.Zero);
+            DateTime start = DateTime.UtcNow;
+            TimeSpan totalDuration = time;
+            
+            try {
+                do {
+                    setTime(time);
+                    await Task.Delay(updateDelay, cancellation);
+                    time = totalDuration.Subtract(DateTime.UtcNow.Subtract(start));
+                } while (time > TimeSpan.Zero);
+            } catch (TaskCanceledException) {
+                DebugUtility.Log("TimerUtility.StartTimer - Canceled.");
+            }
             
             setTime(TimeSpan.Zero);
             onComplete();
