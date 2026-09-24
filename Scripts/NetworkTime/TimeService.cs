@@ -10,7 +10,7 @@ using UnityEngine;
 
 namespace TinyUtilities.NetworkTime {
     public static class TimeService {
-        public static bool isInitialized { get; private set; }
+        public static bool isInitialized => _status is State.Success;
         
     #if UNITY_EDITOR
         public static float debugTimeScale;
@@ -20,11 +20,18 @@ namespace TinyUtilities.NetworkTime {
         private static float _startTime;
         private static float _lastConnectionTime;
         private static bool _lastConnectionStatus;
-        private static bool _isProcess;
+        private static State _status;
         
         private static readonly ITimeProvider[] _providers;
         
         private const float _CONNECT_CHECK_DELAY = 60f;
+        
+        private enum State : byte {
+            None,
+            Process,
+            Success,
+            Failed
+        }
         
         static TimeService() {
         #if UNITY_EDITOR
@@ -43,17 +50,17 @@ namespace TinyUtilities.NetworkTime {
         public static UniTask Sync() => Sync(CancellationToken.None);
         
         public static async UniTask Sync(CancellationToken cancellation) {
-            if (isInitialized) {
+            if (_status == State.Success) {
                 Debug.LogWarning("TimeService.Sync - Already initialized!");
                 return;
             }
             
-            if (_isProcess) {
+            if (_status == State.Process) {
                 Debug.LogWarning("TimeService.Sync - Operation is started!");
                 return;
             }
             
-            _isProcess = true;
+            _status = State.Process;
             
             try {
                 TimeResult result = await TryGetNetworkTime(cancellation);
@@ -62,7 +69,7 @@ namespace TinyUtilities.NetworkTime {
                     Initialize(result.time);
                 }
             } finally {
-                _isProcess = false;
+                _status = State.Failed;
             }
         }
         
@@ -71,11 +78,11 @@ namespace TinyUtilities.NetworkTime {
         
         [Pure]
         public static async UniTask<bool> IsConnected(CancellationToken cancellation) {
-            if (isInitialized) {
+            if (_status == State.Success) {
                 if (Time.unscaledTime - _lastConnectionTime > _CONNECT_CHECK_DELAY) {
-                    TimeResult _ = await TryGetNetworkTime(cancellation);   
+                    TimeResult _ = await TryGetNetworkTime(cancellation);
                 }
-            } else {
+            } else if (_status == State.None) {
                 Debug.LogError("TimeService.IsConnected - Isn't initialized, use TimeService.Sync to start initialization!");
             }
             
@@ -84,7 +91,7 @@ namespace TinyUtilities.NetworkTime {
         
         [Pure]
         public static async UniTask<DateTime> GetTime(CancellationToken cancellation) {
-            if (isInitialized) {
+            if (_status == State.Success) {
                 DateTime networkTime;
                 
                 while (TryGetTime(out networkTime) == false) {
@@ -94,12 +101,15 @@ namespace TinyUtilities.NetworkTime {
                 return networkTime;
             }
             
-            Debug.LogError("TimeService.GetTime - Isn't initialized, use TimeService.Sync to start initialization!");
+            if (_status == State.None) {
+                Debug.LogError("TimeService.GetTime - Isn't initialized, use TimeService.Sync to start initialization!");
+            }
+            
             return default;
         }
         
         public static bool TryGetTime(out DateTime time) {
-            if (isInitialized) {
+            if (_status == State.Success) {
                 float current = Time.unscaledTime;
             #if UNITY_EDITOR
                 current *= debugTimeScale;
@@ -108,7 +118,10 @@ namespace TinyUtilities.NetworkTime {
                 return true;
             }
             
-            Debug.LogError("TimeService.TryGetTime - Isn't initialized, use TimeService.Sync to start initialization!");
+            if (_status == State.None) {
+                Debug.LogError("TimeService.TryGetTime - Isn't initialized, use TimeService.Sync to start initialization!");
+            }
+            
             time = default;
             return false;
         }
@@ -116,7 +129,7 @@ namespace TinyUtilities.NetworkTime {
         private static void Initialize(in DateTime time) {
             _networkTime = time.AddHours(LoadOffset(time));
             _startTime = Time.unscaledTime;
-            isInitialized = true;
+            _status = State.Success;
         }
         
         [Pure]
