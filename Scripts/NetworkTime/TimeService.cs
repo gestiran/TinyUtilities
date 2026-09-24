@@ -91,21 +91,17 @@ namespace TinyUtilities.NetworkTime {
         
         [Pure]
         public static async UniTask<DateTime> GetTime(CancellationToken cancellation) {
-            if (_status == State.Success) {
-                DateTime networkTime;
-                
-                while (TryGetTime(out networkTime) == false) {
-                    await UniTask.Delay(1000, DelayType.UnscaledDeltaTime, PlayerLoopTiming.Update, cancellation);
-                }
-                
-                return networkTime;
+            while (_status != State.Success) {
+                await UniTask.Delay(1000, DelayType.UnscaledDeltaTime, PlayerLoopTiming.Update, cancellation);
             }
             
-            if (_status == State.None) {
-                Debug.LogError("TimeService.GetTime - Isn't initialized, use TimeService.Sync to start initialization!");
+            DateTime networkTime;
+            
+            while (TryGetTime(out networkTime) == false) {
+                await UniTask.Delay(1000, DelayType.UnscaledDeltaTime, PlayerLoopTiming.Update, cancellation);
             }
             
-            return default;
+            return networkTime;
         }
         
         public static bool TryGetTime(out DateTime time) {
