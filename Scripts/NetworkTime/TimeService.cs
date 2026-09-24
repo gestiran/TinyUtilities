@@ -68,7 +68,8 @@ namespace TinyUtilities.NetworkTime {
                 if (result.isSuccess) {
                     Initialize(result.time);
                 }
-            } finally {
+            } catch (Exception) {
+                Debug.LogError("TimeService.IsConnected - Isn't initialized, use TimeService.Sync to start initialization!");
                 _status = State.Failed;
             }
         }
